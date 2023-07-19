@@ -6,4 +6,6 @@
 
 - Clone the repository
 - Run `npm ci` to install the dependencies
+- Run `docker compose up --detach` to start the services
+- Copy `.env.example` to `.env` and update if needed
 - Run `npm run ship` to ensure all of the tests pass
