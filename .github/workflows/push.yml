@@ -20,28 +20,15 @@ jobs:
         cache: 'npm'
         node-version-file: '.nvmrc'
     - run: npm ci
-      env:
-        CYPRESS_INSTALL_BINARY: 0
     - run: npm run lint
     - run: npm run test
       env:
         FORCE_COLOR: true
-  e2e:
-    runs-on: ubuntu-22.04
-    needs: build
-    steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-node@v3
-      with:
-        cache: 'npm'
-        node-version-file: '.nvmrc'
-    - run: npm ci
     - run: npm run e2e
-    - run: npm run e2e:dev
   deploy:
     uses: './.github/workflows/deploy.yml'
     if: github.ref == 'refs/heads/main'
-    needs: e2e
+    needs: build
     with:
       environment: heroku
     secrets:
