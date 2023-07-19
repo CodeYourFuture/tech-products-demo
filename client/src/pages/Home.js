@@ -28,11 +28,11 @@ export function Home() {
 			<div>
 				<img
 					className="logo"
-					data-qa="logo"
+					data-testid="logo"
 					src={logo}
 					alt="Just the React logo"
 				/>
-				<h1 className="message" data-qa="message">
+				<h1 className="message" data-testid="message">
 					{message}
 				</h1>
 				<Link to="/about/this/site">About</Link>

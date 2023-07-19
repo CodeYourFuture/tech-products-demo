@@ -17,6 +17,3 @@
 import "./commands";
 
 import "cypress-axe";
-
-import { configure } from "@testing-library/cypress";
-configure({ testIdAttribute: "data-qa" });
