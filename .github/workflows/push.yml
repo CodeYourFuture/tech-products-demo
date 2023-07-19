@@ -1,0 +1,78 @@
+name: Node.js CI
+
+on:
+  push:
+    branches:
+    - '*'
+  pull_request:
+    branches:
+    - main
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+    - uses: actions/checkout@v3
+    - run: echo "NODE_VERSION=$(cat .nvmrc)" >> $GITHUB_OUTPUT
+      id: nvmrc
+    - uses: actions/setup-node@v3
+      with:
+        cache: 'npm'
+        node-version-file: '.nvmrc'
+    - run: ./bin/check-node.sh
+    - run: npm ci
+      env:
+        CYPRESS_INSTALL_BINARY: 0
+    - run: npm run lint
+    - run: npm run test
+      env:
+        FORCE_COLOR: true
+    - uses: docker/setup-buildx-action@v2
+    - uses: docker/build-push-action@v4
+      with:
+        build-args: |
+          NODE_RELEASE=${{ steps.nvmrc.outputs.NODE_VERSION }}
+        context: .
+        push: false
+        tags: textbook/starter-kit
+  windows:
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          cache: 'npm'
+          node-version-file: '.nvmrc'
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run test
+        env:
+          FORCE_COLOR: true
+      - run: npm run e2e
+      - run: npm run e2e:dev
+  e2e:
+    runs-on: ubuntu-22.04
+    needs: build
+    strategy:
+      matrix:
+        node: [ '16.17', '16', '18.3', '18', '20' ]
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with:
+        cache: 'npm'
+        node-version: ${{ matrix.node }}
+    - run: npm ci
+    - run: npm run e2e
+    - run: npm run e2e:dev
+  deploy:
+    uses: './.github/workflows/deploy.yml'
+    if: github.ref == 'refs/heads/main'
+    needs:
+      - e2e
+      - windows
+    with:
+      environment: heroku
+    secrets:
+      HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+      HEROKU_EMAIL: ${{ secrets.HEROKU_EMAIL }}

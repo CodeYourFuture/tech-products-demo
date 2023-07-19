@@ -1,0 +1,11 @@
+{
+  "env": {
+    "cypress/globals": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 6
+  },
+  "plugins": [
+    "cypress"
+  ]
+}
