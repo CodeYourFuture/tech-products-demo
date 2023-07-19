@@ -5,20 +5,14 @@ module.exports = {
 			moduleNameMapper: {
 				"\\.(png|svg|jpe?g|gif|css)$": "<rootDir>/__mocks__/fileMock.js",
 			},
-			setupFilesAfterEnv: [
-				"<rootDir>/client/setupTests.js",
-			],
+			setupFilesAfterEnv: ["<rootDir>/client/setupTests.js"],
 			testEnvironment: "jsdom",
-			testMatch: [
-				"<rootDir>/client/**/*.test.js",
-			],
+			testMatch: ["<rootDir>/client/**/*.test.js"],
 		},
 		{
 			displayName: "server",
 			testEnvironment: "node",
-			testMatch: [
-				"<rootDir>/server/**/*.test.js",
-			],
+			testMatch: ["<rootDir>/server/**/*.test.js"],
 		},
 	],
 	testRunner: "jest-circus/runner",

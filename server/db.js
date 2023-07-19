@@ -6,7 +6,9 @@ import logger from "./utils/logger";
 const pool = new Pool({
 	connectionString: config.dbUrl,
 	connectionTimeoutMillis: 5_000,
-	ssl: config.dbUrl.includes("localhost") ? false : { rejectUnauthorized: false },
+	ssl: config.dbUrl.includes("localhost")
+		? false
+		: { rejectUnauthorized: false },
 });
 
 export const connectDb = async () => {
@@ -29,7 +31,10 @@ export const disconnectDb = () => pool.end();
  */
 export default {
 	query: (query, ...args) => {
-		logger.debug("Postgres querying %O", [query, ...(config.production ? [] : args)]);
+		logger.debug("Postgres querying %O", [
+			query,
+			...(config.production ? [] : args),
+		]);
 		return pool.query.apply(pool, args);
 	},
 };

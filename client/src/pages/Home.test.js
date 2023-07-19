@@ -22,7 +22,7 @@ const message = "Foo bar!";
 const server = setupServer(
 	rest.get("/api", (req, res, ctx) => {
 		return res(ctx.status(200), ctx.json({ message }));
-	}),
+	})
 );
 
 describe("Home", () => {
