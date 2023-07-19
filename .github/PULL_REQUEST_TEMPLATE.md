@@ -1,17 +1,41 @@
-Thank you for contributing! To help the review process, please provide the following:
+This is a:
 
-### Proposal
-Provide a short description of the change you are proposing and the reasons for it.
+<!-- Tick one category - if more than one applies, it should be split up -->
 
-### Related
-Provide links to any associated pull requests or issues. You can use `#123` to link to a PR or issue in this repository, or `user/repo#123` to link to other repositories.
+- [ ] ✨ **New feature** - new behaviour has been implemented
+- [ ] 🐛 **Bug fix** - existing behaviour has been made to behave
+- [ ] ♻️ **Refactor** - the behaviour has not changed, just the implementation
+- [ ] ✅ **Test backfill** - tests for existing behaviour were added but the behaviour itself hasn't changed
+- [ ] ⚙️ **Chore** - maintenance task, behaviour and implementation haven't changed
 
-### Checklist
+<!-- adapted from https://gitmoji.dev/ -->
 
-- [ ] I have read the [code of conduct] and [contributing guide]
-- [ ] I have made this pull request to the `main` branch
-- [ ] I have run all of the automated validation using `npm run ship`
-- [ ] I have added myself to the `"contributors"` list in the `package.json` (or do not want to)
+### Description
 
-[code of conduct]: https://github.com/textbook/starter-kit/blob/main/.github/CODE_OF_CONDUCT.md
-[contributing guide]: https://github.com/textbook/starter-kit/blob/main/.github/CONTRIBUTING.md
+<!-- Describe what merging this pull request will do -->
+
+- **Purpose** - <!-- Allow astronauts to perform a case-insensitive search for their spaceship. -->
+
+<!-- Describe how the reviewer should check it works -->
+
+- **How to check** - <!-- Log in as an astronaut, go to the Spaceships tab and type "saturn" into the search box. Previously Saturn V would not have appeared, due to the capital S, but now it does. -->
+
+### Links
+
+<!-- links to other issues/PRs/tickets, e.g. user/repo#123 -->
+
+### Author checklist
+
+<!-- All PRs -->
+
+- [ ] I have written a title that reflects the relevant ticket
+- [ ] I have written a description that says what the PR does and how to validate it
+- [ ] I have linked to the project board ticket (and any related PRs/issues) in the Links section
+- [ ] I have added a link to this PR to the ticket
+- [ ] I have made the PR to `main` from a branch named `<category>/<name>`, e.g. `feature/edit-spaceships` or `bugfix/restore-oxygen`
+- [ ] I have manually tested that the app still works correctly
+- [ ] I have requested reviewers here and in my team chat channel
+<!-- depending on the task, the following may be optional -->
+- [ ] I have spoken with my PM or TL about any parts of this task that may have become out-of-scope, or any additional improvements that I now realise may benefit my project
+- [ ] I have added tests, or new tests were not required
+- [ ] I have updated any documentation (e.g. diagrams, schemas), or documentation updates were not required
