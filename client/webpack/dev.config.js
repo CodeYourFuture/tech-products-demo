@@ -8,13 +8,13 @@ module.exports = merge(common, {
 		historyApiFallback: {
 			disableDotRule: true,
 		},
-		port: 3000,
+		port: 4201,
 		proxy: [
 			{
 				context: ["/api"],
 				logLevel: "debug",
 				logProvider: () => console,
-				target: "http://localhost:3100",
+				target: "http://localhost:4202",
 			},
 		],
 		static: false,
