@@ -13,7 +13,7 @@ const options = {
 			? false
 			: { rejectUnauthorized: configuration["reject-unauthorized"] },
 	},
-	dir: configuration["migrations-dir"],
+	dir: configuration["migrations-dir"] ?? "migrations",
 	direction: process.argv.includes("down") ? "down" : "up",
 	migrationsTable: configuration["migrations-table"] ?? "pgmigrations",
 	verbose: true,
