@@ -1,4 +1,5 @@
 {
 	"migrations-dir": "db/migrations",
+	"reject-unauthorized": false,
 	"template-file-name": "db/migration-template.js"
 }
