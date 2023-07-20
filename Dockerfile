@@ -34,6 +34,7 @@ RUN npm ci --omit dev
 
 COPY --from=build /home/node/dist ./dist
 COPY ./migration-config.json .
+COPY ./bin/run-migrations.js ./bin
 COPY ./db/migrations ./db/migrations
 
 ENV PORT=80

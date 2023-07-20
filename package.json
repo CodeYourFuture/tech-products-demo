@@ -25,7 +25,7 @@
 		"preserve": "npm run build",
 		"serve": "npm start",
 		"ship": "npm run lint && npm run test && npm run e2e",
-		"prestart": "npm run migration -- up",
+		"prestart": "node bin/run-migrations.js",
 		"start": "node dist/server.js",
 		"test": "jest",
 		"test:cover": "npm run test -- --coverage",
