@@ -30,6 +30,7 @@ jobs:
           node-version-file: ".nvmrc"
       - run: npm ci
       - run: npm run lint
+      - run: npm run migration -- up
       - run: npm run test
         env:
           DATABASE_URL: postgres://admin:opensesame@localhost:5432/test-db

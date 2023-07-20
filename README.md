@@ -8,6 +8,7 @@
 - Run `npm ci` to install the dependencies
 - Run `docker compose up --detach` to start the services
 - Copy `.env.example` to `.env` and update if needed
+- Run `npm run migration -- up` to migrate the database
 - Run `npm run ship` to ensure all of the tests pass
 - Start the app with `npm run dev` (dev mode) or `npm run serve` (prod mode) and visit http://localhost:4201
 

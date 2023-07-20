@@ -1,0 +1,4 @@
+{
+	"migrations-dir": "db/migrations",
+	"template-file-name": "db/migration-template.js"
+}

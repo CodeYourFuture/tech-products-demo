@@ -33,6 +33,8 @@ COPY --from=build /home/node/package*.json ./
 RUN npm ci --omit dev
 
 COPY --from=build /home/node/dist ./dist
+COPY ./migration-config.json .
+COPY ./db/migrations ./db/migrations
 
 ENV PORT=80
 EXPOSE 80

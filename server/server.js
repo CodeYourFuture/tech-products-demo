@@ -1,7 +1,7 @@
 import http from "node:http";
 
 import app from "./app";
-import { connectDb, disconnectDb } from "./db";
+import { connectDb } from "./db";
 import config from "./utils/config";
 import logger from "./utils/logger";
 
@@ -13,6 +13,6 @@ server.on("listening", () => {
 	logger.info("listening on: %s", bind);
 });
 
-process.on("SIGTERM", () => server.close(() => disconnectDb()));
+process.on("SIGTERM", () => server.close());
 
 connectDb().then(() => server.listen(config.port));

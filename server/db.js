@@ -30,11 +30,12 @@ export const disconnectDb = () => pool.end();
  * `await db.query("<SQL>", [...<variables>])`.
  */
 export default {
-	query: (query, ...args) => {
-		logger.debug("Postgres querying %O", [
-			query,
-			...(config.production ? [] : args),
-		]);
+	query: (...args) => {
+		if (!config.production) {
+			logger.debug("Postgres querying %O", args);
+		} else {
+			logger.debug("Postgres querying %s", args[0]);
+		}
 		return pool.query.apply(pool, args);
 	},
 };

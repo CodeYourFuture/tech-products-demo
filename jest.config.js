@@ -11,6 +11,7 @@ module.exports = {
 		},
 		{
 			displayName: "server",
+			setupFilesAfterEnv: ["<rootDir>/server/setupTests.js"],
 			testEnvironment: "node",
 			testMatch: ["<rootDir>/server/**/*.test.js"],
 		},
