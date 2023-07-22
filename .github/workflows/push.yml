@@ -45,6 +45,7 @@ jobs:
           DATABASE_URL: postgres://admin:opensesame@localhost:5432/test-db
           SUDO_TOKEN: opensesame
       - uses: actions/upload-artifact@v3
+        if: ${{ always() }}
         with:
           if-no-files-found: ignore
           name: cypress-outputs
