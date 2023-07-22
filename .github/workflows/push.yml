@@ -40,6 +40,7 @@ jobs:
           SUDO_TOKEN: opensesame
       - run: npm run e2e
         env:
+          CYPRESS_SUDO_TOKEN: opensesame
           CYPRESS_VIDEO: true
           DATABASE_URL: postgres://admin:opensesame@localhost:5432/test-db
           SUDO_TOKEN: opensesame
