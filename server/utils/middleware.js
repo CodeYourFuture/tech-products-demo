@@ -7,6 +7,15 @@ import morgan from "morgan";
 import config from "./config";
 import logger from "./logger";
 
+export const asyncHandler = (handler) => async (req, res, next) => {
+	try {
+		await handler(req, res);
+		next();
+	} catch (err) {
+		next(err);
+	}
+};
+
 export const clientRouter = (apiRoot) => {
 	const staticDir = path.join(__dirname, "..", "static");
 	const router = Router();
