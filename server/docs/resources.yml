@@ -1,0 +1,84 @@
+---
+/resources:
+  get:
+    tags: [Resources]
+    description: Get all resources.
+    security:
+      - sudoToken: []
+    parameters:
+      - in: query
+        name: drafts
+        description: |
+          Whether to include draft resources.
+
+          **Note**: drafts are only available with SUDO token.
+        schema:
+          type: boolean
+    responses:
+      200:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/Resource"
+      500:
+        $ref: "#/components/responses/InternalServerError"
+  post:
+    tags: [Resources]
+    description: Share a new resource.
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ResourceCreation"
+    responses:
+      201:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Resource"
+      500:
+        $ref: "#/components/responses/InternalServerError"
+/resources/{id}:
+  patch:
+    tags: [Resources]
+    description: |
+      Update an existing resource.
+
+      **Note**: currently only supports publication with SUDO token.
+    security:
+      - sudoToken: []
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [draft]
+            properties:
+              draft:
+                type: boolean
+                example: false
+    responses:
+      200:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Resource"
+      400:
+        $ref: "#/components/responses/BadRequestError"
+      401:
+        $ref: "#/components/responses/UnauthorizedError"
+      404:
+        $ref: "#/components/responses/NotFoundError"
+      500:
+        $ref: "#/components/responses/InternalServerError"

@@ -1,0 +1,72 @@
+---
+tags:
+  - name: Resources
+    description: Useful resources shared by the users.
+
+components:
+  responses:
+    BadRequestError:
+      description: The request was not accepted.
+      content:
+        text/plain:
+          schema:
+            type: string
+            example: Bad Request
+    InternalServerError:
+      description: Something unexpected went wrong.
+      content:
+        text/plain:
+          schema:
+            type: string
+            example: Internal Server Error
+    NotFoundError:
+      description: The resource was not found.
+      content:
+        text/html:
+          schema:
+            type: string
+    UnauthorizedError:
+      description: User not permitted to access the resource.
+      content:
+        text/plain:
+          schema:
+            type: string
+            example: Unauthorized
+
+  schemas:
+    ResourceCreation:
+      type: object
+      required: [title, url]
+      properties:
+        description:
+          type: string
+          example: The main CodeYourFuture syllabus.
+        title:
+          type: string
+          example: CYF Syllabus
+        url:
+          type: string
+          format: uri
+          example: https://syllabus.codeyourfuture.io/
+    Resource:
+      allOf:
+        - $ref: "#/components/schemas/ResourceCreation"
+        - type: object
+          required: [accession, draft, id]
+          properties:
+            accession:
+              format: date-time
+              type: string
+            draft:
+              type: boolean
+            id:
+              format: uuid
+              type: string
+            publication:
+              format: date-time
+              type: string
+
+  securitySchemes:
+    sudoToken:
+      type: http
+      scheme: bearer
