@@ -2,6 +2,8 @@ import { useState } from "react";
 
 import { createResource } from "../services/resourceService";
 
+import "./SuggestResource.scss";
+
 export default function SuggestResource() {
 	const [suggested, setSuggested] = useState(false);
 	/**
@@ -21,8 +23,14 @@ export default function SuggestResource() {
 
 	return (
 		<>
-			{suggested && <p>Thank you for suggesting a resource!</p>}
-			<form aria-label="Suggest resource" onSubmit={submitForm}>
+			{suggested && (
+				<p className="success">Thank you for suggesting a resource!</p>
+			)}
+			<form
+				aria-label="Suggest resource"
+				onChange={() => setSuggested(false)}
+				onSubmit={submitForm}
+			>
 				<label>
 					Title
 					<input name="title" required type="text" />

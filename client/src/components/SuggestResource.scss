@@ -1,0 +1,36 @@
+form {
+	align-items: flex-end;
+	display: flex;
+	flex-direction: column;
+	max-width: 600px;
+
+	> * {
+		margin-top: 16px;
+
+		&:last-child {
+			margin-bottom: 16px;
+		}
+	}
+
+	button {
+		width: 25%;
+	}
+
+	label {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		width: 100%;
+
+		input {
+			width: 75%;
+		}
+	}
+}
+
+p.success {
+	background-color: palegreen;
+	color: darkgreen;
+	font-weight: bold;
+	padding: 8px;
+}
