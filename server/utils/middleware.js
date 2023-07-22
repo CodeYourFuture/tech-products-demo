@@ -9,8 +9,7 @@ import logger from "./logger";
 
 export const asyncHandler = (handler) => async (req, res, next) => {
 	try {
-		await handler(req, res);
-		next();
+		await handler(req, res, next);
 	} catch (err) {
 		next(err);
 	}

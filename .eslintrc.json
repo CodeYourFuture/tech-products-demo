@@ -7,17 +7,13 @@
 	"overrides": [
 		{
 			"files": ["setupTests.js", "**/*.test.js"],
+			"excludedFiles": ["e2e/**/*.js"],
 			"extends": ["plugin:jest/recommended"],
 			"rules": {
 				"jest/expect-expect": [
 					"error",
 					{
-						"assertFunctionNames": [
-							"cy.**.should",
-							"cy.checkA11y",
-							"expect",
-							"request.**.expect"
-						]
+						"assertFunctionNames": ["expect", "request.**.expect"]
 					}
 				]
 			}

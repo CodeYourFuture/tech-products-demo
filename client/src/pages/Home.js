@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
+import { SuggestResource } from "../components";
+
 import "./Home.css";
 import logo from "./logo.svg";
 
@@ -25,6 +27,7 @@ export function Home() {
 
 	return (
 		<main role="main">
+			<SuggestResource />
 			<div>
 				<img
 					className="logo"
