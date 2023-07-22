@@ -33,7 +33,7 @@ jobs:
       - run: npm run migration -- up
         env:
           DATABASE_URL: postgres://admin:opensesame@localhost:5432/test-db
-      - run: npm run test
+      - run: npm run test -- --coverage
         env:
           DATABASE_URL: postgres://admin:opensesame@localhost:5432/test-db
           FORCE_COLOR: true
