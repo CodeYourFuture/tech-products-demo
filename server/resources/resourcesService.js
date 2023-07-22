@@ -17,6 +17,6 @@ export async function getAll(includeDrafts) {
 	return await repository.getAll({ draft: includeDrafts });
 }
 
-export const create = async ({ title, url }) => {
-	return await repository.add({ title, url });
+export const create = async (resource) => {
+	return await repository.add(resource);
 };

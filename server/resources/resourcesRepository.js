@@ -7,12 +7,12 @@ export const getOne = async (id) => {
 	return resource;
 };
 
-export const add = async ({ title, url }) => {
+export const add = async ({ description, title, url }) => {
 	const {
 		rows: [created],
 	} = await db.query(
-		"INSERT INTO resources (title, url) VALUES ($1, $2) RETURNING *;",
-		[title, url]
+		"INSERT INTO resources (description, title, url) VALUES ($1, $2, $3) RETURNING *;",
+		[description, title, url]
 	);
 	return created;
 };

@@ -13,7 +13,11 @@ describe("SuggestResource", () => {
 		const user = userEvent.setup();
 		server.use(
 			rest.post("/api/resources", async (req, res, ctx) => {
-				await expect(req.json()).resolves.toEqual({ title, url });
+				await expect(req.json()).resolves.toEqual({
+					description: "",
+					title,
+					url,
+				});
 				return res(ctx.json({}));
 			})
 		);
@@ -24,6 +28,38 @@ describe("SuggestResource", () => {
 		await user.click(screen.getByRole("button", { name: /suggest/i }));
 
 		await screen.findByText(/thank you for suggesting a resource/i);
-		expect(screen.getByRole("form")).toHaveFormValues({ title: "", url: "" });
+		expect(screen.getByRole("form")).toHaveFormValues({
+			description: "",
+			title: "",
+			url: "",
+		});
+	});
+
+	it("allows the user to include a description", async () => {
+		const description = "Check colour contrast for accessibility.";
+		const user = userEvent.setup();
+		server.use(
+			rest.post("/api/resources", async (req, res, ctx) => {
+				await expect(req.json()).resolves.toMatchObject({ description });
+				return res(ctx.json({}));
+			})
+		);
+		render(<SuggestResource />);
+
+		await user.type(
+			screen.getByRole("textbox", { name: /description/i }),
+			description
+		);
+		await user.type(
+			screen.getByRole("textbox", { name: /title/i }),
+			"WebAIM Contrast Checker"
+		);
+		await user.type(
+			screen.getByRole("textbox", { name: /url/i }),
+			"https://webaim.org/resources/contrastchecker/"
+		);
+		await user.click(screen.getByRole("button", { name: /suggest/i }));
+
+		await screen.findByText(/thank you for suggesting a resource/i);
 	});
 });

@@ -17,8 +17,8 @@ router
 	)
 	.post(
 		asyncHandler(async (req, res) => {
-			const { title, url } = req.body;
-			const resource = await service.create({ title, url });
+			const { description, title, url } = req.body;
+			const resource = await service.create({ description, title, url });
 			res.status(201).send(resource);
 		})
 	)

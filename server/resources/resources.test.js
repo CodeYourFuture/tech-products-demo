@@ -38,6 +38,21 @@ describe("/api/resources", () => {
 				url: resource.url,
 			});
 		});
+
+		it("accepts a description", async () => {
+			const resource = {
+				description: "Helpful tool for PostgreSQL DB migrations.",
+				title: "Node PG Migrate",
+				url: "https://salsita.github.io/node-pg-migrate/#/",
+			};
+
+			const { body } = await request(app)
+				.post("/api/resources")
+				.send(resource)
+				.expect(201);
+
+			expect(body).toMatchObject(resource);
+		});
 	});
 
 	describe("GET /", () => {

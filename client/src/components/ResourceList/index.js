@@ -11,9 +11,10 @@ export default function ResourceList() {
 
 	return (
 		<ul>
-			{resources.map((resource) => (
-				<li key={resource.id}>
-					<a href={resource.url}>{resource.title}</a>
+			{resources.map(({ description, id, title, url }) => (
+				<li key={id}>
+					<a href={url}>{title}</a>
+					{description && ` - ${description}`}
 				</li>
 			))}
 		</ul>

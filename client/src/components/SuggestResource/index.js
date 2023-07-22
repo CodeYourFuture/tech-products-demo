@@ -12,10 +12,11 @@ export default function SuggestResource() {
 	const submitForm = (event) => {
 		event.preventDefault();
 		const {
+			description: { value: description },
 			title: { value: title },
 			url: { value: url },
 		} = event.target.elements;
-		createResource({ title, url }).then(() => {
+		createResource({ description, title, url }).then(() => {
 			setSuggested(true);
 			event.target.reset();
 		});
@@ -38,6 +39,10 @@ export default function SuggestResource() {
 				<label>
 					URL
 					<input name="url" required type="url" />
+				</label>
+				<label>
+					Description (optional)
+					<input name="description" type="text" />
 				</label>
 				<button type="submit">Suggest</button>
 			</form>
