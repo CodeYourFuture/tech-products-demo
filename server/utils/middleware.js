@@ -4,6 +4,7 @@ import express, { Router } from "express";
 import helmet from "helmet";
 import morgan from "morgan";
 
+import config from "./config";
 import logger from "./logger";
 
 export const clientRouter = (apiRoot) => {
@@ -39,4 +40,11 @@ export const logErrors = () => (err, _, res, next) => {
 	}
 	logger.error("%O", err);
 	res.sendStatus(500);
+};
+
+export const sudo = (req, res, next) => {
+	const token = req.get("Authorization");
+	req.superuser =
+		token?.startsWith("Bearer ") && token?.slice(7) === config.sudoToken;
+	next();
 };

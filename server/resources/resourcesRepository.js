@@ -9,3 +9,12 @@ export const add = async ({ title, url }) => {
 	);
 	return created;
 };
+
+export const getAll = async ({ draft }) => {
+	const { rows } = await db.query(
+		draft
+			? "SELECT * FROM resources;"
+			: "SELECT * FROM resources WHERE draft = false;"
+	);
+	return rows;
+};

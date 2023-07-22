@@ -1,10 +1,21 @@
 import { Router } from "express";
+
 import * as service from "./resourcesService";
 
 const router = Router();
 
 router
 	.route("/")
+	.get(async (req, res, next) => {
+		const includeDrafts = req.superuser && req.query.drafts === "true";
+		try {
+			res.send(
+				await service.getAll(includeDrafts)
+			);
+		} catch (err) {
+			next(err);
+		}
+	})
 	.post(async (req, res, next) => {
 		try {
 			const { title, url } = req.body;

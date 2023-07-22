@@ -37,4 +37,30 @@ describe("/api/resources", () => {
 			});
 		});
 	});
+
+	describe("GET /", () => {
+		it("allows superuser to see all resources", async () => {
+			const resource = { title: "foo", url: "bar" };
+			await request(app).post("/api/resources").send(resource).expect(201);
+
+			const { body } = await request(app)
+				.get("/api/resources")
+				.query({ drafts: true })
+				.set("Authorization", `Bearer ${process.env.SUDO_TOKEN}`)
+				.expect(200);
+
+			expect(body).toHaveLength(1);
+			expect(body[0]).toMatchObject(resource);
+		});
+
+		it("prevents non-superusers from seeing draft resources", async () => {
+			const resource = { title: "title", url: "url" };
+			await request(app).post("/api/resources").send(resource).expect(201);
+
+			await request(app)
+				.get("/api/resources")
+				.query({ drafts: true })
+				.expect(200, []);
+		});
+	});
 });

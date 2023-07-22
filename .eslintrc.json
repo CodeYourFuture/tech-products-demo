@@ -24,5 +24,8 @@
 		}
 	],
 	"parser": "@babel/eslint-parser",
-	"root": true
+	"root": true,
+	"rules": {
+		"operator-linebreak": "off"
+	}
 }
