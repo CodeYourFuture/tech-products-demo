@@ -40,8 +40,16 @@ jobs:
           SUDO_TOKEN: opensesame
       - run: npm run e2e
         env:
+          CYPRESS_VIDEO: true
           DATABASE_URL: postgres://admin:opensesame@localhost:5432/test-db
           SUDO_TOKEN: opensesame
+      - uses: actions/upload-artifact@v3
+        with:
+          if-no-files-found: ignore
+          name: cypress-outputs
+          path: |
+            e2e/screenshots/
+            e2e/videos/
   deploy:
     uses: "./.github/workflows/deploy.yml"
     if: github.ref == 'refs/heads/main'
