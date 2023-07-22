@@ -3,8 +3,9 @@ const path = require("node:path");
 const HtmlWebpackTagsPlugin = require("html-webpack-tags-plugin");
 const { merge } = require("webpack-merge");
 
-const common = require("./common.config");
 const { devDependencies } = require("../../package.json");
+
+const common = require("./common.config");
 
 module.exports = merge(common, {
 	devtool: process.env.GENERATE_SOURCEMAP !== "false" && "source-map",

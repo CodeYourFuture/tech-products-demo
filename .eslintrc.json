@@ -24,8 +24,10 @@
 		}
 	],
 	"parser": "@babel/eslint-parser",
+	"plugins": ["import"],
 	"root": true,
 	"rules": {
+		"import/order": ["error", { "newlines-between": "always" }],
 		"operator-linebreak": "off"
 	}
 }
