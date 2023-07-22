@@ -22,6 +22,7 @@
 		"lint:fix": "npm run lint:eslint -- --fix && npm run lint:prettier -- --write",
 		"lint:prettier": "prettier .",
 		"migration": "node-pg-migrate --config-file migration-config.json",
+		"prepare": "husky install || echo 'No Husky 🐶'",
 		"preserve": "npm run build",
 		"serve": "npm start",
 		"ship": "npm run lint && npm run test && npm run e2e",
@@ -30,6 +31,10 @@
 		"test": "jest",
 		"test:cover": "npm run test -- --coverage",
 		"test:watch": "npm run test -- --watch"
+	},
+	"lint-staged": {
+		"*.{js,jsx}": "eslint --fix",
+		"*": "prettier --ignore-unknown --write"
 	},
 	"repository": {
 		"type": "git",
@@ -76,8 +81,10 @@
 		"history": "^5.3.0",
 		"html-webpack-plugin": "^5.5.3",
 		"html-webpack-tags-plugin": "^3.0.2",
+		"husky": "^8.0.3",
 		"jest": "^29.6.1",
 		"jest-environment-jsdom": "^29.6.1",
+		"lint-staged": "^13.2.3",
 		"msw": "^1.2.3",
 		"nodemon": "^3.0.1",
 		"prettier": "^3.0.0",
