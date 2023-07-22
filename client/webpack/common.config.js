@@ -1,7 +1,7 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
-	entry: "./client/src/index.js",
+	entry: "./src/index.js",
 	module: {
 		rules: [
 			{
@@ -33,8 +33,8 @@ module.exports = {
 	},
 	plugins: [
 		new HtmlWebpackPlugin({
-			favicon: "./client/src/favicon.ico",
-			template: "./client/src/index.html",
+			favicon: "./src/favicon.ico",
+			template: "./src/index.html",
 		}),
 	],
 };

@@ -1,0 +1,33 @@
+{
+	"name": "@demo/server",
+	"version": "0.1.0",
+	"description": "",
+	"main": "server.js",
+	"devDependencies": {
+		"@babel/node": "^7.22.6",
+		"nodemon": "^3.0.1",
+		"supertest": "^6.3.3"
+	},
+	"scripts": {
+		"build": "babel . --copy-files --delete-dir-on-start --ignore *.test.js,**/*.test.js,jest.config.js,setupTests.js --no-copy-ignored --out-dir ../dist",
+		"postbuild": "del-cli --force ../dist/static ../dist/**/README.md ../dist/**/*.json",
+		"dev": "cross-env DOTENV_CONFIG_PATH=../.env LOG_LEVEL=debug PORT=4202 nodemon --inspect server.js",
+		"test": "cross-env DOTENV_CONFIG_PATH=../.env jest"
+	},
+	"keywords": [],
+	"author": "Jonathan Sharpe <mail@jonrshar.pe>",
+	"license": "ISC",
+	"dependencies": {
+		"@babel/runtime": "^7.22.6",
+		"dotenv": "^16.3.1",
+		"dotenv-expand": "^10.0.0",
+		"express": "^4.18.2",
+		"helmet": "^7.0.0",
+		"morgan": "^1.10.0",
+		"node-pg-migrate": "^6.2.2",
+		"pg": "^8.11.1",
+		"swagger-jsdoc": "^6.2.8",
+		"swagger-ui-express": "^5.0.0",
+		"winston": "^3.10.0"
+	}
+}

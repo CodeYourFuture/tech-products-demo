@@ -1,4 +1,9 @@
 {
+	"parserOptions": {
+		"babelOptions": {
+			"configFile": "./server/.babelrc"
+		}
+	},
 	"rules": {
 		"no-console": "error"
 	}

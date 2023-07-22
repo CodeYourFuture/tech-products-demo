@@ -3,6 +3,9 @@
 		"cypress/globals": true
 	},
 	"parserOptions": {
+		"babelOptions": {
+			"configFile": "./.babelrc"
+		},
 		"ecmaVersion": 6
 	},
 	"plugins": ["cypress"]

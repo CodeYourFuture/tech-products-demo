@@ -3,6 +3,5 @@
 	"delay": 500,
 	"exec": "babel-node",
 	"exitcrash": true,
-	"ext": "js,json,yml",
-	"watch": ["./server"]
+	"ext": "js,json,yml"
 }

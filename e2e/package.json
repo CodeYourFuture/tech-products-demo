@@ -1,0 +1,20 @@
+{
+	"name": "@demo/e2e",
+	"version": "0.1.0",
+	"description": "",
+	"main": "index.js",
+	"devDependencies": {
+		"@testing-library/cypress": "^9.0.0",
+		"axe-core": "^4.7.2",
+		"cypress": "^12.17.2",
+		"cypress-axe": "^1.4.0",
+		"eslint-plugin-cypress": "^2.13.3"
+	},
+	"scripts": {
+		"pree2e": "wait-on --log --timeout 60000 http-get://localhost:4201",
+		"e2e": "cross-env DOTENV_CONFIG_PATH=../.env cypress run"
+	},
+	"keywords": [],
+	"author": "Jonathan Sharpe <mail@jonrshar.pe>",
+	"license": "ISC"
+}

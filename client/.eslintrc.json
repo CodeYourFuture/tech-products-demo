@@ -3,6 +3,11 @@
 		"browser": true
 	},
 	"extends": ["plugin:jsx-a11y/strict", "plugin:react/recommended"],
+	"parserOptions": {
+		"babelOptions": {
+			"configFile": "./client/.babelrc"
+		}
+	},
 	"plugins": ["react-hooks"],
 	"rules": {
 		"react/jsx-tag-spacing": "error",

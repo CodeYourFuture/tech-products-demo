@@ -3,7 +3,7 @@ const path = require("node:path");
 const HtmlWebpackTagsPlugin = require("html-webpack-tags-plugin");
 const { merge } = require("webpack-merge");
 
-const { devDependencies } = require("../../package.json");
+const { devDependencies } = require("../package.json");
 
 const common = require("./common.config");
 

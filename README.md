@@ -19,3 +19,22 @@
 - 4201: client application (Webpack in dev mode, Express in production mode)
 - 4202: Express server (dev mode only)
 - 4211: Postgres
+
+### Workspaces
+
+This project uses NPM [workspaces] to separate the different parts of the system:
+
+- `client`: The frontend React app and associated Webpack configuration;
+- `e2e`: The Cypress E2E tests; and
+- `server`: The backend Express app.
+
+If you need to run NPM commands in these workspaces, you can use the `-w`/`--workspace` flag, e.g. to install a new
+dependency needed in the React build:
+
+```shell
+$ npm --workspace client install --save-dev <dependency>
+```
+
+**Note**: only dependencies needed by the `server` workspace at runtime should be non-`dev` dependencies.
+
+[workspaces]: https://docs.npmjs.com/cli/v8/using-npm/workspaces
