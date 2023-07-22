@@ -9,3 +9,11 @@ export const createResource = async (resource) => {
 	}
 	return res.json();
 };
+
+export const getResources = async () => {
+	const res = await fetch("/api/resources");
+	if (!res.ok) {
+		throw new Error(res.statusText);
+	}
+	return res.json();
+};

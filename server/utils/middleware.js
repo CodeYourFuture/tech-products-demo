@@ -50,9 +50,19 @@ export const logErrors = () => (err, _, res, next) => {
 	res.sendStatus(500);
 };
 
+export const methodNotAllowed = (_, res) => res.sendStatus(405);
+
 export const sudo = (req, res, next) => {
 	const token = req.get("Authorization");
 	req.superuser =
 		token?.startsWith("Bearer ") && token?.slice(7) === config.sudoToken;
 	next();
+};
+
+export const sudoOnly = (req, res, next) => {
+	if (req.superuser) {
+		next();
+	} else {
+		res.sendStatus(401);
+	}
 };

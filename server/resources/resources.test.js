@@ -1,3 +1,5 @@
+import { randomUUID } from "node:crypto";
+
 import { Pool } from "pg";
 import request from "supertest";
 
@@ -61,6 +63,72 @@ describe("/api/resources", () => {
 				.get("/api/resources")
 				.query({ drafts: true })
 				.expect(200, []);
+		});
+	});
+
+	describe("PATCH /:id", () => {
+		it("allows superusers to publish a draft resource", async () => {
+			const { body: resource } = await request(app)
+				.post("/api/resources")
+				.send({
+					title: "CYF Syllabus",
+					url: "https://syllabus.codeyourfuture.io/",
+				})
+				.expect(201);
+
+			const { body: updated } = await request(app)
+				.patch(`/api/resources/${resource.id}`)
+				.send({ draft: false })
+				.set("Authorization", `Bearer ${process.env.SUDO_TOKEN}`)
+				.expect(200);
+
+			expect(updated).toEqual({
+				...resource,
+				draft: false,
+				publication: expect.stringMatching(DATETIME),
+			});
+
+			const { body: resources } = await request(app).get("/api/resources");
+			expect(resources).toHaveLength(1);
+		});
+
+		it("rejects other changes", async () => {
+			const { body: resource } = await request(app)
+				.post("/api/resources")
+				.send({
+					title: "Mastering margin collapsing",
+					url: "https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Box_Model/Mastering_margin_collapsing",
+				})
+				.expect(201);
+
+			await request(app)
+				.patch(`/api/resources/${resource.id}`)
+				.send({ draft: true, title: "Something else" })
+				.set("Authorization", `Bearer ${process.env.SUDO_TOKEN}`)
+				.expect(400);
+		});
+
+		it("handles missing resources", async () => {
+			await request(app)
+				.patch(`/api/resources/${randomUUID()}`)
+				.send({ draft: false })
+				.set("Authorization", `Bearer ${process.env.SUDO_TOKEN}`)
+				.expect(404);
+		});
+
+		it("prevents non-superusers from publishing resources", async () => {
+			const { body: resource } = await request(app)
+				.post("/api/resources")
+				.send({
+					title: "PostgreSQL tutorial",
+					url: "https://www.postgresqltutorial.com/",
+				})
+				.expect(201);
+
+			await request(app)
+				.patch(`/api/resources/${resource.id}`)
+				.send({ draft: false })
+				.expect(401);
 		});
 	});
 });

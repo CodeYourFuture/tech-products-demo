@@ -1,4 +1,4 @@
-import "dotenv/config";
+import "dotenv-expand/config";
 
 const missing = ["DATABASE_URL", "SUDO_TOKEN"].filter(
 	(envVar) => !process.env[envVar]

@@ -3,7 +3,7 @@ beforeEach(() => {
 });
 
 it("displays the site", () => {
-	cy.findByTestId("message").should("contain.text", "Hello, world!");
+	cy.findByRole("heading", { level: 1 }).should("contain.text", "Resources");
 });
 
 it("meets basic accessibility guidelines", () => {
@@ -18,9 +18,17 @@ it("lets the user submit a resource", () => {
 	cy.findByRole("textbox", { name: /title/i }).type(title);
 	cy.findByRole("textbox", { name: /url/i }).type(url);
 	cy.findByRole("button", { name: /suggest/i }).click();
-	cy.wait("@createResource").then(({ request: { body } }) => {
-		expect(body).to.have.property("title", title);
-		expect(body).to.have.property("url", url);
+	cy.wait("@createResource").then(({ request, response }) => {
+		expect(request.body).to.have.property("title", title);
+		expect(request.body).to.have.property("url", url);
+		cy.request({
+			body: { draft: false },
+			headers: { Authorization: `Bearer ${Cypress.env("SUDO_TOKEN")}` },
+			method: "PATCH",
+			url: `/api/resources/${response.body.id}`,
+		});
 	});
 	cy.findByText(/thank you for suggesting a resource/i).should("exist");
+	cy.visit("/");
+	cy.findByText(title).should("have.attr", "href", url);
 });

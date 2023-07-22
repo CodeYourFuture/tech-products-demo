@@ -1,45 +1,14 @@
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-import { SuggestResource } from "../components";
-
-import "./Home.css";
-import logo from "./logo.svg";
+import { ResourceList, SuggestResource } from "../components";
 
 export function Home() {
-	const [message, setMessage] = useState("Loading...");
-
-	useEffect(() => {
-		fetch("/api")
-			.then((res) => {
-				if (!res.ok) {
-					throw new Error(res.statusText);
-				}
-				return res.json();
-			})
-			.then((body) => {
-				setMessage(body.message);
-			})
-			.catch((err) => {
-				console.error(err);
-			});
-	}, []);
-
 	return (
 		<main role="main">
+			<h1>Resources</h1>
 			<SuggestResource />
-			<div>
-				<img
-					className="logo"
-					data-testid="logo"
-					src={logo}
-					alt="Just the React logo"
-				/>
-				<h1 className="message" data-testid="message">
-					{message}
-				</h1>
-				<Link to="/about/this/site">About</Link>
-			</div>
+			<ResourceList />
+			<Link to="/about/this/site">About</Link>
 		</main>
 	);
 }

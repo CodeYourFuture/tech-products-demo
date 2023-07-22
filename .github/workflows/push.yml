@@ -37,9 +37,11 @@ jobs:
         env:
           DATABASE_URL: postgres://admin:opensesame@localhost:5432/test-db
           FORCE_COLOR: true
+          SUDO_TOKEN: opensesame
       - run: npm run e2e
         env:
           DATABASE_URL: postgres://admin:opensesame@localhost:5432/test-db
+          SUDO_TOKEN: opensesame
   deploy:
     uses: "./.github/workflows/deploy.yml"
     if: github.ref == 'refs/heads/main'

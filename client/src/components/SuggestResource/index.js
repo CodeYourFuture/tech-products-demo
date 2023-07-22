@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { createResource } from "../services/resourceService";
+import { createResource } from "../../services/resourceService";
 
 import "./SuggestResource.scss";
 
