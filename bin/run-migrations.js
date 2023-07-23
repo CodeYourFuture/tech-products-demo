@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-require("dotenv/config");
+require("dotenv-expand/config");
 const { default: migrate } = require("node-pg-migrate");
 
 const configuration = require("../migration-config.json");
