@@ -11,6 +11,5 @@ it("can be reached directly", () => {
 
 it("meets basic accessibility guidelines", () => {
 	cy.visit("/about");
-	cy.injectAxe();
-	cy.checkA11y();
+	cy.validateA11y();
 });

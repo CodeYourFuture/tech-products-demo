@@ -25,3 +25,20 @@
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
 import "@testing-library/cypress/add-commands";
+import "cypress-axe";
+
+Cypress.Commands.add("validateA11y", () => {
+	cy.injectAxe();
+	cy.checkA11y(null, null, (violations) => {
+		const violationData = violations.map(
+			({ id, impact, description, nodes }) => ({
+				id,
+				impact,
+				description,
+				nodes: nodes.length,
+			})
+		);
+
+		cy.task("table", violationData);
+	});
+});

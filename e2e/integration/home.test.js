@@ -7,8 +7,7 @@ it("displays the site", () => {
 });
 
 it("meets basic accessibility guidelines", () => {
-	cy.injectAxe();
-	cy.checkA11y();
+	cy.validateA11y();
 });
 
 it("lets the user submit a resource", () => {

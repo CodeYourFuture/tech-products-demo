@@ -10,6 +10,12 @@ module.exports = defineConfig({
 					config.env[key.slice(8)] = value;
 				}
 			});
+			on("task", {
+				table(data) {
+					console.table(data);
+					return null;
+				},
+			});
 			return config;
 		},
 		specPattern: "e2e/integration/**/*.test.js",
