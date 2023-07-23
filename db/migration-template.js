@@ -1,16 +1,9 @@
 /* eslint-disable no-unused-vars */
 
 /**
- * Importing library types for better type hints.
+ * Defines changes to be made to the database schema to accommodate new functionality.
  *
  * See {@link https://salsita.github.io/node-pg-migrate/#/migrations?id=defining-migrations the docs}.
- *
- * @typedef {import("node-pg-migrate").MigrationBuilder} MigrationBuilder
- * @typedef {import("node-pg-migrate").ColumnDefinitions} ColumnDefinitions
- */
-
-/**
- * Defines changes to be made to the database schema to accommodate new functionality.
  *
  * @param {MigrationBuilder} pgm
  * @returns {void | Promise<void>}
@@ -31,3 +24,9 @@ exports.down = (pgm) => {};
  * @type {ColumnDefinitions | undefined}
  */
 exports.shorthands = undefined;
+
+/**
+ * Importing library types for less verbose type hints.
+ * @typedef {import("node-pg-migrate").MigrationBuilder} MigrationBuilder
+ * @typedef {import("node-pg-migrate").ColumnDefinitions} ColumnDefinitions
+ */
