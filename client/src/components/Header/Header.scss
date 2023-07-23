@@ -21,7 +21,9 @@ header {
 				sans-serif;
 			text-decoration: none;
 
-			&.active {
+			&.active,
+			&:focus,
+			&:hover {
 				border-bottom: 2px solid #bb373a;
 				color: #bb373a;
 			}
