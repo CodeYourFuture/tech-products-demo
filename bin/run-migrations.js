@@ -2,7 +2,7 @@
 require("dotenv-expand/config");
 const { default: migrate } = require("node-pg-migrate");
 
-const configuration = require("../migration-config.json");
+const configuration = require("../.config/migrations.json");
 
 const connectionString = process.env.DATABASE_URL;
 
