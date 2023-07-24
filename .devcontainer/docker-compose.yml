@@ -7,7 +7,6 @@ services:
       context: ..
       dockerfile: .devcontainer/Dockerfile
     command: sleep infinity
-    env_file: ../.env.example
     environment:
       DATABASE_URL: postgres://postgres:@db:5432/postgres?sslmode=disable
     network_mode: service:db
