@@ -17,7 +17,7 @@ module.exports = merge(common, {
 		historyApiFallback: {
 			disableDotRule: true,
 		},
-		port: port,
+		port,
 		proxy: [
 			{
 				context: ["/api", "/docs", "/health"],
