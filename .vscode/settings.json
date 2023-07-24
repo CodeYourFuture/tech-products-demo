@@ -1,7 +1,15 @@
 {
-	"editor.formatOnSave": false,
 	"editor.codeActionsOnSave": {
 		"source.fixAll.eslint": true
 	},
-	"files.eol": "\n"
+	"editor.formatOnSave": false,
+	"eslint.options": {
+		"ignorePath": ".config/.lintignore",
+		"overrideConfigFile": ".config/.eslintrc.json"
+	},
+	"files.eol": "\n",
+	"jest.autoRun": "off",
+	"prettier.configPath": ".config/.prettierrc",
+	"prettier.ignorePath": ".config/.lintignore",
+	"prettier.requireConfig": true
 }

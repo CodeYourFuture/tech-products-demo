@@ -1,0 +1,25 @@
+---
+version: "3.8"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: .devcontainer/Dockerfile
+    command: sleep infinity
+    env_file: .env.example
+    environment:
+      DATABASE_URL: postgres://postgres:@db:5432/postgres?sslmode=disable
+    network_mode: service:db
+    volumes:
+      - ..:/workspaces:cached
+  db:
+    extends:
+      file: "./docker-compose.yml"
+      service: db
+    restart: unless-stopped
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+volumes:
+  postgres-data:

@@ -1,0 +1,16 @@
+{
+	"name": "Tech Products Demo",
+	"dockerComposeFile": ["../docker-compose.yml", "docker-compose.yml"],
+	"service": "app",
+	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+	"forwardPorts": [4201, 4202],
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"eamodio.gitlens",
+				"esbenp.prettier-vscode",
+				"orta.vscode-jest"
+			]
+		}
+	}
+}

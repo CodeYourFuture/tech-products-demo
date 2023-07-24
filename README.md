@@ -4,15 +4,17 @@
 
 ## Dev Setup
 
-- Clone the repository
-- Run `npm ci` to install the dependencies
-- Run `docker compose up --detach` to start the services
-- Copy `.env.example` to `.env` and update if needed
-- Run `npm run migration -- up` to migrate the database
-- Run `npm run ship` to ensure all of the tests pass
-- Start the app with `npm run dev` (dev mode) or `npm run serve` (prod mode) and visit:
-  - UI: http://localhost:4201
-  - API docs: http://localhost:4201/docs
+If you're using devcontainers, see `.devcontainer/README.md`. Otherwise:
+
+1. Clone the repository
+2. Run `npm ci` to install the dependencies
+3. Run `docker compose up --detach` to start the services
+4. Copy `.env.example` to `.env` and update if needed
+5. Run `npm run migration -- up` to migrate the database
+6. Run `npm run ship` to ensure all of the tests pass
+7. Start the app with `npm run dev` (dev mode) or `npm run serve` (prod mode) and visit:
+   - UI: http://localhost:4201
+   - API docs: http://localhost:4201/docs
 
 ### Ports used
 
