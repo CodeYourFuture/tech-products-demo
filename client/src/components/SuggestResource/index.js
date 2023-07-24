@@ -33,15 +33,21 @@ export default function SuggestResource() {
 				onSubmit={submitForm}
 			>
 				<label>
-					Title*
+					<span>
+						<strong>Title</strong>*
+					</span>
 					<input name="title" required type="text" />
 				</label>
 				<label>
-					URL*
+					<span>
+						<strong>URL</strong>*
+					</span>
 					<input name="url" required type="url" />
 				</label>
 				<label>
-					Description
+					<span>
+						<strong>Description</strong>
+					</span>
 					<input name="description" type="text" />
 				</label>
 				<button type="submit">Suggest</button>
