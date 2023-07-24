@@ -27,4 +27,12 @@ describe("Home", () => {
 			within(screen.getByRole("heading", { level: 1 })).getByRole("link")
 		).toHaveAttribute("href", "/");
 	});
+
+	it("allows the user to go to the suggest page", () => {
+		renderWithHistory();
+		expect(screen.getByRole("link", { name: /suggest/i })).toHaveAttribute(
+			"href",
+			"/suggest"
+		);
+	});
 });

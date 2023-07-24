@@ -1,9 +1,8 @@
-import { ResourceList, SuggestResource } from "../components";
+import { ResourceList } from "../components";
 
 export function Home() {
 	return (
 		<>
-			<SuggestResource />
 			<ResourceList />
 		</>
 	);

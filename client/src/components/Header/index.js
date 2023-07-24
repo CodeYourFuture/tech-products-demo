@@ -11,6 +11,11 @@ export default function Header() {
 			<nav>
 				<ul>
 					<li>
+						<NavLink to="/suggest">Suggest</NavLink>
+					</li>
+				</ul>
+				<ul>
+					<li>
 						<NavLink to="/about">About</NavLink>
 					</li>
 				</ul>
