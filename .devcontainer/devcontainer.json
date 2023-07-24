@@ -1,6 +1,6 @@
 {
 	"name": "Tech Products Demo",
-	"dockerComposeFile": ["../docker-compose.yml", "docker-compose.yml"],
+	"dockerComposeFile": "docker-compose.yml",
 	"service": "app",
 	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
 	"forwardPorts": [4201, 4202],
