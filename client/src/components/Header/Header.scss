@@ -3,13 +3,21 @@ header {
 	background-color: #efefef;
 	display: flex;
 	justify-content: space-between;
-	padding: 0 16px;
+	padding: 0 32px;
 
 	h1 {
 		margin-right: 32px;
+
 		a {
+			align-items: center;
 			color: inherit;
+			display: flex;
 			text-decoration: none;
+
+			img {
+				height: 50px;
+				margin-right: 8px;
+			}
 		}
 	}
 
@@ -54,10 +62,18 @@ header {
 	@media (max-width: 600px) {
 		align-items: flex-start;
 		flex-direction: column;
-		padding-bottom: 16px;
+
+		h1 > a > img {
+			height: 35px;
+			margin-right: 4px;
+		}
 
 		nav {
 			flex-direction: column;
+
+			ul {
+				padding-bottom: 16px;
+			}
 		}
 	}
 }

@@ -1,12 +1,16 @@
 import { Link, NavLink } from "react-router-dom";
 
 import "./Header.scss";
+import logo from "./logo.png";
 
 export default function Header() {
 	return (
 		<header>
 			<h1>
-				<Link to="/">Resources</Link>
+				<Link to="/">
+					<img alt="" src={logo} />
+					&nbsp;Resources
+				</Link>
 			</h1>
 			<nav>
 				<ul>
