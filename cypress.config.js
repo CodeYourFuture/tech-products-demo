@@ -2,7 +2,7 @@ require("dotenv-expand/config");
 
 const { defineConfig } = require("cypress");
 
-const { clearDb, closeConnection } = require("./e2e/db");
+const { clearDb, closeConnection, seed } = require("./e2e/db");
 
 module.exports = defineConfig({
 	e2e: {
@@ -10,7 +10,7 @@ module.exports = defineConfig({
 		async setupNodeEvents(on, config) {
 			loadEnvVars(config.env);
 			on("after:run", () => closeConnection());
-			on("task", { clearDb, table });
+			on("task", { clearDb, seed, table });
 			return config;
 		},
 		specPattern: "e2e/integration/**/*.test.js",

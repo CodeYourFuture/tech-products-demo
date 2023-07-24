@@ -1,17 +1,29 @@
 beforeEach(() => {
 	cy.task("clearDb");
-	cy.visit("/");
 });
 
 it("displays the site", () => {
+	cy.visit("/");
 	cy.findByRole("heading", { level: 1 }).should("contain.text", "Resources");
 });
 
 it("meets basic accessibility guidelines", () => {
+	cy.visit("/");
 	cy.validateA11y();
 });
 
+it("shows existing resources", () => {
+	cy.fixture("initialResources").then((fixture) => cy.task("seed", fixture));
+	cy.visit("/");
+	cy.findByRole("link", { name: "JS TDD Ohm" }).should(
+		"have.attr",
+		"href",
+		"https://blog.jonrshar.pe/2023/May/23/js-tdd-ohm.html"
+	);
+});
+
 it("lets the user submit a resource", () => {
+	cy.visit("/");
 	const description = "This is a useful thing to read.";
 	const title = crypto.randomUUID();
 	const url = `https://example.com/${crypto.randomUUID()}`;

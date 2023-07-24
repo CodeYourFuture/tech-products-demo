@@ -13,4 +13,13 @@ module.exports = {
 		}
 		return null;
 	},
+	async seed({ resources = [] }) {
+		for (const { description, draft, title, url } of resources) {
+			await pool.query(
+				"INSERT INTO resources (description, draft, title, url) VALUES ($1, $2, $3, $4);",
+				[description, draft, title, url]
+			);
+		}
+		return null;
+	},
 };
