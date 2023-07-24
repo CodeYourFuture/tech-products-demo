@@ -1,4 +1,5 @@
 beforeEach(() => {
+	cy.task("clearDb");
 	cy.visit("/");
 });
 
