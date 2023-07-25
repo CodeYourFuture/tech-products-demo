@@ -19,10 +19,10 @@ jobs:
         with:
           cache: "npm"
           node-version-file: ".nvmrc"
+      - run: npm ci
       - run: cp .env.example .env
       - run: npm run services:start
       - run: npm run migration -- up
-      - run: npm ci
       - run: npm run lint
       - run: npm run test -- --coverage
         env:
