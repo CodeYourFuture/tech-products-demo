@@ -8,6 +8,6 @@ export async function findByGitHubId(id) {
 	return await repository.findOneByGitHubId(id);
 }
 
-export async function findById(id) {
+export async function getById(id) {
 	return await repository.getOne(id);
 }

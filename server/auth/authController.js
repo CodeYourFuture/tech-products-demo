@@ -3,18 +3,24 @@ import passport from "passport";
 import { Strategy as GitHubStrategy } from "passport-github2";
 
 import config from "../utils/config";
-import { authOnly } from "../utils/middleware";
+import { authOnly, methodNotAllowed } from "../utils/middleware";
 
 import * as service from "./authService";
 
 const router = Router();
+
 passport.use(
 	"github",
 	new GitHubStrategy(
-		{ ...config.oauth },
+		{
+			...config.oauth,
+			scopeSeparator: " ",
+			scope: ["read:user", "user:email"],
+		},
 		async (accessToken, refreshToken, profile, done) => {
 			try {
-				done(null, await service.logIn(profile));
+				const user = await service.logIn(profile);
+				done(null, user);
 			} catch (err) {
 				done(err);
 			}
@@ -32,19 +38,24 @@ passport.deserializeUser(async (user, done) => {
 
 passport.serializeUser((user, done) => done(null, user.id));
 
-router.get(
-	"/callback",
-	passport.authenticate("github", {
-		successRedirect: "/",
-		failureRedirect: "/",
-	})
-);
+router
+	.route("/callback")
+	.get(
+		passport.authenticate("github", {
+			successRedirect: "/",
+			failureRedirect: "/",
+		})
+	)
+	.all(methodNotAllowed);
 
-router.get(
-	"/login",
-	passport.authenticate("github", { scope: ["user:email"] })
-);
+router
+	.route("/login")
+	.get(passport.authenticate("github"))
+	.all(methodNotAllowed);
 
-router.get("/principal", authOnly, (req, res) => res.json(req.user));
+router
+	.route("/principal")
+	.get(authOnly, (req, res) => res.json(req.user))
+	.all(methodNotAllowed);
 
 export default router;

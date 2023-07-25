@@ -1,22 +1,11 @@
 import { randomUUID } from "node:crypto";
 
-import { Pool } from "pg";
 import request from "supertest";
 
 import app from "../app";
-
-const DATETIME = /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z/;
-const UUID = /[\da-f]{8}-[\da-f]{4}-[\da-f]{4}-[\da-f]{4}-[\da-f]{12}/;
-
-const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+import { patterns } from "../setupTests";
 
 describe("/api/resources", () => {
-	beforeEach(async () => {
-		await pool.query("TRUNCATE TABLE resources;");
-	});
-
-	afterAll(() => pool.end());
-
 	describe("POST /", () => {
 		it("returns the created resource", async () => {
 			const resource = {
@@ -27,13 +16,14 @@ describe("/api/resources", () => {
 			const { body } = await request(app)
 				.post("/api/resources")
 				.send(resource)
+				.set("User-Agent", "supertest")
 				.expect(201);
 
 			expect(body).toMatchObject({
-				accession: expect.stringMatching(DATETIME),
+				accession: expect.stringMatching(patterns.DATETIME),
 				description: null,
 				draft: true,
-				id: expect.stringMatching(UUID),
+				id: expect.stringMatching(patterns.UUID),
 				title: resource.title,
 				url: resource.url,
 			});
@@ -49,6 +39,7 @@ describe("/api/resources", () => {
 			const { body } = await request(app)
 				.post("/api/resources")
 				.send(resource)
+				.set("User-Agent", "supertest")
 				.expect(201);
 
 			expect(body).toMatchObject(resource);
@@ -58,12 +49,17 @@ describe("/api/resources", () => {
 	describe("GET /", () => {
 		it("allows superuser to see all resources", async () => {
 			const resource = { title: "foo", url: "bar" };
-			await request(app).post("/api/resources").send(resource).expect(201);
+			await request(app)
+				.post("/api/resources")
+				.send(resource)
+				.set("User-Agent", "supertest")
+				.expect(201);
 
 			const { body } = await request(app)
 				.get("/api/resources")
 				.query({ drafts: true })
 				.set("Authorization", `Bearer ${process.env.SUDO_TOKEN}`)
+				.set("User-Agent", "supertest")
 				.expect(200);
 
 			expect(body).toHaveLength(1);
@@ -72,11 +68,16 @@ describe("/api/resources", () => {
 
 		it("prevents non-superusers from seeing draft resources", async () => {
 			const resource = { title: "title", url: "url" };
-			await request(app).post("/api/resources").send(resource).expect(201);
+			await request(app)
+				.post("/api/resources")
+				.send(resource)
+				.set("User-Agent", "supertest")
+				.expect(201);
 
 			await request(app)
 				.get("/api/resources")
 				.query({ drafts: true })
+				.set("User-Agent", "supertest")
 				.expect(200, []);
 		});
 	});
@@ -89,21 +90,25 @@ describe("/api/resources", () => {
 					title: "CYF Syllabus",
 					url: "https://syllabus.codeyourfuture.io/",
 				})
+				.set("User-Agent", "supertest")
 				.expect(201);
 
 			const { body: updated } = await request(app)
 				.patch(`/api/resources/${resource.id}`)
 				.send({ draft: false })
 				.set("Authorization", `Bearer ${process.env.SUDO_TOKEN}`)
+				.set("User-Agent", "supertest")
 				.expect(200);
 
 			expect(updated).toEqual({
 				...resource,
 				draft: false,
-				publication: expect.stringMatching(DATETIME),
+				publication: expect.stringMatching(patterns.DATETIME),
 			});
 
-			const { body: resources } = await request(app).get("/api/resources");
+			const { body: resources } = await request(app)
+				.get("/api/resources")
+				.set("User-Agent", "supertest");
 			expect(resources).toHaveLength(1);
 		});
 
@@ -114,12 +119,14 @@ describe("/api/resources", () => {
 					title: "Mastering margin collapsing",
 					url: "https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Box_Model/Mastering_margin_collapsing",
 				})
+				.set("User-Agent", "supertest")
 				.expect(201);
 
 			await request(app)
 				.patch(`/api/resources/${resource.id}`)
 				.send({ draft: true, title: "Something else" })
 				.set("Authorization", `Bearer ${process.env.SUDO_TOKEN}`)
+				.set("User-Agent", "supertest")
 				.expect(400);
 		});
 
@@ -128,6 +135,7 @@ describe("/api/resources", () => {
 				.patch(`/api/resources/${randomUUID()}`)
 				.send({ draft: false })
 				.set("Authorization", `Bearer ${process.env.SUDO_TOKEN}`)
+				.set("User-Agent", "supertest")
 				.expect(404);
 		});
 
@@ -138,11 +146,13 @@ describe("/api/resources", () => {
 					title: "PostgreSQL tutorial",
 					url: "https://www.postgresqltutorial.com/",
 				})
+				.set("User-Agent", "supertest")
 				.expect(201);
 
 			await request(app)
 				.patch(`/api/resources/${resource.id}`)
 				.send({ draft: false })
+				.set("User-Agent", "supertest")
 				.expect(401);
 		});
 	});

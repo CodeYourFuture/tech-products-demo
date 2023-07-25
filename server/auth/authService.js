@@ -1,7 +1,7 @@
 import { usersService } from "../users";
 
 export async function deserialize(id) {
-	return usersService.findById(id);
+	return await usersService.getById(id);
 }
 
 export async function logIn(profile) {
@@ -9,7 +9,7 @@ export async function logIn(profile) {
 	if (existing) {
 		return existing;
 	}
-	return usersService.create({
+	return await usersService.create({
 		email: profile.emails?.[0]?.value,
 		gitHubId: profile.id,
 		name: profile.displayName ?? profile.username,
