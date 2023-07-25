@@ -30,7 +30,9 @@ jobs:
       - run: npm run e2e
         env:
           CYPRESS_VIDEO: true
-      - run: docker compose down
+      - run: |
+          docker compose logs
+          docker compose down
         if: always()
       - uses: actions/upload-artifact@v3
         if: always()

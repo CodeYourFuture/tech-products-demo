@@ -1,10 +1,12 @@
 import express from "express";
 import { coreRouter } from "fauxauth";
+import morgan from "morgan";
 
 import createRoutes from "./api.mjs";
 import users from "./users.mjs";
 
 const app = express();
+app.use(morgan("dev"));
 
 const fauxauth = coreRouter({
 	callbackUrl:
