@@ -1,6 +1,6 @@
 import { Navigate } from "react-router-dom";
 
-import { usePrincipal } from "../authContext";
+import { usePrincipal } from "../../authContext";
 
 export default function Account() {
 	const principal = usePrincipal();
@@ -18,7 +18,7 @@ export default function Account() {
 					</tr>
 					<tr>
 						<th>Email</th>
-						<td>{principal?.email}</td>
+						<td>{principal?.email ?? <em>N/A</em>}</td>
 					</tr>
 				</tbody>
 			</table>
