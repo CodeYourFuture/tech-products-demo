@@ -48,9 +48,11 @@ export default function SuggestResource() {
 					<span>
 						<strong>Description</strong>
 					</span>
-					<input name="description" type="text" />
+					<textarea name="description" rows={5} />
 				</label>
-				<button type="submit">Suggest</button>
+				<button className="primary" type="submit">
+					Suggest
+				</button>
 			</form>
 		</>
 	);

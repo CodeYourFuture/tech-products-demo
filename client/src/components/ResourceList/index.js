@@ -6,7 +6,9 @@ export default function ResourceList() {
 	const [resources, setResources] = useState([]);
 
 	useEffect(() => {
-		getResources().then(setResources);
+		getResources()
+			.then(setResources)
+			.catch(() => {});
 	}, []);
 
 	return (
