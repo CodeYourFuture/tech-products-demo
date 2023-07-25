@@ -1,9 +1,12 @@
 import { Link, NavLink } from "react-router-dom";
 
+import { usePrincipal } from "../../authContext";
+
 import "./Header.scss";
 import logo from "./logo.png";
 
 export default function Header() {
+	const principal = usePrincipal();
 	return (
 		<header>
 			<h1>
@@ -23,7 +26,11 @@ export default function Header() {
 						<NavLink to="/about">About</NavLink>
 					</li>
 					<li>
-						<a href="/api/auth/login">Log In</a>
+						{principal ? (
+							<NavLink to="/account">Account</NavLink>
+						) : (
+							<a href="/api/auth/login">Log In</a>
+						)}
 					</li>
 				</ul>
 			</nav>

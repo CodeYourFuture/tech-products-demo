@@ -2,7 +2,7 @@ import { Route, Routes } from "react-router-dom";
 
 import "./App.scss";
 import { Header } from "./components";
-import { About, Home, NotFound, Suggest } from "./pages";
+import { About, Account, Home, NotFound, Suggest } from "./pages";
 
 const App = () => (
 	<main role="main">
@@ -11,6 +11,7 @@ const App = () => (
 			<Routes>
 				<Route path="/" element={<Home />} />
 				<Route path="/about" element={<About />} />
+				<Route path="/account" element={<Account />} />
 				<Route path="/suggest" element={<Suggest />} />
 				<Route path="*" element={<NotFound />} />
 			</Routes>
