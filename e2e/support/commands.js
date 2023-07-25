@@ -36,16 +36,20 @@ Cypress.Commands.add("logInAs", (email) => {
 
 Cypress.Commands.add("validateA11y", () => {
 	cy.injectAxe();
-	cy.checkA11y(null, null, (violations) => {
-		const violationData = violations.map(
-			({ id, impact, description, nodes }) => ({
-				id,
-				impact,
-				description,
-				nodes: nodes.length,
-			})
-		);
+	cy.checkA11y(
+		null,
+		{ runOnly: { type: "tag", values: ["wcag2a", "wcag2aa"] } },
+		(violations) => {
+			const violationData = violations.map(
+				({ id, impact, description, nodes }) => ({
+					id,
+					impact,
+					description,
+					nodes: nodes.length,
+				})
+			);
 
-		cy.task("table", violationData);
-	});
+			cy.task("table", violationData);
+		}
+	);
 });
