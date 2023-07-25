@@ -9,6 +9,7 @@ export const usePrincipal = () => {
 };
 
 export default function AuthProvider({ children }) {
+	const [loading, setLoading] = useState(true);
 	const [principal, setPrincipal] = useState();
 
 	useEffect(() => {
@@ -18,8 +19,13 @@ export default function AuthProvider({ children }) {
 					return res.json();
 				}
 			})
-			.then(setPrincipal);
+			.then(setPrincipal)
+			.finally(() => setLoading(false));
 	}, []);
+
+	if (loading) {
+		return null;
+	}
 
 	return (
 		<AuthContext.Provider value={{ principal }}>

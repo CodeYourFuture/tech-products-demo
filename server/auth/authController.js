@@ -54,6 +54,18 @@ router
 	.all(methodNotAllowed);
 
 router
+	.route("/logout")
+	.post((req, res, next) => {
+		req.logout((err) => {
+			if (err) {
+				return next(err);
+			}
+			res.redirect("/");
+		});
+	})
+	.all(methodNotAllowed);
+
+router
 	.route("/principal")
 	.get(authOnly, (req, res) => res.json(req.user))
 	.all(methodNotAllowed);

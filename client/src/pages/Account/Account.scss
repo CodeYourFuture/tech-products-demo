@@ -1,0 +1,20 @@
+button.secondary {
+	background-color: white;
+	border: 2px solid #bb373a;
+	border-radius: 5px;
+	color: #bb373a;
+	cursor: pointer;
+	font:
+		400 16px "Lato",
+		sans-serif;
+	line-height: 28px;
+	padding: 0;
+
+	&:hover {
+		background-color: #faf3f3;
+	}
+
+	&:active {
+		background-color: #f2dbdb;
+	}
+}

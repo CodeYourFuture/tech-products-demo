@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 
 import { usePrincipal } from "../../authContext";
@@ -37,5 +37,16 @@ describe("Account", () => {
 			</MemoryRouter>
 		);
 		expect(screen.getByText("Home!")).toBeInTheDocument();
+	});
+
+	it("shows a logout link", () => {
+		usePrincipal.mockReturnValue({ email: "", name: "" });
+		render(<Account />);
+		const form = screen.getByRole("form");
+		expect(form).toHaveAttribute("action", "/api/auth/logout");
+		expect(form).toHaveAttribute("method", "POST");
+		expect(
+			within(form).getByRole("button", { name: /log out/i })
+		).toHaveAttribute("type", "submit");
 	});
 });

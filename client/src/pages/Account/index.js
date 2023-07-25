@@ -2,6 +2,8 @@ import { Navigate } from "react-router-dom";
 
 import { usePrincipal } from "../../authContext";
 
+import "./Account.scss";
+
 export default function Account() {
 	const principal = usePrincipal();
 	if (!principal) {
@@ -22,6 +24,15 @@ export default function Account() {
 					</tr>
 				</tbody>
 			</table>
+			<form
+				action="/api/auth/logout"
+				aria-labelledby="logout-button"
+				method="POST"
+			>
+				<button className="secondary" id="logout-button" type="submit">
+					Log out
+				</button>
+			</form>
 		</>
 	);
 }

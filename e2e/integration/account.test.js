@@ -5,3 +5,10 @@ it("shows the user's details", () => {
 	cy.findByText(email).should("exist");
 	cy.findByText("Cyf Admin").should("exist");
 });
+
+it("lets the user log out", () => {
+	cy.logInAs("shh@example.com");
+	cy.findByRole("link", { name: /account/i }).click();
+	cy.findByRole("button", { name: /log out/i }).click();
+	cy.findByRole("link", { name: /log in/i }).should("exist");
+});
