@@ -19,9 +19,9 @@ jobs:
         with:
           cache: "npm"
           node-version-file: ".nvmrc"
+      - run: docker compose up --detach
       - run: npm ci
       - run: cp .env.example .env
-      - run: npm run services:start
       - run: npm run migration -- up
       - run: npm run lint
       - run: npm run test -- --coverage
@@ -30,7 +30,7 @@ jobs:
       - run: npm run e2e
         env:
           CYPRESS_VIDEO: true
-      - run: npm run services:stop
+      - run: docker compose down
         if: always()
       - uses: actions/upload-artifact@v3
         if: always()
