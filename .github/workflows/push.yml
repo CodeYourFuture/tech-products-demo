@@ -30,8 +30,10 @@ jobs:
       - run: npm run e2e
         env:
           CYPRESS_VIDEO: true
+      - run: npm run services:stop
+        if: always()
       - uses: actions/upload-artifact@v3
-        if: ${{ always() }}
+        if: always()
         with:
           if-no-files-found: ignore
           name: cypress-outputs
