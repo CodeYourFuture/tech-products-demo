@@ -1,4 +1,4 @@
-import { createHash } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
 
 export default JSON.parse(process.env.USERS).map(createSpec);
 
@@ -8,7 +8,7 @@ function createSpec({
 	name,
 	privateEmails = [],
 	publicEmails = [],
-	token,
+	token = randomUUID(),
 }) {
 	let login = gitHubLogin;
 	if (login === undefined) {

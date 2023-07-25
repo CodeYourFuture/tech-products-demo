@@ -4,6 +4,7 @@
 		"node": true
 	},
 	"extends": ["@codeyourfuture/standard"],
+	"ignorePatterns": ["*.d.ts"],
 	"overrides": [
 		{
 			"files": ["setupTests.js", "**/*.test.js"],

@@ -17,9 +17,14 @@ services:
         [
           {
             "gitHubId": 123,
+            "gitHubLogin": "cyf-admin",
             "name": "Cyf Admin",
-            "publicEmails": ["admin@codeyourfuture.io"],
-            "token": "cyf-admin-token"
+            "publicEmails": ["admin@codeyourfuture.io"]
+          },
+          {
+            "gitHubId": 456,
+            "gitHubLogin": "discreet-volunteer",
+            "privateEmails": ["shh@example.com"]
           }
         ]
     init: true

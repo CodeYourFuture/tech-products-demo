@@ -27,6 +27,13 @@
 import "@testing-library/cypress/add-commands";
 import "cypress-axe";
 
+Cypress.Commands.add("logInAs", (email) => {
+	// TODO - actually clicking the link didn't work and I couldn't figure out why...
+	cy.visit("/api/auth/login");
+	cy.findByRole("combobox", { name: /identity/i }).select(email);
+	cy.findByRole("button", { name: /authenticate/i }).click();
+});
+
 Cypress.Commands.add("validateA11y", () => {
 	cy.injectAxe();
 	cy.checkA11y(null, null, (violations) => {

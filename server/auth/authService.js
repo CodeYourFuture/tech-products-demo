@@ -10,7 +10,7 @@ export async function logIn(profile) {
 		return existing;
 	}
 	return usersService.create({
-		email: profile.emails[0]?.value,
+		email: profile.emails?.[0]?.value,
 		gitHubId: profile.id,
 		name: profile.displayName ?? profile.username,
 	});
