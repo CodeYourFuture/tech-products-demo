@@ -12,30 +12,39 @@ jobs:
   build:
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v3
-      - run: echo "NODE_VERSION=$(cat .nvmrc)" >> $GITHUB_OUTPUT
-        id: nvmrc
-      - uses: actions/setup-node@v3
+      - name: Check out source code
+        uses: actions/checkout@v3
+      - name: Set up appropriate Node version
+        uses: actions/setup-node@v3
         with:
           cache: "npm"
           node-version-file: ".nvmrc"
-      - run: docker compose up --detach
-      - run: npm ci
-      - run: cp .env.example .env
-      - run: npm run migration -- up
-      - run: npm run lint
-      - run: npm run test -- --coverage
+      - name: Start dev service containers
+        run: docker compose up --detach
+      - name: Install dependencies
+        run: npm ci
+      - name: Set up environment
+        run: cp .env.example .env
+      - name: Apply database migrations
+        run: npm run migration -- up
+      - name: Check code style
+        run: npm run lint
+      - name: Run low-level tests
+        run: npm run test -- --coverage
         env:
           FORCE_COLOR: true
-      - run: npm run e2e
+      - name: Run end-to-end tests
+        run: npm run e2e
         env:
           CYPRESS_VIDEO: true
-      - run: |
+      - name: Get service logs and stop containers
+        if: always()
+        run: |
           docker compose logs
           docker compose down
+      - name: Store Cypress test outputs
         if: always()
-      - uses: actions/upload-artifact@v3
-        if: always()
+        uses: actions/upload-artifact@v3
         with:
           if-no-files-found: ignore
           name: cypress-outputs
