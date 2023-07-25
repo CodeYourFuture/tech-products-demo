@@ -19,14 +19,16 @@ export default {
 			process.env.OAUTH_BASE_URL && `${process.env.OAUTH_BASE_URL}/authorize`,
 		clientID: process.env.OAUTH_CLIENT_ID,
 		clientSecret: process.env.OAUTH_CLIENT_SECRET,
-		callbackUrl: process.env.OAUTH_CALLBACK_URL,
+		callbackURL: process.env.OAUTH_CALLBACK_URL,
 		tokenURL:
 			process.env.OAUTH_BASE_URL &&
 			`${process.env.OAUTH_BASE_URL}/access_token`,
+		userAgent: "CodeYourFuture/tech-products-demo",
 		userEmailURL:
-			process.env.GITHUB_API_URL && `${process.env.GITHUB_API_URL}/user/emails`,
+			process.env.GH_API_BASE_URL &&
+			`${process.env.GH_API_BASE_URL}/user/emails`,
 		userProfileURL:
-			process.env.GITHUB_API_URL && `${process.env.GITHUB_API_URL}/user`,
+			process.env.GH_API_BASE_URL && `${process.env.GH_API_BASE_URL}/user`,
 	},
 	port: parseInt(process.env.PORT ?? "4201", 10),
 	production: process.env.NODE_ENV?.toLowerCase() === "production",
