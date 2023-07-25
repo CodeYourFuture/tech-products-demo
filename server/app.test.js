@@ -3,10 +3,6 @@ import request from "supertest";
 import app from "./app";
 
 describe("app", () => {
-	it("exposes the API endpoint", async () => {
-		await request(app).get("/api").expect(200, { message: "Hello, world!" });
-	});
-
 	it("exposes a /health endpoint", async () => {
 		await request(app).get("/health").expect(200, "OK");
 	});

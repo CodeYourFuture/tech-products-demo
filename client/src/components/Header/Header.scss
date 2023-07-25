@@ -35,10 +35,18 @@ header {
 
 			&:first-child {
 				justify-content: flex-start;
+
+				li:not(:last-of-type) {
+					padding-right: 16px;
+				}
 			}
 
 			&:last-child {
 				justify-content: flex-end;
+
+				li:not(:first-of-type) {
+					padding-left: 16px;
+				}
 			}
 
 			li > a {

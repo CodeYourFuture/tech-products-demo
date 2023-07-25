@@ -6,17 +6,17 @@ export class MissingResource extends Error {
 	}
 }
 
-export async function publish(id) {
-	if (!(await repository.getOne(id))) {
-		throw new MissingResource(id);
-	}
-	return await repository.update(id, { draft: false, publication: new Date() });
-}
+export const create = async (resource) => {
+	return await repository.add(resource);
+};
 
 export async function getAll(includeDrafts) {
 	return await repository.getAll({ draft: includeDrafts });
 }
 
-export const create = async (resource) => {
-	return await repository.add(resource);
-};
+export async function publish(id) {
+	if (!(await repository.findOne(id))) {
+		throw new MissingResource(id);
+	}
+	return await repository.update(id, { draft: false, publication: new Date() });
+}

@@ -22,6 +22,9 @@ export default function Header() {
 					<li>
 						<NavLink to="/about">About</NavLink>
 					</li>
+					<li>
+						<a href="/api/auth/login">Log In</a>
+					</li>
 				</ul>
 			</nav>
 		</header>

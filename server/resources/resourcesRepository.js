@@ -1,12 +1,5 @@
 import db from "../db";
 
-export const getOne = async (id) => {
-	const {
-		rows: [resource],
-	} = await db.query("SELECT * FROM resources WHERE id = $1;", [id]);
-	return resource;
-};
-
 export const add = async ({ description, title, url }) => {
 	const {
 		rows: [created],
@@ -15,6 +8,13 @@ export const add = async ({ description, title, url }) => {
 		[description, title, url]
 	);
 	return created;
+};
+
+export const findOne = async (id) => {
+	const {
+		rows: [resource],
+	} = await db.query("SELECT * FROM resources WHERE id = $1;", [id]);
+	return resource;
 };
 
 export const getAll = async ({ draft }) => {

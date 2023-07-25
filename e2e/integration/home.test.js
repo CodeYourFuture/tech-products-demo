@@ -21,3 +21,13 @@ it("shows existing resources", () => {
 		"https://blog.jonrshar.pe/2023/May/23/js-tdd-ohm.html"
 	);
 });
+
+it("allows user to log in", () => {
+	// TODO - actually clicking the link didn't work and I couldn't figure out why...
+	cy.visit("/api/auth/login");
+	cy.findByRole("combobox", { name: /identity/i }).select(
+		"admin@codeyourfuture.io"
+	);
+	cy.findByRole("button", { name: /authenticate/i }).click();
+	cy.findByRole("heading", { level: 1 }).should("contain.text", "Resources");
+});

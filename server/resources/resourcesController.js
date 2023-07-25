@@ -37,7 +37,7 @@ router
 			} catch (err) {
 				if (err instanceof service.MissingResource) {
 					logger.info(err.message);
-					res.sendStatus(404);
+					return res.sendStatus(404);
 				}
 				throw err;
 			}

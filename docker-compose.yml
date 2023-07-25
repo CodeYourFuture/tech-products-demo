@@ -1,7 +1,27 @@
 services:
   db:
+    container_name: "postgres"
     image: postgres:15
     environment:
       POSTGRES_HOST_AUTH_METHOD: trust
     ports:
       - "4211:5432"
+  gh:
+    container_name: "gitstub"
+    build:
+      context: dev/gitstub/
+    environment:
+      DEBUG: "fauxauth:*"
+      # noinspection JsonSchemaCompliance
+      USERS: >
+        [
+          {
+            "gitHubId": 123,
+            "name": "Cyf Admin",
+            "publicEmails": ["admin@codeyourfuture.io"],
+            "token": "cyf-admin-token"
+          }
+        ]
+    init: true
+    ports:
+      - "4212:4212"

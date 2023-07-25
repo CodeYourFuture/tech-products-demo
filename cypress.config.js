@@ -17,6 +17,7 @@ module.exports = defineConfig({
 		supportFile: "e2e/support/index.js",
 	},
 	fixturesFolder: "e2e/fixtures",
+	pageLoadTimeout: 5_000,
 	screenshotsFolder: "e2e/screenshots",
 	video: false,
 	videosFolder: "e2e/videos",

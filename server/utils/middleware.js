@@ -15,6 +15,13 @@ export const asyncHandler = (handler) => async (req, res, next) => {
 	}
 };
 
+export const authOnly = (req, res, next) => {
+	if (req.user) {
+		return next();
+	}
+	res.sendStatus(401);
+};
+
 export const clientRouter = (apiRoot) => {
 	const staticDir = path.join(__dirname, "..", "static");
 	const router = Router();
@@ -61,8 +68,7 @@ export const sudo = (req, res, next) => {
 
 export const sudoOnly = (req, res, next) => {
 	if (req.superuser) {
-		next();
-	} else {
-		res.sendStatus(401);
+		return next();
 	}
+	res.sendStatus(401);
 };

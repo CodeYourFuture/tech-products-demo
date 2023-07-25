@@ -25,6 +25,7 @@
 	"rules": {
 		"import/order": ["error", { "newlines-between": "always" }],
 		"object-shorthand": "error",
-		"operator-linebreak": "off"
+		"operator-linebreak": "off",
+		"no-warning-comments": "warn"
 	}
 }

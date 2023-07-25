@@ -10,9 +10,10 @@ it("meets basic accessibility guidelines", () => {
 it("lets the user submit a resource", () => {
 	cy.visit("/");
 	cy.findByRole("link", { name: /suggest/i }).click();
+	const now = new Date().toISOString();
 	const description = "This is a useful thing to read.";
-	const title = crypto.randomUUID();
-	const url = `https://example.com/${crypto.randomUUID()}`;
+	const title = `Resource from ${now}`;
+	const url = `https://example.com/${now}`;
 	cy.intercept("POST", "/api/resources").as("createResource");
 	cy.findByRole("textbox", { name: /description/i }).type(description);
 	cy.findByRole("textbox", { name: /title/i }).type(title);
