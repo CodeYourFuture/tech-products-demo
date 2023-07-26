@@ -1,10 +1,9 @@
-import pgSession from "connect-pg-simple";
 import express from "express";
-import session, { MemoryStore } from "express-session";
+import session from "express-session";
 import passport from "passport";
 
 import apiRouter from "./api";
-import pool from "./db";
+import { getSessionStore } from "./db";
 import docsRouter from "./docs";
 import config from "./utils/config";
 import {
@@ -15,24 +14,13 @@ import {
 	logErrors,
 } from "./utils/middleware";
 
-function getStore(store) {
-	switch (store) {
-		case "memory":
-			return new MemoryStore();
-		case "postgres":
-			return new (pgSession(session))({ pool, tableName: "sessions" });
-		default:
-			throw new Error(`unknown store type: ${store}`);
-	}
-}
-
 const apiRoot = "/api";
 const sessionConfig = {
 	cookie: {},
 	resave: false,
 	saveUninitialized: true,
 	secret: config.sessionSecret,
-	store: getStore(config.sessionStore),
+	store: getSessionStore(),
 };
 
 const app = express();
