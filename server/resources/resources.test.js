@@ -3,7 +3,7 @@ import { randomUUID } from "node:crypto";
 import request from "supertest";
 
 import app from "../app";
-import { patterns } from "../setupTests";
+import { patterns, sudoToken } from "../setupTests";
 
 describe("/api/resources", () => {
 	describe("POST /", () => {
@@ -58,7 +58,7 @@ describe("/api/resources", () => {
 			const { body } = await request(app)
 				.get("/api/resources")
 				.query({ drafts: true })
-				.set("Authorization", `Bearer ${process.env.SUDO_TOKEN}`)
+				.set("Authorization", `Bearer ${sudoToken}`)
 				.set("User-Agent", "supertest")
 				.expect(200);
 
@@ -96,7 +96,7 @@ describe("/api/resources", () => {
 			const { body: updated } = await request(app)
 				.patch(`/api/resources/${resource.id}`)
 				.send({ draft: false })
-				.set("Authorization", `Bearer ${process.env.SUDO_TOKEN}`)
+				.set("Authorization", `Bearer ${sudoToken}`)
 				.set("User-Agent", "supertest")
 				.expect(200);
 
@@ -125,7 +125,7 @@ describe("/api/resources", () => {
 			await request(app)
 				.patch(`/api/resources/${resource.id}`)
 				.send({ draft: true, title: "Something else" })
-				.set("Authorization", `Bearer ${process.env.SUDO_TOKEN}`)
+				.set("Authorization", `Bearer ${sudoToken}`)
 				.set("User-Agent", "supertest")
 				.expect(400);
 		});
@@ -134,7 +134,7 @@ describe("/api/resources", () => {
 			await request(app)
 				.patch(`/api/resources/${randomUUID()}`)
 				.send({ draft: false })
-				.set("Authorization", `Bearer ${process.env.SUDO_TOKEN}`)
+				.set("Authorization", `Bearer ${sudoToken}`)
 				.set("User-Agent", "supertest")
 				.expect(404);
 		});

@@ -10,6 +10,8 @@ on:
 
 jobs:
   build:
+    env:
+      DATABASE_URL: postgres://postgres:@localhost:4211/postgres
     runs-on: ubuntu-22.04
     steps:
       - name: Check out source code
@@ -23,8 +25,6 @@ jobs:
         run: docker compose up --detach
       - name: Install dependencies
         run: npm ci
-      - name: Set up environment
-        run: cp .env.example .env
       - name: Apply database migrations
         run: npm run migration -- up
       - name: Check code style
@@ -33,6 +33,11 @@ jobs:
         run: npm run test -- --coverage
         env:
           FORCE_COLOR: true
+          LOG_LEVEL: debug
+          OAUTH_CLIENT_ID: unused
+          OAUTH_CLIENT_SECRET: unused
+          SESSION_SECRET: correct-horse-battery-staple
+          SUDO_TOKEN: make-me-a-sandwich
       - name: Run end-to-end tests
         run: npm run e2e
         env:

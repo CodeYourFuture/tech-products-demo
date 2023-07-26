@@ -11,9 +11,11 @@ services:
     environment:
       DATABASE_URL: postgres://postgres:@db:5432/postgres?sslmode=disable
       OAUTH_BASE_URL: http://gh:4212/login/oauth
-      OAUTH_CLIENT_ID: fake-client-id
-      OAUTH_CLIENT_SECRET: fake-client-secret
       GH_API_BASE_URL: http://gh:4212/api
+      OAUTH_CLIENT_ID: fakecb2e25b0b3a44f9b
+      OAUTH_CLIENT_SECRET: fake1761003c4f22016bb715ae01545f84474b3e
+      SESSION_SECRET: 6d3d8c476e06166175c6
+      SUDO_TOKEN: fake2f92040527fcba40
     network_mode: service:db
     volumes:
       - ..:/workspaces:cached
@@ -21,5 +23,11 @@ services:
     restart: unless-stopped
     volumes:
       - postgres-data:/var/lib/postgresql/data
+  gh:
+    environment:
+      FAUXAUTH_CALLBACK_URL: http://localhost:4201/api/auth/callback
+      FAUXAUTH_CLIENT_ID: fakecb2e25b0b3a44f9b
+      FAUXAUTH_CLIENT_SECRET: fake1761003c4f22016bb715ae01545f84474b3e
+
 volumes:
   postgres-data:

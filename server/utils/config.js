@@ -18,11 +18,8 @@ export default {
 		callbackURL: process.env.OAUTH_CALLBACK_URL,
 		tokenURL: oauthUrl("OAUTH_ACCESS_TOKEN_ENDPOINT", "/access_token"),
 		userAgent: "CodeYourFuture/tech-products-demo",
-		userEmailURL:
-			process.env.GH_API_BASE_URL &&
-			`${process.env.GH_API_BASE_URL}/user/emails`,
-		userProfileURL:
-			process.env.GH_API_BASE_URL && `${process.env.GH_API_BASE_URL}/user`,
+		userEmailURL: apiUrl("GH_API_BASE_URL", "/user/emails"),
+		userProfileURL: apiUrl("GH_API_BASE_URL", "/user"),
 	},
 	port: parseInt(process.env.PORT ?? "4201", 10),
 	production: process.env.NODE_ENV?.toLowerCase() === "production",
@@ -30,6 +27,16 @@ export default {
 	sessionStore: process.env.SESSION_STORE ?? "postgres",
 	sudoToken: process.env.SUDO_TOKEN,
 };
+
+/**
+ * Determine URLs for API endpoints
+ * @param {string} envVar - environment variable to use if available
+ * @param {string} endpoint - endpoint to add
+ * @returns {string}
+ */
+function apiUrl(envVar, endpoint) {
+	return process.env[envVar] && `${process.env[envVar]}${endpoint}`;
+}
 
 /**
  * Throws an error if any required env vars are missing
@@ -55,7 +62,7 @@ function oauthUrl(envVar, endpoint) {
 	if (process.env[envVar]) {
 		return process.env[envVar];
 	}
-	if (process.env.OAUTH_BASE_URL) {
-		return `${process.env.OAUTH_BASE_URL}${endpoint}`;
-	}
+	return (
+		process.env.OAUTH_BASE_URL && `${process.env.OAUTH_BASE_URL}${endpoint}`
+	);
 }

@@ -16,6 +16,7 @@ export const patterns = {
 	UUID: /[\da-f]{8}-[\da-f]{4}-[\da-f]{4}-[\da-f]{4}-[\da-f]{12}/,
 };
 export const server = setupServer();
+export const { sudoToken } = config;
 
 beforeAll(() => {
 	server.listen({
@@ -43,25 +44,34 @@ afterAll(async () => {
 export const authenticateAs = async (user, email) => {
 	const agent = request.agent(app);
 	server.use(
-		rest.post(config.oauth.tokenURL, (req, res, ctx) => {
-			return res(
-				ctx.json({
-					access_token: "my-cool-token",
-					scope: "read:user,user:email",
-					token_type: "bearer",
-				})
-			);
-		}),
-		rest.get(config.oauth.userProfileURL, (req, res, ctx) => {
-			return res(ctx.json(user));
-		}),
-		rest.get(config.oauth.userEmailURL, (req, res, ctx) => {
-			return res(
-				ctx.json([
-					{ email, primary: true, verified: true, visibility: "public" },
-				])
-			);
-		})
+		rest.post(
+			config.oauth.tokenURL ?? "https://github.com/login/oauth/access_token",
+			(req, res, ctx) => {
+				return res(
+					ctx.json({
+						access_token: "my-cool-token",
+						scope: "read:user,user:email",
+						token_type: "bearer",
+					})
+				);
+			}
+		),
+		rest.get(
+			config.oauth.userProfileURL ?? "https://api.github.com/user",
+			(req, res, ctx) => {
+				return res(ctx.json(user));
+			}
+		),
+		rest.get(
+			config.oauth.userEmailURL ?? "https://api.github.com/user/emails",
+			(req, res, ctx) => {
+				return res(
+					ctx.json([
+						{ email, primary: true, verified: true, visibility: "public" },
+					])
+				);
+			}
+		)
 	);
 	await agent
 		.get("/api/auth/callback")
