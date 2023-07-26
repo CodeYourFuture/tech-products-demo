@@ -1,9 +1,9 @@
 {
 	"name": "Tech Products Demo",
-	"dockerComposeFile": "docker-compose.yml",
+	"dockerComposeFile": ["../docker-compose.yml", "docker-compose.yml"],
 	"service": "app",
 	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
-	"forwardPorts": [4201, 4202],
+	"forwardPorts": [4201, 4202, "gh:4212"],
 	"customizations": {
 		"vscode": {
 			"extensions": [

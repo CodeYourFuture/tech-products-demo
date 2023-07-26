@@ -12,14 +12,11 @@ export default {
 	dbUrl: process.env.DATABASE_URL,
 	logLevel: process.env.LOG_LEVEL?.toLowerCase() ?? "info",
 	oauth: {
-		authorizationURL:
-			process.env.OAUTH_BASE_URL && `${process.env.OAUTH_BASE_URL}/authorize`,
+		authorizationURL: oauthUrl("OAUTH_AUTHORIZE_ENDPOINT", "/authorize"),
 		clientID: process.env.OAUTH_CLIENT_ID,
 		clientSecret: process.env.OAUTH_CLIENT_SECRET,
 		callbackURL: process.env.OAUTH_CALLBACK_URL,
-		tokenURL:
-			process.env.OAUTH_BASE_URL &&
-			`${process.env.OAUTH_BASE_URL}/access_token`,
+		tokenURL: oauthUrl("OAUTH_ACCESS_TOKEN_ENDPOINT", "/access_token"),
 		userAgent: "CodeYourFuture/tech-products-demo",
 		userEmailURL:
 			process.env.GH_API_BASE_URL &&
@@ -34,6 +31,10 @@ export default {
 	sudoToken: process.env.SUDO_TOKEN,
 };
 
+/**
+ * Throws an error if any required env vars are missing
+ * @param {string[]} required - names of required env vars
+ */
 function checkRequired(required) {
 	const missing = required.filter((envVar) => !process.env[envVar]);
 	if (missing.length > 0) {
@@ -41,5 +42,20 @@ function checkRequired(required) {
 			missing.length > 1 ? "s" : ""
 		}: ${missing.join(", ")}`;
 		throw new Error(message);
+	}
+}
+
+/**
+ * Determine URLs for OAuth connections
+ * @param {string} envVar - environment variable to use if available
+ * @param {string} endpoint - endpoint on OAUTH_BASE_URL otherwise
+ * @returns {string}
+ */
+function oauthUrl(envVar, endpoint) {
+	if (process.env[envVar]) {
+		return process.env[envVar];
+	}
+	if (process.env.OAUTH_BASE_URL) {
+		return `${process.env.OAUTH_BASE_URL}${endpoint}`;
 	}
 }

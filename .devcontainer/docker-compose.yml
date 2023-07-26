@@ -4,24 +4,23 @@ version: "3.8"
 services:
   app:
     build:
-      context: ..
+      context: .
       dockerfile: .devcontainer/Dockerfile
     command: sleep infinity
+    container_name: develop
     environment:
       DATABASE_URL: postgres://postgres:@db:5432/postgres?sslmode=disable
+      OAUTH_CLIENT_ID: fake-client-id
+      OAUTH_CLIENT_SECRET: fake-client-secret
+      OAUTH_ACCESS_TOKEN_ENDPOINT: http://gh:4212/login/oauth/access_token
+      OAUTH_AUTHORIZE_ENDPOINT: http://localhost:4212/login/oauth/authorize
+      GH_API_BASE_URL: http://gh:4212/api
     network_mode: service:db
     volumes:
-      - ../..:/workspaces:cached
+      - ..:/workspaces:cached
   db:
-    extends:
-      file: "../docker-compose.yml"
-      service: db
     restart: unless-stopped
     volumes:
       - postgres-data:/var/lib/postgresql/data
-  gh:
-    extends:
-      file: "../docker-compose.yml"
-      service: gh
 volumes:
   postgres-data:
