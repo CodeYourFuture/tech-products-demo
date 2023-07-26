@@ -1,0 +1,71 @@
+---
+/auth/callback:
+  get:
+    tags: [Authentication]
+    description: Exchange the code with GitHub and get user information.
+    parameters:
+      - in: query
+        name: code
+        description: The
+        schema:
+          type: string
+    responses:
+      302:
+        description: Redirect the user back to the app.
+        headers:
+          Location:
+            schema:
+              type: string
+              example: /
+      500:
+        $ref: "#/components/responses/InternalServerError"
+
+/auth/login:
+  get:
+    tags: [Authentication]
+    description: Start the OAuth login process.
+    responses:
+      302:
+        description: Redirect the user to the OAuth provider for login
+        headers:
+          Location:
+            schema:
+              type: string
+              format: uri
+              example: https://github.com/login/oauth/authorize?...
+      500:
+        $ref: "#/components/responses/InternalServerError"
+
+/auth/logout:
+  post:
+    tags: [Authentication]
+    description: Delete the session and clear the cookie.
+    security:
+      - authCookie: []
+    responses:
+      302:
+        description: Redirect the user back to the app.
+        headers:
+          Location:
+            schema:
+              type: string
+              example: /
+      500:
+        $ref: "#/components/responses/InternalServerError"
+
+/auth/principal:
+  get:
+    tags: [Authentication]
+    description: Get information about the authenticated user (if any).
+    security:
+      - authCookie: []
+    responses:
+      200:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Principal"
+      401:
+        $ref: "#/components/responses/UnauthorizedError"
+      500:
+        $ref: "#/components/responses/InternalServerError"
