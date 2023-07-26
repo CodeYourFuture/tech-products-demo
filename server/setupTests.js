@@ -7,8 +7,10 @@ import request from "supertest";
 
 import app from "./app";
 import { disconnectDb } from "./db";
+import config from "./utils/config";
 
-const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+const pool = new Pool({ connectionString: config.dbUrl });
+
 export const patterns = {
 	DATETIME: /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z/,
 	UUID: /[\da-f]{8}-[\da-f]{4}-[\da-f]{4}-[\da-f]{4}-[\da-f]{12}/,
@@ -41,7 +43,7 @@ afterAll(async () => {
 export const authenticateAs = async (user, email) => {
 	const agent = request.agent(app);
 	server.use(
-		rest.post(`${process.env.OAUTH_BASE_URL}/access_token`, (req, res, ctx) => {
+		rest.post(config.oauth.tokenURL, (req, res, ctx) => {
 			return res(
 				ctx.json({
 					access_token: "my-cool-token",
@@ -50,10 +52,10 @@ export const authenticateAs = async (user, email) => {
 				})
 			);
 		}),
-		rest.get(`${process.env.GH_API_BASE_URL}/user`, (req, res, ctx) => {
+		rest.get(config.oauth.userProfileURL, (req, res, ctx) => {
 			return res(ctx.json(user));
 		}),
-		rest.get(`${process.env.GH_API_BASE_URL}/user/emails`, (req, res, ctx) => {
+		rest.get(config.oauth.userEmailURL, (req, res, ctx) => {
 			return res(
 				ctx.json([
 					{ email, primary: true, verified: true, visibility: "public" },
