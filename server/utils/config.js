@@ -1,15 +1,12 @@
 import "dotenv-expand/config";
 
-const missing = [
+checkRequired([
 	"DATABASE_URL",
 	"OAUTH_CLIENT_ID",
 	"OAUTH_CLIENT_SECRET",
 	"SESSION_SECRET",
 	"SUDO_TOKEN",
-].filter((envVar) => !process.env[envVar]);
-if (missing.length > 0) {
-	throw new Error(`Missing required env vars: ${missing.join(", ")}`);
-}
+]);
 
 export default {
 	dbUrl: process.env.DATABASE_URL,
@@ -36,3 +33,13 @@ export default {
 	sessionStore: process.env.SESSION_STORE ?? "postgres",
 	sudoToken: process.env.SUDO_TOKEN,
 };
+
+function checkRequired(required) {
+	const missing = required.filter((envVar) => !process.env[envVar]);
+	if (missing.length > 0) {
+		const message = `Missing required env var${
+			missing.length > 1 ? "s" : ""
+		}: ${missing.join(", ")}`;
+		throw new Error(message);
+	}
+}
