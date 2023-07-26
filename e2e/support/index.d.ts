@@ -9,6 +9,12 @@ declare global {
 			logInAs(email: string): Chainable;
 
 			/**
+			 * Seed the database with the specified fixture.
+			 * @param {string} fixture - name of the fixture file to use
+			 */
+			seed(fixture: string): Chainable;
+
+			/**
 			 * Inject Cypress Axe and check basic accessibility.
 			 */
 			validateA11y(): Chainable;

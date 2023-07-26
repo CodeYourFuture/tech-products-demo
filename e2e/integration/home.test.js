@@ -13,7 +13,7 @@ it("meets basic accessibility guidelines", () => {
 });
 
 it("shows existing resources", () => {
-	cy.fixture("initialResources").then((fixture) => cy.task("seed", fixture));
+	cy.seed("initialResources");
 	cy.visit("/");
 	cy.findByRole("link", { name: "JS TDD Ohm" }).should(
 		"have.attr",

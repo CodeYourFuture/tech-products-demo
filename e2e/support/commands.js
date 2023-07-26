@@ -34,6 +34,10 @@ Cypress.Commands.add("logInAs", (email) => {
 	cy.findByRole("button", { name: /authenticate/i }).click();
 });
 
+Cypress.Commands.add("seed", (fixture) => {
+	cy.fixture(fixture).then((data) => cy.task("seed", data));
+});
+
 Cypress.Commands.add("validateA11y", () => {
 	cy.injectAxe();
 	cy.checkA11y(
