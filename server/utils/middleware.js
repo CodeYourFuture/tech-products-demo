@@ -1,4 +1,5 @@
-import path from "node:path";
+import { timingSafeEqual } from "node:crypto";
+import { join } from "node:path";
 
 import express, { Router } from "express";
 import helmet from "helmet";
@@ -23,12 +24,12 @@ export const authOnly = (req, res, next) => {
 };
 
 export const clientRouter = (apiRoot) => {
-	const staticDir = path.join(__dirname, "..", "static");
+	const staticDir = join(__dirname, "..", "static");
 	const router = Router();
 	router.use(express.static(staticDir));
 	router.use((req, res, next) => {
 		if (req.method === "GET" && !req.url.startsWith(apiRoot)) {
-			return res.sendFile(path.join(staticDir, "index.html"));
+			return res.sendFile(join(staticDir, "index.html"));
 		}
 		next();
 	});
@@ -60,9 +61,13 @@ export const logErrors = () => (err, _, res, next) => {
 export const methodNotAllowed = (_, res) => res.sendStatus(405);
 
 export const sudo = (req, res, next) => {
-	const token = req.get("Authorization");
-	req.superuser =
-		token?.startsWith("Bearer ") && token?.slice(7) === config.sudoToken;
+	const sudoToken = Buffer.from(config.sudoToken);
+	const header = req.get("Authorization");
+	const headerToken = header?.startsWith("Bearer ") && header?.slice(7);
+	req.superuser = timingSafeEqual(
+		sudoToken,
+		Buffer.alloc(sudoToken.length, headerToken)
+	);
 	next();
 };
 
