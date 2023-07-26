@@ -5,6 +5,7 @@ const { defineConfig } = require("cypress");
 const { clearDb, closeConnection, seed } = require("./e2e/db");
 
 module.exports = defineConfig({
+	downloadsFolder: "e2e/downloads",
 	e2e: {
 		baseUrl: "http://localhost:4201",
 		async setupNodeEvents(on, config) {
