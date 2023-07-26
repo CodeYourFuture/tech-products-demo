@@ -24,7 +24,7 @@
 		"preserve": "npm run build",
 		"serve": "npm start",
 		"services:start": "docker compose up --build --detach",
-		"services:stop": "docker compose down",
+		"services:stop": "docker compose down --remove-orphans",
 		"ship": "npm run lint && npm run test && npm run e2e",
 		"prestart": "node bin/run-migrations.js",
 		"start": "node dist/server.js",

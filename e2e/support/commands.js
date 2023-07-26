@@ -28,10 +28,15 @@ import "@testing-library/cypress/add-commands";
 import "cypress-axe";
 
 Cypress.Commands.add("logInAs", (email) => {
-	// TODO - actually clicking the link didn't work and I couldn't figure out why...
-	cy.visit("/api/auth/login");
-	cy.findByRole("combobox", { name: /identity/i }).select(email);
-	cy.findByRole("button", { name: /authenticate/i }).click();
+	cy.findByRole("link", { name: /log in/i }).click();
+	cy.origin(
+		new URL(Cypress.env("OAUTH_URL")).origin,
+		{ args: { email } },
+		({ email }) => {
+			cy.get("#role-select").select(email);
+			cy.get("#submit-button").click();
+		}
+	);
 });
 
 Cypress.Commands.add("seed", (fixture) => {

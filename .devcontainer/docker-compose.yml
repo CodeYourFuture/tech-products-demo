@@ -10,10 +10,9 @@ services:
     container_name: develop
     environment:
       DATABASE_URL: postgres://postgres:@db:5432/postgres?sslmode=disable
+      OAUTH_BASE_URL: http://gh:4212/login/oauth
       OAUTH_CLIENT_ID: fake-client-id
       OAUTH_CLIENT_SECRET: fake-client-secret
-      OAUTH_ACCESS_TOKEN_ENDPOINT: http://gh:4212/login/oauth/access_token
-      OAUTH_AUTHORIZE_ENDPOINT: http://localhost:4212/login/oauth/authorize
       GH_API_BASE_URL: http://gh:4212/api
     network_mode: service:db
     volumes:

@@ -25,9 +25,13 @@ module.exports = defineConfig({
 });
 
 function loadEnvVars(env, prefix = "CYPRESS_") {
-	Object.entries(process.env)
-		.filter(([key]) => key.startsWith(prefix))
-		.forEach(([key, value]) => (env[key.slice(8)] = value));
+	const updates = Object.fromEntries(
+		Object.entries(process.env)
+			.filter(([key]) => key.startsWith(prefix))
+			.map(([key, value]) => [key.slice(prefix.length), value])
+	);
+	console.table(updates);
+	Object.assign(env, updates);
 }
 
 function table(data) {

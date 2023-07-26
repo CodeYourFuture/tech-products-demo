@@ -15,3 +15,10 @@
 
 // Import commands.js using ES2015 syntax:
 import "./commands";
+
+before(() => {
+	// Make sure the OAuth login page loads
+	cy.origin(new URL(Cypress.env("OAUTH_URL")).origin, () => {
+		cy.visit("/", { failOnStatusCode: false });
+	});
+});

@@ -23,11 +23,13 @@ it("shows existing resources", () => {
 });
 
 it("allows user to log in", () => {
+	cy.visit("/");
 	cy.logInAs("admin@codeyourfuture.io");
 	cy.findByRole("heading", { level: 1 }).should("contain.text", "Resources");
 });
 
 it("supports users without public emails", () => {
+	cy.visit("/");
 	cy.logInAs("shh@example.com");
 	cy.findByRole("heading", { level: 1 }).should("contain.text", "Resources");
 });
