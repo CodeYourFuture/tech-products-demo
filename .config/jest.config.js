@@ -1,4 +1,8 @@
+/**
+ * @type {import("jest").Config}
+ */
 module.exports = {
+	maxWorkers: 1,
 	projects: [
 		{
 			displayName: "client",
@@ -18,4 +22,5 @@ module.exports = {
 			testMatch: ["<rootDir>/server/**/*.test.js"],
 		},
 	],
+	verbose: true,
 };
