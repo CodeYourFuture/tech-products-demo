@@ -30,7 +30,7 @@ components:
           schema:
             type: string
     UnauthorizedError:
-      description: User not permitted to access the resource.
+      description: User not authenticated.
       content:
         text/plain:
           schema:
@@ -93,5 +93,6 @@ components:
       in: cookie
       name: connect.sid
     sudoToken:
+      description: Defined by the `SUDO_TOKEN` environment variable.
       type: http
       scheme: bearer

@@ -6,7 +6,7 @@
     parameters:
       - in: query
         name: code
-        description: The
+        description: The temporary code (supplied by the OAuth provider when they redirect you back to the app).
         schema:
           type: string
     responses:
@@ -26,13 +26,19 @@
     description: Start the OAuth login process.
     responses:
       302:
-        description: Redirect the user to the OAuth provider for login
+        description: |
+          Redirect the user to the OAuth provider for login.
+
+          The provider URL is configured by the `OAUTH_BASE_URL` environment variable, or more specifically
+          `OAUTH_AUTHORIZE_ENDPOINT` if defined. The default, if neither is defined, is GitHub.
+
+          The `client_id` is configured by the `OAUTH_CLIENT_ID` environment variable.
         headers:
           Location:
             schema:
               type: string
               format: uri
-              example: https://github.com/login/oauth/authorize?...
+              example: https://github.com/login/oauth/authorize?client_id...&...
       500:
         $ref: "#/components/responses/InternalServerError"
 
