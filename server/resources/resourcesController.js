@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { Joi } from "express-validation";
 
 import logger from "../utils/logger";
 import {
@@ -6,6 +7,7 @@ import {
 	authOnly,
 	methodNotAllowed,
 	sudoOnly,
+	validated,
 } from "../utils/middleware";
 
 import * as service from "./resourcesService";
@@ -15,6 +17,7 @@ const router = Router();
 router
 	.route("/")
 	.get(
+		validated({ query: Joi.object({ drafts: Joi.boolean() }).unknown() }),
 		asyncHandler(async (req, res) => {
 			const includeDrafts = req.superuser && req.query.drafts === "true";
 			res.send(await service.getAll(includeDrafts));
@@ -22,6 +25,13 @@ router
 	)
 	.post(
 		authOnly,
+		validated({
+			body: Joi.object({
+				description: Joi.string(),
+				title: Joi.string().required(),
+				url: Joi.string().uri({ allowRelative: false }).required(),
+			}),
+		}),
 		asyncHandler(async (req, res) => {
 			const { id: source } = req.user;
 			const { description, title, url } = req.body;
@@ -40,10 +50,12 @@ router
 	.route("/:id")
 	.patch(
 		sudoOnly,
+		validated({
+			body: Joi.object({
+				draft: Joi.any().valid(false),
+			}),
+		}),
 		asyncHandler(async (req, res) => {
-			if (req.body.draft !== false) {
-				return res.sendStatus(400);
-			}
 			try {
 				res.send(await service.publish(req.params.id));
 			} catch (err) {

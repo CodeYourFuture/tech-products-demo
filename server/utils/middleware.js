@@ -2,6 +2,7 @@ import { timingSafeEqual } from "node:crypto";
 import { join } from "node:path";
 
 import express, { Router } from "express";
+import { validate, ValidationError } from "express-validation";
 import helmet from "helmet";
 import morgan from "morgan";
 
@@ -76,4 +77,17 @@ export const sudoOnly = (req, res, next) => {
 		return next();
 	}
 	res.sendStatus(401);
+};
+
+export const validated = (rules) => (req, res, next) => {
+	validate(rules, { keyByField: true }, { abortEarly: false })(
+		req,
+		res,
+		(err) => {
+			if (err instanceof ValidationError) {
+				return res.status(400).json(Object.assign({}, ...err.details));
+			}
+			next(err);
+		}
+	);
 };

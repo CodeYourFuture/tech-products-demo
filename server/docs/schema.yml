@@ -12,10 +12,15 @@ components:
     BadRequestError:
       description: The request was not accepted.
       content:
-        text/plain:
+        application/json:
           schema:
-            type: string
-            example: Bad Request
+            type: object
+            description: Object mapping fields to error messages.
+            additionalProperties:
+              type: string
+            example:
+              title: '"title" is required'
+              url: '"url" must be a valid uri'
     InternalServerError:
       description: Something unexpected went wrong.
       content:

@@ -14,7 +14,11 @@
 				"jest/expect-expect": [
 					"error",
 					{
-						"assertFunctionNames": ["expect", "request.**.expect"]
+						"assertFunctionNames": [
+							"expect",
+							"agent.**.expect",
+							"request.**.expect"
+						]
 					}
 				]
 			}

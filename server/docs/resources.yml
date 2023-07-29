@@ -41,6 +41,8 @@
           application/json:
             schema:
               $ref: "#/components/schemas/Resource"
+      400:
+        $ref: "#/components/responses/BadRequestError"
       401:
         $ref: "#/components/responses/UnauthorizedError"
       500:

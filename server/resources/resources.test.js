@@ -67,12 +67,44 @@ describe("/api/resources", () => {
 				.set("User-Agent", "supertest")
 				.expect(401, "Unauthorized");
 		});
+
+		[
+			{
+				req: {},
+				res: { title: '"title" is required', url: '"url" is required' },
+				title: "everything missing",
+			},
+			{
+				req: { url: "https://example.com" },
+				res: { title: '"title" is required' },
+				title: "missing title",
+			},
+			{
+				req: { title: "foo" },
+				res: { url: '"url" is required' },
+				title: "missing url",
+			},
+			{
+				req: { title: "foo", url: "/foo/bar" },
+				res: { url: '"url" must be a valid uri' },
+				title: "invalid url",
+			},
+		].forEach(({ req, res, title }) => {
+			it(`rejects invalid request: ${title}`, async () => {
+				const agent = await authenticateAs({ id: 0, login: "" }, "");
+				await agent
+					.post("/api/resources")
+					.send(req)
+					.set("User-Agent", "supertest")
+					.expect(400, res);
+			});
+		});
 	});
 
 	describe("GET /", () => {
 		it("allows superuser to see all resources", async () => {
 			const agent = await authenticateAs({ id: 123, login: "" }, "");
-			const resource = { title: "foo", url: "bar" };
+			const resource = { title: "foo", url: "https://example.com" };
 			await agent
 				.post("/api/resources")
 				.send(resource)
@@ -92,7 +124,7 @@ describe("/api/resources", () => {
 
 		it("prevents non-superusers from seeing draft resources", async () => {
 			const agent = await authenticateAs({ id: 123, login: "" }, "");
-			const resource = { title: "title", url: "url" };
+			const resource = { title: "title", url: "https://example.com" };
 			await agent
 				.post("/api/resources")
 				.send(resource)
@@ -154,7 +186,10 @@ describe("/api/resources", () => {
 				.send({ draft: true, title: "Something else" })
 				.set("Authorization", `Bearer ${sudoToken}`)
 				.set("User-Agent", "supertest")
-				.expect(400);
+				.expect(400, {
+					draft: '"draft" must be [false]',
+					title: '"title" is not allowed',
+				});
 		});
 
 		it("handles missing resources", async () => {
