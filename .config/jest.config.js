@@ -2,6 +2,7 @@
  * @type {import("jest").Config}
  */
 module.exports = {
+	coverageDirectory: "../reports/coverage",
 	maxWorkers: 1,
 	projects: [
 		{

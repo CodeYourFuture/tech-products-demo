@@ -30,7 +30,7 @@ jobs:
       - name: Check code style
         run: npm run lint
       - name: Run low-level tests
-        run: npm run test -- --coverage
+        run: npm run test:cover
         env:
           FORCE_COLOR: true
           LOG_LEVEL: debug
@@ -38,6 +38,12 @@ jobs:
           OAUTH_CLIENT_SECRET: unused
           SESSION_SECRET: correct-horse-battery-staple
           SUDO_TOKEN: make-me-a-sandwich
+      - name: Store coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          if-no-files-found: error
+          name: coverage-report
+          path: reports/coverage/
       - name: Run end-to-end tests
         run: npm run e2e
         env:
@@ -65,3 +71,18 @@ jobs:
     secrets:
       HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
       HEROKU_EMAIL: ${{ secrets.HEROKU_EMAIL }}
+  publish-coverage:
+    if: github.ref == 'refs/heads/main'
+    needs: build
+    permissions:
+      contents: write
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Download coverage report
+        uses: actions/download-artifact@v3
+        with:
+          name: coverage-report
+      - name: Publish coverage report
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: reports/coverage/lcov-report
