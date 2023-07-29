@@ -17,9 +17,7 @@ export default function Header() {
 			</h1>
 			<nav>
 				<ul>
-					<li>
-						<NavLink to="/suggest">Suggest</NavLink>
-					</li>
+					<li>{principal && <NavLink to="/suggest">Suggest</NavLink>}</li>
 				</ul>
 				<ul>
 					<li>

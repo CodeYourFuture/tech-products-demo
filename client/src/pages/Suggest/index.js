@@ -16,10 +16,13 @@ export default function Suggest() {
 				title: { value: title },
 				url: { value: url },
 			} = event.target.elements;
-			resourceService.createResource({ description, title, url }).then(() => {
-				setSuggested(true);
-				event.target.reset();
-			});
+			resourceService
+				.createResource({ description, title, url })
+				.then(() => {
+					setSuggested(true);
+					event.target.reset();
+				})
+				.catch(() => {});
 		},
 		[resourceService]
 	);

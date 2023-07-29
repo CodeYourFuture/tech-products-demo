@@ -15,7 +15,7 @@ module.exports = {
 			)
 		);
 		for (const { tablename } of rows) {
-			await pool.query(format("TRUNCATE TABLE %I;", tablename));
+			await pool.query(format("TRUNCATE TABLE %I CASCADE;", tablename));
 		}
 		return null;
 	},

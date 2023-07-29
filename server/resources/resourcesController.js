@@ -1,7 +1,12 @@
 import { Router } from "express";
 
 import logger from "../utils/logger";
-import { asyncHandler, methodNotAllowed, sudoOnly } from "../utils/middleware";
+import {
+	asyncHandler,
+	authOnly,
+	methodNotAllowed,
+	sudoOnly,
+} from "../utils/middleware";
 
 import * as service from "./resourcesService";
 
@@ -16,9 +21,16 @@ router
 		})
 	)
 	.post(
+		authOnly,
 		asyncHandler(async (req, res) => {
+			const { id: source } = req.user;
 			const { description, title, url } = req.body;
-			const resource = await service.create({ description, title, url });
+			const resource = await service.create({
+				description,
+				source,
+				title,
+				url,
+			});
 			res.status(201).send(resource);
 		})
 	)

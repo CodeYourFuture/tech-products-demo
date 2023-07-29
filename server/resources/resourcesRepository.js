@@ -1,11 +1,11 @@
 import db from "../db";
 
-export const add = async ({ description, title, url }) => {
+export const add = async ({ description, source, title, url }) => {
 	const {
 		rows: [created],
 	} = await db.query(
-		"INSERT INTO resources (description, title, url) VALUES ($1, $2, $3) RETURNING *;",
-		[description, title, url]
+		"INSERT INTO resources (description, source, title, url) VALUES ($1, $2, $3, $4) RETURNING *;",
+		[description, source, title, url]
 	);
 	return created;
 };

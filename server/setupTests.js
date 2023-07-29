@@ -30,7 +30,7 @@ beforeAll(() => {
 
 beforeEach(async () => {
 	for (const table of ["resources", "users"]) {
-		await pool.query(format("TRUNCATE TABLE %I;", table));
+		await pool.query(format("TRUNCATE TABLE %I CASCADE;", table));
 	}
 	server.resetHandlers();
 });
@@ -41,6 +41,16 @@ afterAll(async () => {
 	await disconnectDb();
 });
 
+/**
+ * @typedef {Object} User
+ * @property {number} id
+ * @property {string} login
+ * @property {string=} name
+ *
+ * @param {User} user
+ * @param {string} email
+ * @returns {Promise<import("supertest").TestAgent>}
+ */
 export const authenticateAs = async (user, email) => {
 	const agent = request.agent(app);
 	server.use(

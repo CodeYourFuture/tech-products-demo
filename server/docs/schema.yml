@@ -86,6 +86,10 @@ components:
             publication:
               format: date-time
               type: string
+            source:
+              type: string
+              format: uuid
+              description: The ID of the user who suggested the resource.
 
   securitySchemes:
     authCookie:

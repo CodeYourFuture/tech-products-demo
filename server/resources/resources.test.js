@@ -3,17 +3,27 @@ import { randomUUID } from "node:crypto";
 import request from "supertest";
 
 import app from "../app";
-import { patterns, sudoToken } from "../setupTests";
+import { authenticateAs, patterns, sudoToken } from "../setupTests";
 
 describe("/api/resources", () => {
 	describe("POST /", () => {
 		it("returns the created resource", async () => {
+			const agent = await authenticateAs(
+				{ id: 123, login: "foo-bar" },
+				"foo@bar.org"
+			);
 			const resource = {
 				title: "CYF Syllabus",
 				url: "https://syllabus.codeyourfuture.io/",
 			};
 
-			const { body } = await request(app)
+			const {
+				body: { id },
+			} = await agent
+				.get("/api/auth/principal")
+				.set("User-Agent", "supertest")
+				.expect(200);
+			const { body } = await agent
 				.post("/api/resources")
 				.send(resource)
 				.set("User-Agent", "supertest")
@@ -24,19 +34,24 @@ describe("/api/resources", () => {
 				description: null,
 				draft: true,
 				id: expect.stringMatching(patterns.UUID),
+				source: id,
 				title: resource.title,
 				url: resource.url,
 			});
 		});
 
 		it("accepts a description", async () => {
+			const agent = await authenticateAs(
+				{ id: 123, login: "foo-bar" },
+				"foo@bar.org"
+			);
 			const resource = {
 				description: "Helpful tool for PostgreSQL DB migrations.",
 				title: "Node PG Migrate",
 				url: "https://salsita.github.io/node-pg-migrate/#/",
 			};
 
-			const { body } = await request(app)
+			const { body } = await agent
 				.post("/api/resources")
 				.send(resource)
 				.set("User-Agent", "supertest")
@@ -44,12 +59,21 @@ describe("/api/resources", () => {
 
 			expect(body).toMatchObject(resource);
 		});
+
+		it("rejects unauthenticated users", async () => {
+			await request(app)
+				.post("/api/resources")
+				.send({ title: "Something", url: "https://example.com" })
+				.set("User-Agent", "supertest")
+				.expect(401, "Unauthorized");
+		});
 	});
 
 	describe("GET /", () => {
 		it("allows superuser to see all resources", async () => {
+			const agent = await authenticateAs({ id: 123, login: "" }, "");
 			const resource = { title: "foo", url: "bar" };
-			await request(app)
+			await agent
 				.post("/api/resources")
 				.send(resource)
 				.set("User-Agent", "supertest")
@@ -67,8 +91,9 @@ describe("/api/resources", () => {
 		});
 
 		it("prevents non-superusers from seeing draft resources", async () => {
+			const agent = await authenticateAs({ id: 123, login: "" }, "");
 			const resource = { title: "title", url: "url" };
-			await request(app)
+			await agent
 				.post("/api/resources")
 				.send(resource)
 				.set("User-Agent", "supertest")
@@ -84,7 +109,8 @@ describe("/api/resources", () => {
 
 	describe("PATCH /:id", () => {
 		it("allows superusers to publish a draft resource", async () => {
-			const { body: resource } = await request(app)
+			const agent = await authenticateAs({ id: 123, login: "" }, "");
+			const { body: resource } = await agent
 				.post("/api/resources")
 				.send({
 					title: "CYF Syllabus",
@@ -113,7 +139,8 @@ describe("/api/resources", () => {
 		});
 
 		it("rejects other changes", async () => {
-			const { body: resource } = await request(app)
+			const agent = await authenticateAs({ id: 123, login: "" }, "");
+			const { body: resource } = await agent
 				.post("/api/resources")
 				.send({
 					title: "Mastering margin collapsing",
@@ -140,7 +167,8 @@ describe("/api/resources", () => {
 		});
 
 		it("prevents non-superusers from publishing resources", async () => {
-			const { body: resource } = await request(app)
+			const agent = await authenticateAs({ id: 123, login: "" }, "");
+			const { body: resource } = await agent
 				.post("/api/resources")
 				.send({
 					title: "PostgreSQL tutorial",
