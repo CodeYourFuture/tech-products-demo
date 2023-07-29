@@ -27,6 +27,8 @@
   post:
     tags: [Resources]
     description: Share a new resource.
+    security:
+      - authCookie: []
     requestBody:
       required: true
       content:
@@ -39,6 +41,8 @@
           application/json:
             schema:
               $ref: "#/components/schemas/Resource"
+      401:
+        $ref: "#/components/responses/UnauthorizedError"
       500:
         $ref: "#/components/responses/InternalServerError"
 /resources/{id}:

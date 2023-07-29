@@ -2,13 +2,23 @@ beforeEach(() => {
 	cy.task("clearDb");
 });
 
+it("is not accessible to anonymous users", () => {
+	cy.intercept("GET", "/api/auth/principal").as("initialRequest");
+	cy.visit("/");
+	cy.wait("@initialRequest");
+	cy.findByRole("link", { name: /suggest/i }).should("not.exist");
+});
+
 it("meets basic accessibility guidelines", () => {
+	cy.visit("/");
+	cy.logInAs("admin@codeyourfuture.io");
 	cy.visit("/suggest");
 	cy.validateA11y();
 });
 
-it("lets the user submit a resource", () => {
+it("lets an authenticated user suggest a resource", () => {
 	cy.visit("/");
+	cy.logInAs("shh@example.com");
 	cy.findByRole("link", { name: /suggest/i }).click();
 	const now = new Date().toISOString();
 	const description = "This is a useful thing to read.";

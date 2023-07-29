@@ -2,7 +2,11 @@ import { fireEvent, render, screen, within } from "@testing-library/react";
 import { createMemoryHistory } from "history";
 import { Router } from "react-router-dom";
 
+import { usePrincipal } from "../../authContext";
+
 import Header from "./index";
+
+jest.mock("../../authContext");
 
 const renderWithHistory = () => {
 	const history = createMemoryHistory();
@@ -28,11 +32,20 @@ describe("Home", () => {
 		).toHaveAttribute("href", "/");
 	});
 
-	it("allows the user to go to the suggest page", () => {
+	it("allows the authenticated user to go to the suggest page", () => {
+		usePrincipal.mockReturnValue({});
 		renderWithHistory();
 		expect(screen.getByRole("link", { name: /suggest/i })).toHaveAttribute(
 			"href",
 			"/suggest"
 		);
+	});
+
+	it("does not allow the authenticated user to go to the suggest page", () => {
+		usePrincipal.mockReturnValue(undefined);
+		renderWithHistory();
+		expect(
+			screen.queryByRole("link", { name: /suggest/i })
+		).not.toBeInTheDocument();
 	});
 });
