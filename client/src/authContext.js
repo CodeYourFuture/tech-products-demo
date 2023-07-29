@@ -1,7 +1,18 @@
 import PropTypes from "prop-types";
-import { createContext, useContext, useEffect, useState } from "react";
+import {
+	createContext,
+	useCallback,
+	useContext,
+	useEffect,
+	useState,
+} from "react";
 
-const AuthContext = createContext({});
+const AuthContext = createContext({ logout: () => {} });
+
+export const useLogout = () => {
+	const { logout } = useContext(AuthContext);
+	return logout;
+};
 
 export const usePrincipal = () => {
 	const { principal } = useContext(AuthContext);
@@ -11,6 +22,7 @@ export const usePrincipal = () => {
 export default function AuthProvider({ children }) {
 	const [loading, setLoading] = useState(true);
 	const [principal, setPrincipal] = useState();
+	const logout = useCallback(() => setPrincipal(undefined), [setPrincipal]);
 
 	useEffect(() => {
 		fetch("/api/auth/principal")
@@ -28,7 +40,7 @@ export default function AuthProvider({ children }) {
 	}
 
 	return (
-		<AuthContext.Provider value={{ principal }}>
+		<AuthContext.Provider value={{ logout, principal }}>
 			{children}
 		</AuthContext.Provider>
 	);

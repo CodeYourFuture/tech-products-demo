@@ -1,19 +1,27 @@
-export const createResource = async (resource) => {
-	const res = await fetch("/api/resources", {
-		body: JSON.stringify(resource),
-		headers: { "Content-Type": "application/json" },
-		method: "POST",
-	});
-	if (!res.ok) {
-		throw new Error(res.statusText);
-	}
-	return res.json();
-};
+export default class ResourceService {
+	static ENDPOINT = "/api/resources";
 
-export const getResources = async () => {
-	const res = await fetch("/api/resources");
-	if (!res.ok) {
-		throw new Error(res.statusText);
+	constructor(request = fetch) {
+		this.fetch = request;
 	}
-	return res.json();
-};
+
+	async createResource(resource) {
+		const res = await this.fetch(ResourceService.ENDPOINT, {
+			body: JSON.stringify(resource),
+			headers: { "Content-Type": "application/json" },
+			method: "POST",
+		});
+		if (!res.ok) {
+			throw new Error(res.statusText);
+		}
+		return res.json();
+	}
+
+	async getResources() {
+		const res = await this.fetch(ResourceService.ENDPOINT);
+		if (!res.ok) {
+			throw new Error(res.statusText);
+		}
+		return res.json();
+	}
+}

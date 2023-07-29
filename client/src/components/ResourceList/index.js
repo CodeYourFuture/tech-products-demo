@@ -1,15 +1,17 @@
 import { useEffect, useState } from "react";
 
-import { getResources } from "../../services/resourceService";
+import { useResourceService } from "../../services";
 
 export default function ResourceList() {
+	const resourceService = useResourceService();
 	const [resources, setResources] = useState([]);
 
 	useEffect(() => {
-		getResources()
+		resourceService
+			.getResources()
 			.then(setResources)
 			.catch(() => {});
-	}, []);
+	}, [resourceService]);
 
 	return (
 		<ul>

@@ -1,26 +1,28 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
-import { createResource } from "../../services/resourceService";
+import { useResourceService } from "../../services";
 
 import "./SuggestResource.scss";
 
 export default function SuggestResource() {
 	const [suggested, setSuggested] = useState(false);
-	/**
-	 * @param {React.FormEvent<HTMLFormElement>} event
-	 */
-	const submitForm = (event) => {
-		event.preventDefault();
-		const {
-			description: { value: description },
-			title: { value: title },
-			url: { value: url },
-		} = event.target.elements;
-		createResource({ description, title, url }).then(() => {
-			setSuggested(true);
-			event.target.reset();
-		});
-	};
+	const resourceService = useResourceService();
+
+	const submitForm = useCallback(
+		(/**React.FormEvent<HTMLFormElement>*/ event) => {
+			event.preventDefault();
+			const {
+				description: { value: description },
+				title: { value: title },
+				url: { value: url },
+			} = event.target.elements;
+			resourceService.createResource({ description, title, url }).then(() => {
+				setSuggested(true);
+				event.target.reset();
+			});
+		},
+		[resourceService]
+	);
 
 	return (
 		<>
