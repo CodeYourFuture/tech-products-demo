@@ -1,8 +1,17 @@
 {
+	"users": [
+		{
+			"email": "shh@example.com",
+			"github_id": 456,
+			"id": "2a8e4bb3-6f9c-4602-b084-af343fcbe6f0",
+			"name": "discreet-volunteer"
+		}
+	],
 	"resources": [
 		{
 			"description": "Part 4 of an ongoing series on test-driven development (TDD) in JavaScript.",
 			"draft": false,
+			"source": "2a8e4bb3-6f9c-4602-b084-af343fcbe6f0",
 			"title": "JS TDD Ohm",
 			"url": "https://blog.jonrshar.pe/2023/May/23/js-tdd-ohm.html"
 		}

@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-
+const format = require("pg-format");
 /**
  * Defines changes to be made to the database schema to accommodate new functionality.
  *
@@ -9,8 +9,9 @@
  * @returns {void | Promise<void>}
  */
 exports.up = (pgm) => {
+	pgm.sql(format("TRUNCATE TABLE %I;", "resources"));
 	pgm.addColumn("resources", {
-		source: { type: "UUID" },
+		source: { notNull: true, type: "UUID" },
 	});
 	pgm.addConstraint("resources", "FK_resources_users", {
 		foreignKeys: {
