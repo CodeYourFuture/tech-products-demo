@@ -4,9 +4,9 @@ import { rest } from "msw";
 
 import { server } from "../../../setupTests";
 
-import SuggestResource from "./index";
+import Suggest from "./index";
 
-describe("SuggestResource", () => {
+describe("Suggest", () => {
 	it("allows the user to submit a resource", async () => {
 		const title = "hello";
 		const url = "https://example.com";
@@ -21,7 +21,7 @@ describe("SuggestResource", () => {
 				return res(ctx.json({}));
 			})
 		);
-		render(<SuggestResource />);
+		render(<Suggest />);
 
 		await user.type(screen.getByRole("textbox", { name: /title/i }), title);
 		await user.type(screen.getByRole("textbox", { name: /url/i }), url);
@@ -44,7 +44,7 @@ describe("SuggestResource", () => {
 				return res(ctx.json({}));
 			})
 		);
-		render(<SuggestResource />);
+		render(<Suggest />);
 
 		await user.type(
 			screen.getByRole("textbox", { name: /description/i }),

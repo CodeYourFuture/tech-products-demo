@@ -2,9 +2,9 @@ import { useCallback, useState } from "react";
 
 import { useResourceService } from "../../services";
 
-import "./SuggestResource.scss";
+import "./Suggest.scss";
 
-export default function SuggestResource() {
+export default function Suggest() {
 	const [suggested, setSuggested] = useState(false);
 	const resourceService = useResourceService();
 
@@ -26,6 +26,8 @@ export default function SuggestResource() {
 
 	return (
 		<>
+			<h2>Suggest a resource</h2>
+			<p>Please use the form below to submit a suggestion.</p>
 			{suggested && (
 				<p className="success">Thank you for suggesting a resource!</p>
 			)}

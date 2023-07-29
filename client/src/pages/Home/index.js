@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 
+import { ResourceList } from "../../components";
 import { useResourceService } from "../../services";
 
-export default function ResourceList() {
+export function Home() {
 	const resourceService = useResourceService();
 	const [resources, setResources] = useState([]);
 
@@ -13,14 +14,7 @@ export default function ResourceList() {
 			.catch(() => {});
 	}, [resourceService]);
 
-	return (
-		<ul>
-			{resources.map(({ description, id, title, url }) => (
-				<li key={id}>
-					<a href={url}>{title}</a>
-					{description && ` - ${description}`}
-				</li>
-			))}
-		</ul>
-	);
+	return <ResourceList resources={resources} />;
 }
+
+export default Home;

@@ -3,9 +3,9 @@ import { rest } from "msw";
 
 import { server } from "../../../setupTests";
 
-import ResourceList from "./index";
+import Home from "./index";
 
-describe("ResourceList", () => {
+describe("Home", () => {
 	it("shows resources", async () => {
 		const resource = {
 			description: "This is a very useful resource I found",
@@ -19,7 +19,7 @@ describe("ResourceList", () => {
 			})
 		);
 
-		render(<ResourceList />);
+		render(<Home />);
 
 		await expect(screen.findByText(resource.title)).resolves.toHaveAttribute(
 			"href",
