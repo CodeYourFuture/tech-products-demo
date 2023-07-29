@@ -47,3 +47,12 @@ it("lets an authenticated user suggest a resource", () => {
 	cy.findByText(title).should("have.attr", "href", url);
 	cy.findByText(new RegExp(description)).should("exist");
 });
+
+it("lets an authenticated user submit a resource without a description", () => {
+	cy.visit("/");
+	cy.logInAs("shh@example.com");
+	cy.findByRole("link", { name: /suggest/i }).click();
+	cy.findByRole("textbox", { name: /title/i }).type("Another useful item");
+	cy.findByRole("textbox", { name: /url/i }).type("https://example.com{enter}");
+	cy.findByText(/thank you for suggesting a resource/i).should("exist");
+});
