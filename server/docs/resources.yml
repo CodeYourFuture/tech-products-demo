@@ -46,6 +46,10 @@
         $ref: "#/components/responses/BadRequestError"
       401:
         $ref: "#/components/responses/UnauthorizedError"
+      409:
+        allOf:
+          - $ref: "#/components/responses/ConflictError"
+          - description: A resource with the same name or URL already existed.
       500:
         $ref: "#/components/responses/InternalServerError"
 /resources/{id}:
