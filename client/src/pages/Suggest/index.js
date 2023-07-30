@@ -1,3 +1,5 @@
+import clsx from "clsx";
+import PropTypes from "prop-types";
 import { useCallback, useState } from "react";
 
 import { useResourceService } from "../../services";
@@ -5,7 +7,7 @@ import { useResourceService } from "../../services";
 import "./Suggest.scss";
 
 export default function Suggest() {
-	const [suggested, setSuggested] = useState(false);
+	const [message, setMessage] = useState(undefined);
 	const resourceService = useResourceService();
 
 	const submitForm = useCallback(
@@ -17,12 +19,20 @@ export default function Suggest() {
 				url: { value: url },
 			} = event.target.elements;
 			resourceService
-				.createResource({ description, title, url })
+				.suggest({ description, title, url })
 				.then(() => {
-					setSuggested(true);
+					setMessage({
+						success: true,
+						text: "Thank you for suggesting a resource!",
+					});
 					event.target.reset();
 				})
-				.catch(() => {});
+				.catch((err) => {
+					setMessage({
+						success: false,
+						text: `Resource suggestion failed: ${err.message}.`,
+					});
+				});
 		},
 		[resourceService]
 	);
@@ -30,13 +40,15 @@ export default function Suggest() {
 	return (
 		<>
 			<h2>Suggest a resource</h2>
-			<p>Please use the form below to submit a suggestion.</p>
-			{suggested && (
-				<p className="success">Thank you for suggesting a resource!</p>
-			)}
+			<p>
+				Please use the form below to submit a suggestion. Note that it will not
+				appear on the home page immediately, as it needs to be reviewed by an
+				administrator.
+			</p>
+			{message && <Message {...message} />}
 			<form
 				aria-label="Suggest resource"
-				onChange={() => setSuggested(false)}
+				onChange={() => setMessage(undefined)}
 				onSubmit={submitForm}
 			>
 				<label>
@@ -64,3 +76,14 @@ export default function Suggest() {
 		</>
 	);
 }
+
+function Message({ success, text }) {
+	return (
+		<p className={clsx("message", success ? "success" : "failure")}>{text}</p>
+	);
+}
+
+Message.propTypes = {
+	success: PropTypes.bool.isRequired,
+	text: PropTypes.string.isRequired,
+};

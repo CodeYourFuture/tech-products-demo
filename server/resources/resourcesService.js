@@ -1,5 +1,7 @@
 import * as repository from "./resourcesRepository";
 
+export class DuplicateResource extends Error {}
+
 export class MissingResource extends Error {
 	constructor(id) {
 		super(`Resource not found: ${id}`);

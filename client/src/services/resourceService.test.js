@@ -52,4 +52,42 @@ describe("ResourceService", () => {
 			await service.publish(id);
 		});
 	});
+
+	describe("suggest", () => {
+		it("returns the resource on success", async () => {
+			const submitted = { title: "foo bar", url: "https://example.com" };
+			const created = {
+				...submitted,
+				accession: new Date().toISOString(),
+				draft: true,
+			};
+			server.use(
+				rest.post("/api/resources", async (req, res, ctx) => {
+					await expect(req.json()).resolves.toEqual(submitted);
+					return res(ctx.status(201), ctx.json(created));
+				})
+			);
+			await expect(service.suggest(submitted)).resolves.toEqual(created);
+		});
+
+		it("throws a useful error on conflict", async () => {
+			server.use(
+				rest.post("/api/resources", (req, res, ctx) => {
+					return res(ctx.status(409));
+				})
+			);
+			await expect(service.suggest({})).rejects.toThrow(
+				"a very similar resource already exists"
+			);
+		});
+
+		it("throws a useful error otherwise", async () => {
+			server.use(
+				rest.post("/api/resources", (req, res, ctx) => {
+					return res(ctx.status(401));
+				})
+			);
+			await expect(service.suggest({})).rejects.toThrow("something went wrong");
+		});
+	});
 });

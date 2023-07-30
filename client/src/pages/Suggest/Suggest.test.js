@@ -18,7 +18,7 @@ describe("Suggest", () => {
 					title,
 					url,
 				});
-				return res(ctx.json({}));
+				return res(ctx.status(201), ctx.json({}));
 			})
 		);
 		render(<Suggest />);
@@ -41,7 +41,7 @@ describe("Suggest", () => {
 		server.use(
 			rest.post("/api/resources", async (req, res, ctx) => {
 				await expect(req.json()).resolves.toMatchObject({ description });
-				return res(ctx.json({}));
+				return res(ctx.status(201), ctx.json({}));
 			})
 		);
 		render(<Suggest />);
@@ -61,5 +61,27 @@ describe("Suggest", () => {
 		await user.click(screen.getByRole("button", { name: /suggest/i }));
 
 		await screen.findByText(/thank you for suggesting a resource/i);
+	});
+
+	it("gives useful feedback on failure", async () => {
+		const user = userEvent.setup();
+		server.use(
+			rest.post("/api/resources", (req, res, ctx) => {
+				return res(ctx.status(409));
+			})
+		);
+		render(<Suggest />);
+		await user.type(
+			screen.getByRole("textbox", { name: /title/i }),
+			"Official React documentation"
+		);
+		await user.type(
+			screen.getByRole("textbox", { name: /url/i }),
+			"https://react.dev/"
+		);
+		await user.click(screen.getByRole("button", { name: /suggest/i }));
+		await screen.findByText(
+			"Resource suggestion failed: a very similar resource already exists."
+		);
 	});
 });

@@ -10,6 +10,7 @@ import {
 	validated,
 } from "../utils/middleware";
 
+import { DuplicateResource } from "./resourcesService";
 import * as service from "./resourcesService";
 
 const router = Router();
@@ -36,13 +37,20 @@ router
 		asyncHandler(async (req, res) => {
 			const { id: source } = req.user;
 			const { description, title, url } = req.body;
-			const resource = await service.create({
-				description,
-				source,
-				title,
-				url,
-			});
-			res.status(201).send(resource);
+			try {
+				const resource = await service.create({
+					description,
+					source,
+					title,
+					url,
+				});
+				res.status(201).send(resource);
+			} catch (err) {
+				if (err instanceof DuplicateResource) {
+					return res.sendStatus(409);
+				}
+				throw err;
+			}
 		})
 	)
 	.all(methodNotAllowed);

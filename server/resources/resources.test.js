@@ -99,6 +99,22 @@ describe("/api/resources", () => {
 					.expect(400, res);
 			});
 		});
+
+		it("rejects duplicate resources", async () => {
+			const agent = await authenticateAs({ id: 0, login: "" }, "");
+			const title = "Wuthering Heights";
+			const url = "https://example.com";
+			await agent
+				.post("/api/resources")
+				.send({ title, url })
+				.set("User-Agent", "supertest")
+				.expect(201);
+			await agent
+				.post("/api/resources")
+				.send({ title: "Other", url })
+				.set("User-Agent", "supertest")
+				.expect(409, "Conflict");
+		});
 	});
 
 	describe("GET /", () => {
