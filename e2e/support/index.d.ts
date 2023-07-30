@@ -9,6 +9,11 @@ declare global {
 			logInAs(email: string): Chainable;
 
 			/**
+			 * Log the current user out.
+			 */
+			logOut(): Chainable;
+
+			/**
 			 * Seed the database with the specified fixture.
 			 * @param {string} fixture - name of the fixture file to use
 			 */

@@ -6,6 +6,7 @@ import {
 	About,
 	Account,
 	Authenticated,
+	Drafts,
 	Home,
 	NotFound,
 	Suggest,
@@ -20,6 +21,9 @@ const App = () => (
 					<Route path="/" element={<Home />} />
 					<Route path="/about" element={<About />} />
 					<Route path="/account" element={<Account />} />
+					<Route path="/drafts" element={<Authenticated adminOnly />}>
+						<Route index element={<Drafts />} />
+					</Route>
 					<Route path="/suggest" element={<Authenticated />}>
 						<Route index element={<Suggest />} />
 					</Route>

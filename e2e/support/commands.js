@@ -39,6 +39,11 @@ Cypress.Commands.add("logInAs", (email) => {
 	);
 });
 
+Cypress.Commands.add("logOut", () => {
+	cy.findByRole("link", { name: /account/i }).click();
+	cy.findByRole("button", { name: /log out/i }).click();
+});
+
 Cypress.Commands.add("seed", (fixture) => {
 	cy.fixture(fixture).then((data) => cy.task("seed", data));
 });

@@ -48,4 +48,21 @@ describe("Home", () => {
 			screen.queryByRole("link", { name: /suggest/i })
 		).not.toBeInTheDocument();
 	});
+
+	it("allows admin users to go to the drafts page", () => {
+		usePrincipal.mockReturnValue({ is_admin: true });
+		renderWithHistory();
+		expect(screen.getByRole("link", { name: /drafts/i })).toHaveAttribute(
+			"href",
+			"/drafts"
+		);
+	});
+
+	it("does not allow other users to go to the drafts page", () => {
+		usePrincipal.mockReturnValue({});
+		renderWithHistory();
+		expect(
+			screen.queryByRole("link", { name: /drafts/i })
+		).not.toBeInTheDocument();
+	});
 });

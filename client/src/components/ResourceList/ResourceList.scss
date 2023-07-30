@@ -1,0 +1,46 @@
+ul.resource-list {
+	list-style-type: none;
+	max-width: 600px;
+	padding-left: 0;
+
+	h3 {
+		font-size: 16px;
+		margin: 0;
+	}
+
+	li {
+		border: 1px solid #3f3f3f;
+		border-radius: 5px;
+		padding: 16px;
+		margin: 16px 0;
+
+		& * {
+			margin-bottom: 16px;
+
+			&:last-child {
+				margin-bottom: 0;
+			}
+		}
+	}
+
+	button {
+		background-color: white;
+		border: 2px solid #1976d2;
+		border-radius: 5px;
+		color: #1976d2;
+		cursor: pointer;
+		font:
+			400 14px "Lato",
+			sans-serif;
+		margin-left: 8px;
+
+		&:hover,
+		&:focus {
+			background-color: #e8f1fa;
+		}
+
+		&:active {
+			background-color: #d1e3f6;
+		}
+	}
+}

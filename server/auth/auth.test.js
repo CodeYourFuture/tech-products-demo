@@ -19,6 +19,7 @@ describe("/auth", () => {
 				email,
 				github_id: user.id,
 				id: expect.stringMatching(patterns.UUID),
+				is_admin: false,
 				name: user.name,
 			});
 		});

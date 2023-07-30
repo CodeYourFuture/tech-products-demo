@@ -18,6 +18,9 @@ export default function Header() {
 			<nav>
 				<ul>
 					<li>{principal && <NavLink to="/suggest">Suggest</NavLink>}</li>
+					<li>
+						{principal?.is_admin && <NavLink to="/drafts">Drafts</NavLink>}
+					</li>
 				</ul>
 				<ul>
 					<li>

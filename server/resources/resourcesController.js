@@ -19,7 +19,8 @@ router
 	.get(
 		validated({ query: Joi.object({ drafts: Joi.boolean() }).unknown() }),
 		asyncHandler(async (req, res) => {
-			const includeDrafts = req.superuser && req.query.drafts === "true";
+			const includeDrafts =
+				(req.superuser || req.user?.is_admin) && req.query.drafts === "true";
 			res.send(await service.getAll(includeDrafts));
 		})
 	)
