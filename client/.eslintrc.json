@@ -3,6 +3,12 @@
 		"browser": true
 	},
 	"extends": ["plugin:jsx-a11y/strict", "plugin:react/recommended"],
+	"overrides": [
+		{
+			"files": ["setupTests.js", "**/*.test.js"],
+			"extends": ["plugin:testing-library/react"]
+		}
+	],
 	"plugins": ["react-hooks"],
 	"rules": {
 		"react/jsx-tag-spacing": "error",

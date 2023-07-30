@@ -10,12 +10,12 @@ jest.mock("../../authContext");
 
 const renderWithHistory = () => {
 	const history = createMemoryHistory();
-	const wrapper = render(
+	const utils = render(
 		<Router location={history.location} navigator={history}>
 			<Header />
 		</Router>
 	);
-	return { ...wrapper, history };
+	return { ...utils, history };
 };
 
 describe("Home", () => {
