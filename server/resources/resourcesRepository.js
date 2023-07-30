@@ -1,13 +1,22 @@
 import db from "../db";
 
+import { DuplicateResource } from "./resourcesService";
+
 export const add = async ({ description, source, title, url }) => {
-	const {
-		rows: [created],
-	} = await db.query(
-		"INSERT INTO resources (description, source, title, url) VALUES ($1, $2, $3, $4) RETURNING *;",
-		[description, source, title, url]
-	);
-	return created;
+	try {
+		const {
+			rows: [created],
+		} = await db.query(
+			"INSERT INTO resources (description, source, title, url) VALUES ($1, $2, $3, $4) RETURNING *;",
+			[description, source, title, url]
+		);
+		return created;
+	} catch (err) {
+		if (err.code === "23505" /** unique_violation */) {
+			throw new DuplicateResource();
+		}
+		throw err;
+	}
 };
 
 export const findOne = async (id) => {

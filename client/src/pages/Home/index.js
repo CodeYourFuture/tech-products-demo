@@ -9,7 +9,7 @@ export function Home() {
 
 	useEffect(() => {
 		resourceService
-			.getResources()
+			.getPublished()
 			.then(setResources)
 			.catch(() => {});
 	}, [resourceService]);

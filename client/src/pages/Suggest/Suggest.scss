@@ -53,9 +53,17 @@ form {
 	}
 }
 
-p.success {
-	background-color: palegreen;
-	color: darkgreen;
+p.message {
 	font-weight: bold;
 	padding: 8px;
+
+	&.success {
+		background-color: palegreen;
+		color: darkgreen;
+	}
+
+	&.failure {
+		background-color: lightcoral;
+		color: darkred;
+	}
 }

@@ -23,6 +23,13 @@ components:
             example:
               title: '"title" is required'
               url: '"url" must be a valid uri'
+    ConflictError:
+      description: The request conflicted with a previous request.
+      content:
+        text/plain:
+          schema:
+            type: string
+            example: Conflict
     InternalServerError:
       description: Something unexpected went wrong.
       content:

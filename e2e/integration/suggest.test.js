@@ -56,3 +56,21 @@ it("lets an authenticated user submit a resource without a description", () => {
 	cy.findByRole("textbox", { name: /url/i }).type("https://example.com{enter}");
 	cy.findByText(/thank you for suggesting a resource/i).should("exist");
 });
+
+it("gives feedback if the resource already exists", () => {
+	const title = "Another useful item";
+	const url = "https://example.com";
+	cy.visit("/");
+	cy.logInAs("shh@example.com");
+	cy.findByRole("link", { name: /suggest/i }).click();
+
+	cy.findByRole("textbox", { name: /title/i }).type(title);
+	cy.findByRole("textbox", { name: /url/i }).type(`${url}{enter}`);
+	cy.findByText(/thank you for suggesting a resource/i).should("exist");
+
+	cy.findByRole("textbox", { name: /title/i }).type(title);
+	cy.findByRole("textbox", { name: /url/i }).type(`${url}{enter}`);
+	cy.findByText(/a very similar resource already exists/i).should("exist");
+	cy.findByRole("textbox", { name: /title/i }).should("have.value", title);
+	cy.findByRole("textbox", { name: /url/i }).should("have.value", url);
+});

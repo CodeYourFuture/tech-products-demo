@@ -5,18 +5,6 @@ export default class ResourceService {
 		this.fetch = request;
 	}
 
-	async createResource(resource) {
-		const res = await this.fetch(ResourceService.ENDPOINT, {
-			body: JSON.stringify(resource),
-			headers: { "Content-Type": "application/json" },
-			method: "POST",
-		});
-		if (!res.ok) {
-			throw new Error(res.statusText);
-		}
-		return res.json();
-	}
-
 	async getDrafts() {
 		const res = await this.fetch(
 			`${ResourceService.ENDPOINT}?${new URLSearchParams({ drafts: true })}`
@@ -28,7 +16,7 @@ export default class ResourceService {
 		return [];
 	}
 
-	async getResources() {
+	async getPublished() {
 		const res = await this.fetch(ResourceService.ENDPOINT);
 		if (!res.ok) {
 			throw new Error(res.statusText);
@@ -44,6 +32,22 @@ export default class ResourceService {
 		});
 		if (res.ok) {
 			return res.json();
+		}
+	}
+
+	async suggest(resource) {
+		const res = await this.fetch(ResourceService.ENDPOINT, {
+			body: JSON.stringify(resource),
+			headers: { "Content-Type": "application/json" },
+			method: "POST",
+		});
+		switch (res.status) {
+			case 201:
+				return res.json();
+			case 409:
+				throw new Error("a very similar resource already exists");
+			default:
+				throw new Error("something went wrong");
 		}
 	}
 }
