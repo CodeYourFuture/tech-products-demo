@@ -2,6 +2,8 @@
 tags:
   - name: Resources
     description: Useful resources shared by the users.
+  - name: Users
+    description: The user accounts in the system.
   - name: Authentication
     description: Endpoints for login and security.
     externalDocs:
@@ -43,23 +45,6 @@ components:
             example: Unauthorized
 
   schemas:
-    Principal:
-      type: object
-      required: [id, github_id, name]
-      properties:
-        id:
-          type: string
-          format: uuid
-        email:
-          type: string
-          format: email
-          example: octocat@github.com
-        github_id:
-          type: number
-          example: 1
-        name:
-          type: string
-          example: Monalisa Octocat
     ResourceCreation:
       type: object
       required: [title, url]
@@ -95,6 +80,25 @@ components:
               type: string
               format: uuid
               description: The ID of the user who suggested the resource.
+    User:
+      type: object
+      required: [id, github_id, name]
+      properties:
+        id:
+          type: string
+          format: uuid
+        is_admin:
+          type: boolean
+        email:
+          type: string
+          format: email
+          example: octocat@github.com
+        github_id:
+          type: number
+          example: 1
+        name:
+          type: string
+          example: Monalisa Octocat
 
   securitySchemes:
     authCookie:

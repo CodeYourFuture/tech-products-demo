@@ -3,7 +3,6 @@
  */
 module.exports = {
 	coverageDirectory: "../reports/coverage",
-	maxWorkers: 1,
 	projects: [
 		{
 			displayName: "client",

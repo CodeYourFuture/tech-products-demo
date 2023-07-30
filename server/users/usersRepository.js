@@ -10,6 +10,13 @@ export const add = async ({ email, gitHubId, name }) => {
 	return created;
 };
 
+export async function findOne(id) {
+	const {
+		rows: [found],
+	} = await db.query("SELECT * FROM users WHERE id = $1;", [id]);
+	return found;
+}
+
 export const findOneByGitHubId = async (id) => {
 	const {
 		rows: [found],
@@ -17,12 +24,17 @@ export const findOneByGitHubId = async (id) => {
 	return found;
 };
 
-export async function getOne(id) {
+export async function getAll() {
+	const { rows } = await db.query("SELECT * FROM users;");
+	return rows;
+}
+
+export async function update(id, { is_admin }) {
 	const {
-		rows: [found],
-	} = await db.query("SELECT * FROM users WHERE id = $1;", [id]);
-	if (!found) {
-		throw new Error(`User ${id} not found`);
-	}
-	return found;
+		rows: [updated],
+	} = await db.query(
+		"UPDATE users SET is_admin = $2 WHERE id = $1 RETURNING *;",
+		[id, is_admin]
+	);
+	return updated;
 }

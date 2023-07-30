@@ -73,7 +73,7 @@ export const sudo = (req, res, next) => {
 };
 
 export const sudoOnly = (req, res, next) => {
-	if (req.superuser) {
+	if (req.superuser || req.user?.is_admin) {
 		return next();
 	}
 	res.sendStatus(401);

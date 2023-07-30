@@ -15,8 +15,8 @@ header {
 			text-decoration: none;
 
 			img {
-				height: 50px;
-				margin-right: 8px;
+				height: 35px;
+				margin-right: 4px;
 			}
 		}
 	}
@@ -67,21 +67,18 @@ header {
 		}
 	}
 
-	@media (max-width: 600px) {
+	@media (max-width: 720px) {
 		align-items: flex-start;
 		flex-direction: column;
 
-		h1 > a > img {
-			height: 35px;
-			margin-right: 4px;
+		nav ul {
+			padding-bottom: 16px;
 		}
+	}
 
+	@media (max-width: 480px) {
 		nav {
 			flex-direction: column;
-
-			ul {
-				padding-bottom: 16px;
-			}
 		}
 	}
 }
