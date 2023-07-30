@@ -4,6 +4,7 @@
     tags: [Resources]
     description: Get all resources.
     security:
+      - authCookie: []
       - sudoToken: []
     parameters:
       - in: query
@@ -11,7 +12,7 @@
         description: |
           Whether to include draft resources.
 
-          **Note**: drafts are only available with SUDO token.
+          **Note**: drafts are only available to admin users or with SUDO token.
         schema:
           type: boolean
     responses:
@@ -53,8 +54,9 @@
     description: |
       Update an existing resource.
 
-      **Note**: currently only supports publication with SUDO token.
+      **Note**: currently only supports publication, by admin user or with SUDO token.
     security:
+      - authCookie: []
       - sudoToken: []
     parameters:
       - in: path
