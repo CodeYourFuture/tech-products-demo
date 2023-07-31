@@ -7,7 +7,8 @@ module.exports = {
 		{
 			displayName: "client",
 			moduleNameMapper: {
-				"\\.(png|svg|jpe?g|gif|s?css|sass)$": "<rootDir>/__mocks__/fileMock.js",
+				"\\.(png|svg|jpe?g|gif|s?css|sass)$":
+					"<rootDir>/client/__mocks__/fileMock.js",
 			},
 			rootDir: ".",
 			setupFilesAfterEnv: ["<rootDir>/client/setupTests.js"],

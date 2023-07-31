@@ -1,6 +1,6 @@
 {
-	"migrations-dir": "db/migrations",
+	"migrations-dir": "migrations",
 	"migrations-table": "pgmigrations",
 	"reject-unauthorized": false,
-	"template-file-name": "db/migration-template.js"
+	"template-file-name": ".config/migration-template.js"
 }

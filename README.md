@@ -21,6 +21,8 @@ If you're using [dev containers], see `.devcontainer/README.md`. Otherwise:
    - UI: http://localhost:4201
    - API docs: http://localhost:4201/docs
 
+From there see `.github/CONTRIBUTING.md` for details on recommended workflows.
+
 ### Ports used
 
 - 4201: client application (Webpack in dev mode, Express in production mode)

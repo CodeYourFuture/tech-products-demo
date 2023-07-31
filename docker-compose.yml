@@ -9,7 +9,7 @@ services:
   gh:
     container_name: "gitstub"
     build:
-      context: dev/gitstub/
+      context: .devcontainer/gitstub/
     environment:
       DEBUG: "fauxauth:*"
       # noinspection JsonSchemaCompliance

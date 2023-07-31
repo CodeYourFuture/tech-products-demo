@@ -1,8 +1,4 @@
-# Dev
-
-Additional services required to run the dev environment.
-
-## GitStub
+# GitStub
 
 A fake GitHub OAuth server (using [Fauxauth]) and API to allow login without setting up a real app.
 

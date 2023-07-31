@@ -30,7 +30,8 @@
 		"start": "node dist/server.js",
 		"test": "jest --config .config/jest.config.js --runInBand",
 		"test:cover": "npm run test -- --coverage",
-		"test:watch": "npm run test -- --watch"
+		"test:watch": "npm run test -- --watch",
+		"uuid": "node --print 'require(\"node:crypto\").randomUUID()'"
 	},
 	"lint-staged": {
 		"*.{js,jsx}": "npm run lint:eslint -- --fix",
