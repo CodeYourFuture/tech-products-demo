@@ -8,13 +8,20 @@ export default function ResourceList({ publish, resources }) {
 	}
 	return (
 		<ul className="resource-list">
-			{resources.map(({ description, id, title, url }) => (
+			{resources.map(({ description, id, title, topic_name, url }) => (
 				<li key={id}>
-					<h3>
-						<a href={url}>{title}</a>
-					</h3>
+					<div>
+						<h3>
+							<a href={url}>{title}</a>
+						</h3>
+						{topic_name && <span className="topic">{topic_name}</span>}
+					</div>
 					{description && <p>{description}</p>}
-					{publish && <button onClick={() => publish(id)}>Publish</button>}
+					{publish && (
+						<div>
+							<button onClick={() => publish(id)}>Publish</button>
+						</div>
+					)}
 				</li>
 			))}
 		</ul>

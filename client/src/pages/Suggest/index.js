@@ -1,25 +1,29 @@
 import clsx from "clsx";
 import PropTypes from "prop-types";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
-import { useResourceService } from "../../services";
+import { useResourceService, useTopicService } from "../../services";
 
 import "./Suggest.scss";
 
 export default function Suggest() {
 	const [message, setMessage] = useState(undefined);
+	const [topics, setTopics] = useState(undefined);
 	const resourceService = useResourceService();
+	const topicService = useTopicService();
+
+	useEffect(() => {
+		topicService.getTopics().then(setTopics);
+	}, [topicService]);
 
 	const submitForm = useCallback(
 		(/**React.FormEvent<HTMLFormElement>*/ event) => {
 			event.preventDefault();
-			const {
-				description: { value: description },
-				title: { value: title },
-				url: { value: url },
-			} = event.target.elements;
+			const suggestion = Object.fromEntries(
+				[...new FormData(event.target)].filter(([, value]) => value !== "")
+			);
 			resourceService
-				.suggest({ description, title, url })
+				.suggest(suggestion)
 				.then(() => {
 					setMessage({
 						success: true,
@@ -68,6 +72,22 @@ export default function Suggest() {
 						<strong>Description</strong>
 					</span>
 					<textarea name="description" rows={5} />
+				</label>
+				<label>
+					<span>
+						<strong>Topic</strong>
+					</span>
+					<select defaultValue="" disabled={topics === undefined} name="topic">
+						<option disabled value="">
+							Select a topic
+						</option>
+						{topics &&
+							topics.map(({ id, name }) => (
+								<option key={id} value={id}>
+									{name}
+								</option>
+							))}
+					</select>
 				</label>
 				<button className="primary" type="submit">
 					Suggest

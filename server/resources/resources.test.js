@@ -60,6 +60,40 @@ describe("/api/resources", () => {
 			expect(body).toMatchObject(resource);
 		});
 
+		it("allows a topic", async () => {
+			const agent = await authenticateAs({ id: 0, name: "" }, "");
+			const { body: topics } = await agent
+				.get("/api/topics")
+				.set("User-Agent", "supertest")
+				.expect(200);
+			const topic = topics.find(({ name }) => name === "React");
+
+			const { body: created } = await agent
+				.post("/api/resources")
+				.send({
+					title: "Something",
+					topic: topic.id,
+					url: "https://example.com",
+				})
+				.set("User-Agent", "supertest")
+				.expect(201);
+
+			expect(created).toHaveProperty("topic", topic.id);
+		});
+
+		it("rejects unknown topics", async () => {
+			const agent = await authenticateAs({ id: 0, name: "" }, "");
+			await agent
+				.post("/api/resources")
+				.send({
+					title: "Something",
+					topic: randomUUID(),
+					url: "https://example.com",
+				})
+				.set("User-Agent", "supertest")
+				.expect(400, { topic: '"topic" must exist' });
+		});
+
 		it("rejects unauthenticated users", async () => {
 			await request(app)
 				.post("/api/resources")
@@ -152,6 +186,36 @@ describe("/api/resources", () => {
 				.query({ drafts: true })
 				.set("User-Agent", "supertest")
 				.expect(200, []);
+		});
+
+		it("includes the topic name if present", async () => {
+			const agent = await authenticateAs({ id: 0, name: "" }, "");
+			const {
+				body: [topic],
+			} = await agent
+				.get("/api/topics")
+				.set("User-Agent", "supertest")
+				.expect(200);
+
+			await agent
+				.post("/api/resources")
+				.send({
+					title: "Irrelevant",
+					topic: topic.id,
+					url: "https://example.com",
+				})
+				.set("User-Agent", "supertest")
+				.expect(201);
+
+			const {
+				body: [draft],
+			} = await request(app)
+				.get("/api/resources")
+				.query({ drafts: true })
+				.set("Authorization", `Bearer ${sudoToken}`)
+				.set("User-Agent", "supertest")
+				.expect(200);
+			expect(draft).toHaveProperty("topic_name", topic.name);
 		});
 	});
 

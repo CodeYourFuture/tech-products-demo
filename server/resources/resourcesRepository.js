@@ -1,14 +1,14 @@
-import db from "../db";
+import db, { singleLine } from "../db";
 
 import { DuplicateResource } from "./resourcesService";
 
-export const add = async ({ description, source, title, url }) => {
+export const add = async ({ description, source, title, topic, url }) => {
 	try {
 		const {
 			rows: [created],
 		} = await db.query(
-			"INSERT INTO resources (description, source, title, url) VALUES ($1, $2, $3, $4) RETURNING *;",
-			[description, source, title, url]
+			"INSERT INTO resources (description, source, title, topic, url) VALUES ($1, $2, $3, $4, $5) RETURNING *;",
+			[description, source, title, topic, url]
 		);
 		return created;
 	} catch (err) {
@@ -22,15 +22,13 @@ export const add = async ({ description, source, title, url }) => {
 export const findOne = async (id) => {
 	const {
 		rows: [resource],
-	} = await db.query("SELECT * FROM resources WHERE id = $1;", [id]);
+	} = await db.query(`${resourceQuery} WHERE r.id = $1;`, [id]);
 	return resource;
 };
 
 export const getAll = async ({ draft }) => {
 	const { rows } = await db.query(
-		draft
-			? "SELECT * FROM resources;"
-			: "SELECT * FROM resources WHERE draft = false;"
+		draft ? `${resourceQuery};` : `${resourceQuery} WHERE r.draft = false;`
 	);
 	return rows;
 };
@@ -44,3 +42,10 @@ export const update = async (id, { draft, publication }) => {
 	);
 	return updated;
 };
+
+const resourceQuery = singleLine`
+	SELECT r.*, t.name as topic_name
+	FROM resources as r
+	LEFT JOIN topics as t
+	ON r.topic = t.id
+`;

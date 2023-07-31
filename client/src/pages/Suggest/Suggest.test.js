@@ -1,4 +1,6 @@
-import { render, screen } from "@testing-library/react";
+import { randomUUID } from "node:crypto";
+
+import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { rest } from "msw";
 
@@ -8,16 +10,14 @@ import Suggest from "./index";
 
 describe("Suggest", () => {
 	it("allows the user to submit a resource", async () => {
+		let requestBody;
 		const title = "hello";
 		const url = "https://example.com";
 		const user = userEvent.setup();
 		server.use(
+			rest.get("/api/topics", (req, res, ctx) => res(ctx.json([]))),
 			rest.post("/api/resources", async (req, res, ctx) => {
-				await expect(req.json()).resolves.toEqual({
-					description: "",
-					title,
-					url,
-				});
+				requestBody = await req.json();
 				return res(ctx.status(201), ctx.json({}));
 			})
 		);
@@ -28,6 +28,7 @@ describe("Suggest", () => {
 		await user.click(screen.getByRole("button", { name: /suggest/i }));
 
 		await screen.findByText(/thank you for suggesting a resource/i);
+		expect(requestBody).toEqual({ title, url });
 		expect(screen.getByRole("form")).toHaveFormValues({
 			description: "",
 			title: "",
@@ -37,10 +38,12 @@ describe("Suggest", () => {
 
 	it("allows the user to include a description", async () => {
 		const description = "Check colour contrast for accessibility.";
+		let requestBody;
 		const user = userEvent.setup();
 		server.use(
+			rest.get("/api/topics", (req, res, ctx) => res(ctx.json([]))),
 			rest.post("/api/resources", async (req, res, ctx) => {
-				await expect(req.json()).resolves.toMatchObject({ description });
+				requestBody = await req.json();
 				return res(ctx.status(201), ctx.json({}));
 			})
 		);
@@ -61,11 +64,13 @@ describe("Suggest", () => {
 		await user.click(screen.getByRole("button", { name: /suggest/i }));
 
 		await screen.findByText(/thank you for suggesting a resource/i);
+		expect(requestBody).toHaveProperty("description", description);
 	});
 
 	it("gives useful feedback on failure", async () => {
 		const user = userEvent.setup();
 		server.use(
+			rest.get("/api/topics", (req, res, ctx) => res(ctx.json([]))),
 			rest.post("/api/resources", (req, res, ctx) => {
 				return res(ctx.status(409));
 			})
@@ -83,5 +88,69 @@ describe("Suggest", () => {
 		await screen.findByText(
 			"Resource suggestion failed: a very similar resource already exists."
 		);
+	});
+
+	it("shows the list of topics", async () => {
+		const topics = {
+			"HTML/CSS": randomUUID(),
+			JavaScript: randomUUID(),
+			"Professional Development": randomUUID(),
+		};
+		server.use(
+			rest.get("/api/topics", (req, res, ctx) => {
+				return res(
+					ctx.json(
+						Object.entries(topics).map(([topic, id]) => ({ id, name: topic }))
+					)
+				);
+			})
+		);
+
+		render(<Suggest />);
+
+		expect(
+			within(screen.getByRole("combobox", { name: /topic/i })).getByRole(
+				"option",
+				{ name: /select a topic/i }
+			)
+		).toBeDisabled();
+		await waitFor(() =>
+			expect(
+				within(screen.getByRole("combobox", { name: /topic/i }))
+					.getAllByRole("option")
+					.map((el) => el.textContent)
+			).toEqual(expect.arrayContaining(Object.keys(topics)))
+		);
+	});
+
+	it("allows the user to include a topic", async () => {
+		let requestBody;
+		const topic = "Professional Development";
+		const topicId = randomUUID();
+		const user = userEvent.setup();
+		server.use(
+			rest.get("/api/topics", (_, res, ctx) => {
+				return res(ctx.json([{ id: topicId, name: topic }]));
+			}),
+			rest.post("/api/resources", async (req, res, ctx) => {
+				requestBody = await req.json();
+				return res(ctx.status(201), ctx.json({}));
+			})
+		);
+
+		render(<Suggest />);
+		await user.type(screen.getByRole("textbox", { name: /title/i }), "Title");
+		await user.type(
+			screen.getByRole("textbox", { name: /url/i }),
+			"https://example.com"
+		);
+		await user.selectOptions(
+			screen.getByRole("combobox", { name: /topic/i }),
+			topic
+		);
+		await user.click(screen.getByRole("button", { name: /suggest/i }));
+
+		await screen.findByText(/thank you for suggesting a resource/i);
+		expect(requestBody).toHaveProperty("topic", topicId);
 	});
 });

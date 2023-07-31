@@ -1,0 +1,10 @@
+{
+	"users": [
+		{
+			"email": "admin@codeyourfuture.io",
+			"github_id": 123,
+			"is_admin": true,
+			"name": "Cyf Admin"
+		}
+	]
+}

@@ -2,6 +2,8 @@
 tags:
   - name: Resources
     description: Useful resources shared by the users.
+  - name: Topics
+    description: Topics to group the resources into.
   - name: Users
     description: The user accounts in the system.
   - name: Authentication
@@ -52,6 +54,59 @@ components:
             example: Unauthorized
 
   schemas:
+    BaseResource:
+      allOf:
+        - $ref: "#/components/schemas/ResourceCreation"
+        - type: object
+          required: [accession, id, source]
+          properties:
+            accession:
+              format: date-time
+              type: string
+            id:
+              format: uuid
+              type: string
+            source:
+              type: string
+              format: uuid
+              description: The ID of the user who suggested the resource.
+    DraftResource:
+      allOf:
+        - $ref: "#/components/schemas/BaseResource"
+        - type: object
+          required: [draft]
+          properties:
+            draft:
+              type: boolean
+              example: true
+            publication:
+              type: string
+              example: null
+              nullable: true
+    EnrichedResource:
+      allOf:
+        - $ref: "#/components/schemas/Resource"
+        - type: object
+          properties:
+            topic_name:
+              type: string
+              example: "HTML/CSS"
+    PublishedResource:
+      allOf:
+        - $ref: "#/components/schemas/BaseResource"
+        - type: object
+          required: [draft, publication]
+          properties:
+            draft:
+              example: false
+            publication:
+              type: string
+              format: date-time
+              nullable: false
+    Resource:
+      oneOf:
+        - $ref: "#/components/schemas/DraftResource"
+        - $ref: "#/components/schemas/PublishedResource"
     ResourceCreation:
       type: object
       required: [title, url]
@@ -62,31 +117,23 @@ components:
         title:
           type: string
           example: CYF Syllabus
+        topic:
+          type: string
+          format: uuid
         url:
           type: string
           format: uri
           example: https://syllabus.codeyourfuture.io/
-    Resource:
-      allOf:
-        - $ref: "#/components/schemas/ResourceCreation"
-        - type: object
-          required: [accession, draft, id]
-          properties:
-            accession:
-              format: date-time
-              type: string
-            draft:
-              type: boolean
-            id:
-              format: uuid
-              type: string
-            publication:
-              format: date-time
-              type: string
-            source:
-              type: string
-              format: uuid
-              description: The ID of the user who suggested the resource.
+    Topic:
+      type: object
+      required: [id, name]
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          example: SQL & Postgres
     User:
       type: object
       required: [id, github_id, name]

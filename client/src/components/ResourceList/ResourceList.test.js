@@ -21,4 +21,10 @@ describe("ResourceList", () => {
 
 		expect(publish).toHaveBeenCalledWith(resource.id);
 	});
+
+	it("shows the topic if available", () => {
+		const resource = { id: randomUUID(), topic_name: "My Topic" };
+		render(<ResourceList resources={[resource]} />);
+		expect(screen.getByText(resource.topic_name)).toBeInTheDocument();
+	});
 });
