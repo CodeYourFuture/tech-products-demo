@@ -1,6 +1,5 @@
 it("lets admin users approve drafts", () => {
 	const adminEmail = "admin@codeyourfuture.io";
-	cy.task("clearDb");
 	cy.seed("twoUsersOneResource");
 	cy.request({
 		headers: { Authorization: `Bearer ${Cypress.env("SUDO_TOKEN")}` },

@@ -1,7 +1,3 @@
-beforeEach(() => {
-	cy.task("clearDb");
-});
-
 it("is not accessible to anonymous users", () => {
 	cy.intercept("GET", "/api/auth/principal").as("initialRequest");
 	cy.visit("/");

@@ -1,7 +1,3 @@
-beforeEach(() => {
-	cy.task("clearDb");
-});
-
 it("displays the site", () => {
 	cy.visit("/");
 	cy.findByRole("heading", { level: 1 }).should("contain.text", "Resources");

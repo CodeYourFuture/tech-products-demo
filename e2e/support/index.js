@@ -22,3 +22,5 @@ before(() => {
 		cy.visit("/", { failOnStatusCode: false });
 	});
 });
+
+beforeEach(() => cy.task("clearDb"));
