@@ -42,17 +42,22 @@ afterAll(async () => {
 });
 
 /**
- * @typedef {Object} User
- * @property {number} id
- * @property {string} login
- * @property {string=} name
- *
- * @param {User} user
- * @param {string} email
- * @returns {Promise<import("supertest").TestAgent>}
+ * Creates a SuperTest-wrapped {@link https://ladjs.github.io/superagent/#agents-for-global-state agent}
+ * to use in the tests, and returns it along with the user (if appropriate).
+ * - `"anonymous"`: basic agent, no cookies
+ * - `"user"`: logged in as non-admin user
+ * - `"admin"`: logged in as admin user
+ * @param {"anonymous" | "user" | "admin"} identity
+ * @returns {Promise<{
+ *   agent: import("supertest").SuperTest<import("supertest").Test>,
+ *   user?: { email: string, github_id: number, id: string, is_admin: boolean, name: string },
+ * }>}
  */
-export const authenticateAs = async (user, email) => {
+export const authenticateAs = async (identity) => {
 	const agent = request.agent(app);
+	if (identity === "anonymous") {
+		return { agent };
+	}
 	server.use(
 		rest.post(
 			config.oauth.tokenURL ?? "https://github.com/login/oauth/access_token",
@@ -69,7 +74,9 @@ export const authenticateAs = async (user, email) => {
 		rest.get(
 			config.oauth.userProfileURL ?? "https://api.github.com/user",
 			(req, res, ctx) => {
-				return res(ctx.json(user));
+				return res(
+					ctx.json({ id: 123, login: identity, name: "Sushma Moolya" })
+				);
 			}
 		),
 		rest.get(
@@ -77,7 +84,12 @@ export const authenticateAs = async (user, email) => {
 			(req, res, ctx) => {
 				return res(
 					ctx.json([
-						{ email, primary: true, verified: true, visibility: "public" },
+						{
+							email: "user@example.com",
+							primary: true,
+							verified: true,
+							visibility: "public",
+						},
 					])
 				);
 			}
@@ -89,5 +101,17 @@ export const authenticateAs = async (user, email) => {
 		.set("User-Agent", "supertest")
 		.expect(302)
 		.expect("Location", "/");
-	return agent;
+	const { body: user } = await agent
+		.get("/api/auth/principal")
+		.set("User-Agent", "supertest")
+		.expect(200);
+	if (identity === "admin") {
+		await agent
+			.patch(`/api/user/${user.id}`)
+			.set("Authorization", `Bearer ${sudoToken}`)
+			.set("User-Agent", "supertest")
+			.expect(200);
+		user.is_admin = true;
+	}
+	return { agent, user };
 };

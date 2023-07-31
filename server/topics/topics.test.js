@@ -1,12 +1,10 @@
-import request from "supertest";
-
-import app from "../app";
-import { patterns } from "../setupTests";
+import { authenticateAs, patterns } from "../setupTests";
 
 describe("/api/topics", () => {
 	describe("GET /", () => {
 		it("exposes the list of topics", async () => {
-			const { body: topics } = await request(app)
+			const { agent } = await authenticateAs("anonymous");
+			const { body: topics } = await agent
 				.get("/api/topics")
 				.set("User-Agent", "supertest")
 				.expect(200);

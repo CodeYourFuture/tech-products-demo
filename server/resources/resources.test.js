@@ -1,28 +1,19 @@
 import { randomUUID } from "node:crypto";
 
-import request from "supertest";
-
-import app from "../app";
 import { authenticateAs, patterns, sudoToken } from "../setupTests";
 
 describe("/api/resources", () => {
 	describe("POST /", () => {
 		it("returns the created resource", async () => {
-			const agent = await authenticateAs(
-				{ id: 123, login: "foo-bar" },
-				"foo@bar.org"
-			);
+			const {
+				agent,
+				user: { id },
+			} = await authenticateAs("user");
 			const resource = {
 				title: "CYF Syllabus",
 				url: "https://syllabus.codeyourfuture.io/",
 			};
 
-			const {
-				body: { id },
-			} = await agent
-				.get("/api/auth/principal")
-				.set("User-Agent", "supertest")
-				.expect(200);
 			const { body } = await agent
 				.post("/api/resources")
 				.send(resource)
@@ -41,10 +32,7 @@ describe("/api/resources", () => {
 		});
 
 		it("accepts a description", async () => {
-			const agent = await authenticateAs(
-				{ id: 123, login: "foo-bar" },
-				"foo@bar.org"
-			);
+			const { agent } = await authenticateAs("user");
 			const resource = {
 				description: "Helpful tool for PostgreSQL DB migrations.",
 				title: "Node PG Migrate",
@@ -61,7 +49,7 @@ describe("/api/resources", () => {
 		});
 
 		it("allows a topic", async () => {
-			const agent = await authenticateAs({ id: 0, name: "" }, "");
+			const { agent } = await authenticateAs("user");
 			const { body: topics } = await agent
 				.get("/api/topics")
 				.set("User-Agent", "supertest")
@@ -82,7 +70,7 @@ describe("/api/resources", () => {
 		});
 
 		it("rejects unknown topics", async () => {
-			const agent = await authenticateAs({ id: 0, name: "" }, "");
+			const { agent } = await authenticateAs("user");
 			await agent
 				.post("/api/resources")
 				.send({
@@ -95,7 +83,8 @@ describe("/api/resources", () => {
 		});
 
 		it("rejects unauthenticated users", async () => {
-			await request(app)
+			const { agent } = await authenticateAs("anonymous");
+			await agent
 				.post("/api/resources")
 				.send({ title: "Something", url: "https://example.com" })
 				.set("User-Agent", "supertest")
@@ -125,7 +114,7 @@ describe("/api/resources", () => {
 			},
 		].forEach(({ req, res, title }) => {
 			it(`rejects invalid request: ${title}`, async () => {
-				const agent = await authenticateAs({ id: 0, login: "" }, "");
+				const { agent } = await authenticateAs("user");
 				await agent
 					.post("/api/resources")
 					.send(req)
@@ -135,7 +124,7 @@ describe("/api/resources", () => {
 		});
 
 		it("rejects duplicate resources", async () => {
-			const agent = await authenticateAs({ id: 0, login: "" }, "");
+			const { agent } = await authenticateAs("user");
 			const title = "Wuthering Heights";
 			const url = "https://example.com";
 			await agent
@@ -153,7 +142,8 @@ describe("/api/resources", () => {
 
 	describe("GET /", () => {
 		it("allows superuser to see all resources", async () => {
-			const agent = await authenticateAs({ id: 123, login: "" }, "");
+			const { agent: anonAgent } = await authenticateAs("anonymous");
+			const { agent } = await authenticateAs("user");
 			const resource = { title: "foo", url: "https://example.com" };
 			await agent
 				.post("/api/resources")
@@ -161,7 +151,7 @@ describe("/api/resources", () => {
 				.set("User-Agent", "supertest")
 				.expect(201);
 
-			const { body } = await request(app)
+			const { body } = await anonAgent
 				.get("/api/resources")
 				.query({ drafts: true })
 				.set("Authorization", `Bearer ${sudoToken}`)
@@ -173,7 +163,8 @@ describe("/api/resources", () => {
 		});
 
 		it("prevents non-superusers from seeing draft resources", async () => {
-			const agent = await authenticateAs({ id: 123, login: "" }, "");
+			const { agent: anonAgent } = await authenticateAs("anonymous");
+			const { agent } = await authenticateAs("user");
 			const resource = { title: "title", url: "https://example.com" };
 			await agent
 				.post("/api/resources")
@@ -181,7 +172,7 @@ describe("/api/resources", () => {
 				.set("User-Agent", "supertest")
 				.expect(201);
 
-			await request(app)
+			await anonAgent
 				.get("/api/resources")
 				.query({ drafts: true })
 				.set("User-Agent", "supertest")
@@ -189,7 +180,8 @@ describe("/api/resources", () => {
 		});
 
 		it("includes the topic name if present", async () => {
-			const agent = await authenticateAs({ id: 0, name: "" }, "");
+			const { agent: anonAgent } = await authenticateAs("anonymous");
+			const { agent } = await authenticateAs("user");
 			const {
 				body: [topic],
 			} = await agent
@@ -209,7 +201,7 @@ describe("/api/resources", () => {
 
 			const {
 				body: [draft],
-			} = await request(app)
+			} = await anonAgent
 				.get("/api/resources")
 				.query({ drafts: true })
 				.set("Authorization", `Bearer ${sudoToken}`)
@@ -221,7 +213,8 @@ describe("/api/resources", () => {
 
 	describe("PATCH /:id", () => {
 		it("allows superusers to publish a draft resource", async () => {
-			const agent = await authenticateAs({ id: 123, login: "" }, "");
+			const { agent: anonAgent } = await authenticateAs("anonymous");
+			const { agent } = await authenticateAs("user");
 			const { body: resource } = await agent
 				.post("/api/resources")
 				.send({
@@ -231,7 +224,7 @@ describe("/api/resources", () => {
 				.set("User-Agent", "supertest")
 				.expect(201);
 
-			const { body: updated } = await request(app)
+			const { body: updated } = await anonAgent
 				.patch(`/api/resources/${resource.id}`)
 				.send({ draft: false })
 				.set("Authorization", `Bearer ${sudoToken}`)
@@ -244,14 +237,15 @@ describe("/api/resources", () => {
 				publication: expect.stringMatching(patterns.DATETIME),
 			});
 
-			const { body: resources } = await request(app)
+			const { body: resources } = await anonAgent
 				.get("/api/resources")
 				.set("User-Agent", "supertest");
 			expect(resources).toHaveLength(1);
 		});
 
 		it("rejects other changes", async () => {
-			const agent = await authenticateAs({ id: 123, login: "" }, "");
+			const { agent: anonAgent } = await authenticateAs("anonymous");
+			const { agent } = await authenticateAs("user");
 			const { body: resource } = await agent
 				.post("/api/resources")
 				.send({
@@ -261,7 +255,7 @@ describe("/api/resources", () => {
 				.set("User-Agent", "supertest")
 				.expect(201);
 
-			await request(app)
+			await anonAgent
 				.patch(`/api/resources/${resource.id}`)
 				.send({ draft: true, title: "Something else" })
 				.set("Authorization", `Bearer ${sudoToken}`)
@@ -273,7 +267,8 @@ describe("/api/resources", () => {
 		});
 
 		it("handles missing resources", async () => {
-			await request(app)
+			const { agent } = await authenticateAs("anonymous");
+			await agent
 				.patch(`/api/resources/${randomUUID()}`)
 				.send({ draft: false })
 				.set("Authorization", `Bearer ${sudoToken}`)
@@ -282,7 +277,8 @@ describe("/api/resources", () => {
 		});
 
 		it("prevents non-superusers from publishing resources", async () => {
-			const agent = await authenticateAs({ id: 123, login: "" }, "");
+			const { agent: anonAgent } = await authenticateAs("anonymous");
+			const { agent } = await authenticateAs("user");
 			const { body: resource } = await agent
 				.post("/api/resources")
 				.send({
@@ -292,7 +288,7 @@ describe("/api/resources", () => {
 				.set("User-Agent", "supertest")
 				.expect(201);
 
-			await request(app)
+			await anonAgent
 				.patch(`/api/resources/${resource.id}`)
 				.send({ draft: false })
 				.set("User-Agent", "supertest")

@@ -1,28 +1,20 @@
-import request from "supertest";
-
-import app from "../app";
 import { authenticateAs, sudoToken } from "../setupTests";
 
 describe("/api/users", () => {
 	describe("GET /", () => {
 		it("is inaccessible to unauthenticated users", async () => {
-			await request(app)
+			const { agent } = await authenticateAs("anonymous");
+			await agent
 				.get("/api/users")
 				.set("User-Agent", "supertest")
 				.expect(401, "Unauthorized");
 		});
 
 		it("gives a superuser the list of users", async () => {
-			const agent = await authenticateAs(
-				{ id: 123, login: "foo" },
-				"foo@example.com"
-			);
-			const { body: user } = await agent
-				.get("/api/auth/principal")
-				.set("User-Agent", "supertest")
-				.expect(200);
+			const { agent } = await authenticateAs("anonymous");
+			const { user } = await authenticateAs("user");
 
-			await request(app)
+			await agent
 				.get("/api/users")
 				.set("Authorization", `Bearer ${sudoToken}`)
 				.set("User-Agent", "supertest")
@@ -32,24 +24,19 @@ describe("/api/users", () => {
 
 	describe("PATCH /:id", () => {
 		it("is inaccessible to unauthenticated users", async () => {
-			await request(app)
+			const { agent } = await authenticateAs("anonymous");
+			await agent
 				.patch("/api/users/abc123")
 				.set("User-Agent", "supertest")
 				.expect(401, "Unauthorized");
 		});
 
 		it("allows superusers to make other users admin", async () => {
-			const agent = await authenticateAs(
-				{ id: 123, login: "foo" },
-				"foo@example.com"
-			);
-			let { body: user } = await agent
-				.get("/api/auth/principal")
-				.set("User-Agent", "supertest")
-				.expect(200);
+			const { agent: anonAgent } = await authenticateAs("anonymous");
+			let { agent, user } = await authenticateAs("user");
 			expect(user.is_admin).toBe(false);
 
-			await request(app)
+			await anonAgent
 				.patch(`/api/users/${user.id}`)
 				.send({ is_admin: true })
 				.set("Authorization", `Bearer ${sudoToken}`)
@@ -64,7 +51,8 @@ describe("/api/users", () => {
 		});
 
 		it("rejects updates to nonexistent users", async () => {
-			await request(app)
+			const { agent } = await authenticateAs("anonymous");
+			await agent
 				.patch("/api/users/4174cd3c-70c9-4889-8acb-216de7f38025")
 				.send({ is_admin: true })
 				.set("Authorization", `Bearer ${sudoToken}`)
@@ -73,7 +61,8 @@ describe("/api/users", () => {
 		});
 
 		it("rejects other changes", async () => {
-			await request(app)
+			const { agent } = await authenticateAs("anonymous");
+			await agent
 				.patch("/api/users/4174cd3c-70c9-4889-8acb-216de7f38025")
 				.send({ name: "Some Alias" })
 				.set("Authorization", `Bearer ${sudoToken}`)

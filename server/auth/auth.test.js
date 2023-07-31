@@ -1,31 +1,21 @@
-import request from "supertest";
-
-import app from "../app";
-import { authenticateAs, patterns } from "../setupTests";
+import { authenticateAs } from "../setupTests";
 
 describe("/auth", () => {
 	describe("GET /principal", () => {
 		it("returns the authenticated user", async () => {
-			const email = "user@example.com";
-			const user = { id: 123, login: "user", name: "Some User" };
-			const agent = await authenticateAs(user, email);
+			const { agent, user } = await authenticateAs("user");
 
 			const { body: principal } = await agent
 				.get("/api/auth/principal")
 				.set("User-Agent", "supertest")
 				.expect(200);
 
-			expect(principal).toEqual({
-				email,
-				github_id: user.id,
-				id: expect.stringMatching(patterns.UUID),
-				is_admin: false,
-				name: user.name,
-			});
+			expect(principal).toEqual(user);
 		});
 
 		it("returns 401 for unauthenticated user", async () => {
-			await request(app)
+			const { agent } = await authenticateAs("anonymous");
+			await agent
 				.get("/api/auth/principal")
 				.set("User-Agent", "supertest")
 				.expect(401);
