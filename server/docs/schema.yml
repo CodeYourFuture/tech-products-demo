@@ -91,6 +91,22 @@ components:
             topic_name:
               type: string
               example: "HTML/CSS"
+    PublishedResource:
+      allOf:
+        - $ref: "#/components/schemas/BaseResource"
+        - type: object
+          required: [draft, publication]
+          properties:
+            draft:
+              example: false
+            publication:
+              type: string
+              format: date-time
+              nullable: false
+    Resource:
+      oneOf:
+        - $ref: "#/components/schemas/DraftResource"
+        - $ref: "#/components/schemas/PublishedResource"
     ResourceCreation:
       type: object
       required: [title, url]
@@ -108,22 +124,6 @@ components:
           type: string
           format: uri
           example: https://syllabus.codeyourfuture.io/
-    PublishedResource:
-      allOf:
-        - $ref: "#/components/schemas/BaseResource"
-        - type: object
-          required: [draft, publication]
-          properties:
-            draft:
-              example: false
-            publication:
-              type: string
-              format: date-time
-              nullable: false
-    Resource:
-      oneOf:
-        - $ref: "#/components/schemas/DraftResource"
-        - $ref: "#/components/schemas/PublishedResource"
     Topic:
       type: object
       required: [id, name]
