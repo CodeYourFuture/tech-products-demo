@@ -9,6 +9,10 @@ import morgan from "morgan";
 import config from "./config";
 import logger from "./logger";
 
+/**
+ * @param {import("express").RequestHandler} handler
+ * @returns {import("express").RequestHandler}
+ */
 export const asyncHandler = (handler) => async (req, res, next) => {
 	try {
 		await handler(req, res, next);

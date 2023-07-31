@@ -2,6 +2,8 @@
 tags:
   - name: Resources
     description: Useful resources shared by the users.
+  - name: Topics
+    description: Topics to group the resources into.
   - name: Users
     description: The user accounts in the system.
   - name: Authentication
@@ -87,6 +89,16 @@ components:
               type: string
               format: uuid
               description: The ID of the user who suggested the resource.
+    Topic:
+      type: object
+      required: [id, name]
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          example: SQL & Postgres
     User:
       type: object
       required: [id, github_id, name]
