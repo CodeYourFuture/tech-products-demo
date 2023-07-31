@@ -1,3 +1,5 @@
+import { topicsService } from "../topics";
+
 import * as repository from "./resourcesRepository";
 
 export class DuplicateResource extends Error {}
@@ -9,6 +11,9 @@ export class MissingResource extends Error {
 }
 
 export const create = async (resource) => {
+	if (resource.topic) {
+		await topicsService.getById(resource.topic);
+	}
 	return await repository.add(resource);
 };
 

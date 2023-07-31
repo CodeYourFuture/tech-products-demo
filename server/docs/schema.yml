@@ -54,6 +54,14 @@ components:
             example: Unauthorized
 
   schemas:
+    EnrichedResource:
+      allOf:
+        - $ref: "#/components/schemas/Resource"
+        - type: object
+          properties:
+            topic_name:
+              type: string
+              example: "HTML/CSS"
     ResourceCreation:
       type: object
       required: [title, url]
@@ -64,6 +72,9 @@ components:
         title:
           type: string
           example: CYF Syllabus
+        topic:
+          type: string
+          format: uuid
         url:
           type: string
           format: uri

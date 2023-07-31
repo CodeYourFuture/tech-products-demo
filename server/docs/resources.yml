@@ -22,7 +22,7 @@
             schema:
               type: array
               items:
-                $ref: "#/components/schemas/Resource"
+                $ref: "#/components/schemas/EnrichedResource"
       500:
         $ref: "#/components/responses/InternalServerError"
   post:

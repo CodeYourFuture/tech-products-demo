@@ -20,6 +20,26 @@ export default {
 	},
 };
 
+/**
+ * {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#tagged_templates Tagged template}
+ * to turn a mutliline query in backticks into a single line.
+ * @example
+ * const myQuery = singleLine`
+ *     SELECT *
+ *     FROM some_table
+ *     WHERE some_field = $1;
+ * `;
+ * @param {string} query
+ * @returns {string}
+ */
+export function singleLine([query]) {
+	return query
+		.trim()
+		.split("\n")
+		.map((line) => line.trim())
+		.join(" ");
+}
+
 const pool = new Pool({
 	connectionString: config.dbUrl,
 	connectionTimeoutMillis: 5_000,

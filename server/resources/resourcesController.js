@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { Joi } from "express-validation";
 
+import { MissingTopic } from "../topics/topicsService";
 import logger from "../utils/logger";
 import {
 	asyncHandler,
@@ -31,23 +32,20 @@ router
 			body: Joi.object({
 				description: Joi.string().empty(""),
 				title: Joi.string().required(),
+				topic: Joi.string().uuid(),
 				url: Joi.string().uri({ allowRelative: false }).required(),
 			}),
 		}),
 		asyncHandler(async (req, res) => {
 			const { id: source } = req.user;
-			const { description, title, url } = req.body;
 			try {
-				const resource = await service.create({
-					description,
-					source,
-					title,
-					url,
-				});
+				const resource = await service.create({ ...req.body, source });
 				res.status(201).send(resource);
 			} catch (err) {
 				if (err instanceof DuplicateResource) {
 					return res.sendStatus(409);
+				} else if (err instanceof MissingTopic) {
+					return res.status(400).json({ topic: '"topic" must exist' });
 				}
 				throw err;
 			}
