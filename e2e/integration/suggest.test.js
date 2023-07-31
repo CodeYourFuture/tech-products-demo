@@ -74,3 +74,28 @@ it("gives feedback if the resource already exists", () => {
 	cy.findByRole("textbox", { name: /title/i }).should("have.value", title);
 	cy.findByRole("textbox", { name: /url/i }).should("have.value", url);
 });
+
+it("lets the suggester assign a topic to the resource", () => {
+	cy.seed("admin");
+	cy.visit("/");
+
+	cy.logInAs("shh@example.com");
+	cy.findByRole("link", { name: /suggest/i }).click();
+	cy.findByRole("textbox", { name: /title/i }).type(
+		"A Complete Guide to Flexbox"
+	);
+	cy.findByRole("textbox", { name: /url/i }).type(
+		"https://css-tricks.com/snippets/css/a-guide-to-flexbox/"
+	);
+	cy.findByRole("combobox", { name: /topic/i }).select("HTML/CSS");
+	cy.findByRole("button", { name: /suggest/i }).click();
+	cy.findByText(/thank you for suggesting a resource/i).should("exist");
+	cy.logOut();
+
+	cy.logInAs("admin@codeyourfuture.io");
+	cy.findByRole("link", { name: /drafts/i }).click();
+	cy.findByText("HTML/CSS").should("exist");
+	cy.findByRole("button", { name: /publish/i }).click();
+	cy.findByRole("heading", { level: 1 }).click();
+	cy.findByText("HTML/CSS").should("exist");
+});

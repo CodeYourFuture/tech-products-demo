@@ -7,15 +7,9 @@ module.exports = {
 	async closeConnection() {
 		await pool.end();
 	},
-	async clearDb(skip = ["pgmigrations"]) {
-		const { rows } = await pool.query(
-			format(
-				"SELECT tablename FROM pg_catalog.pg_tables WHERE schemaname = 'public' AND tablename NOT IN (%L);",
-				skip
-			)
-		);
-		for (const { tablename } of rows) {
-			await pool.query(format("TRUNCATE TABLE %I CASCADE;", tablename));
+	async clearDb(tables = ["resources", "sessions", "users"]) {
+		for (const tableName of tables) {
+			await pool.query(format("TRUNCATE TABLE %I CASCADE;", tableName));
 		}
 		return null;
 	},
