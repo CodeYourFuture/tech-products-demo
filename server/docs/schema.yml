@@ -54,6 +54,35 @@ components:
             example: Unauthorized
 
   schemas:
+    BaseResource:
+      allOf:
+        - $ref: "#/components/schemas/ResourceCreation"
+        - type: object
+          required: [accession, id, source]
+          properties:
+            accession:
+              format: date-time
+              type: string
+            id:
+              format: uuid
+              type: string
+            source:
+              type: string
+              format: uuid
+              description: The ID of the user who suggested the resource.
+    DraftResource:
+      allOf:
+        - $ref: "#/components/schemas/BaseResource"
+        - type: object
+          required: [draft]
+          properties:
+            draft:
+              type: boolean
+              example: true
+            publication:
+              type: string
+              example: null
+              nullable: true
     EnrichedResource:
       allOf:
         - $ref: "#/components/schemas/Resource"
@@ -79,27 +108,22 @@ components:
           type: string
           format: uri
           example: https://syllabus.codeyourfuture.io/
-    Resource:
+    PublishedResource:
       allOf:
-        - $ref: "#/components/schemas/ResourceCreation"
+        - $ref: "#/components/schemas/BaseResource"
         - type: object
-          required: [accession, draft, id]
+          required: [draft, publication]
           properties:
-            accession:
-              format: date-time
-              type: string
             draft:
-              type: boolean
-            id:
-              format: uuid
-              type: string
+              example: false
             publication:
+              type: string
               format: date-time
-              type: string
-            source:
-              type: string
-              format: uuid
-              description: The ID of the user who suggested the resource.
+              nullable: false
+    Resource:
+      oneOf:
+        - $ref: "#/components/schemas/DraftResource"
+        - $ref: "#/components/schemas/PublishedResource"
     Topic:
       type: object
       required: [id, name]
