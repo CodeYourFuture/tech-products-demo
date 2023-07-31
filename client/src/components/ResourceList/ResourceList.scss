@@ -3,18 +3,28 @@ ul.resource-list {
 	max-width: 600px;
 	padding-left: 0;
 
+	p,
 	h3 {
-		font-size: 16px;
 		margin: 0;
 	}
 
 	li {
 		border: 1px solid #3f3f3f;
 		border-radius: 5px;
+		display: flex;
+		flex-direction: column;
 		padding: 16px;
 		margin: 16px 0;
 
-		& * {
+		h3 {
+			display: inline-block;
+			font-size: 16px;
+		}
+
+		& > * {
+			justify-content: space-between;
+			display: flex;
+			flex-direction: row;
 			margin-bottom: 16px;
 
 			&:last-child {
