@@ -30,7 +30,7 @@ router
 		authOnly,
 		validated({
 			body: Joi.object({
-				description: Joi.string().empty(""),
+				description: Joi.string(),
 				title: Joi.string().required(),
 				topic: Joi.string().uuid(),
 				url: Joi.string().uri({ allowRelative: false }).required(),
