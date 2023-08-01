@@ -1,15 +1,22 @@
 import { createHash, randomUUID } from "node:crypto";
 
+const gitHubIds = new Set();
+
 export default JSON.parse(process.env.USERS).map(createSpec);
 
 function createSpec({
 	gitHubId,
 	gitHubLogin,
 	name,
-	privateEmails = [],
-	publicEmails = [],
+	email,
+	publicEmail = false,
 	token = randomUUID(),
 }) {
+	if (gitHubIds.has(gitHubId)) {
+		throw new Error("Every user must have a unique gitHubId");
+	}
+	gitHubIds.add(gitHubId);
+
 	let login = gitHubLogin;
 	if (login === undefined) {
 		if (name === undefined) {
@@ -18,38 +25,22 @@ function createSpec({
 		login = name.toLowerCase().split(" ").join("-");
 	}
 
-	const emails = [
-		...publicEmails.map((email) => createEmail(email, "public")),
-		...privateEmails.map((email) => createEmail(email, "private")),
-	];
-	if (emails.length === 0) {
-		throw new Error("A user must have some emails");
+	if (!email) {
+		throw new Error("A user must have an email");
 	}
-	const [primaryEmail] = emails;
-	primaryEmail.primary = true;
 
-	const gravatarId = createGravatarId(primaryEmail.email);
+	const gravatarId = createGravatarId(email);
 
 	return {
-		_id: emails[0].email,
-		emails,
+		_id: email,
 		token,
 		user: createUser({
-			email: publicEmails.length === 0 ? null : publicEmails[0],
+			email: publicEmail ? email : null,
 			gravatarId,
 			id: gitHubId,
 			login,
 			name: name ?? null,
 		}),
-	};
-}
-
-function createEmail(email, visibility) {
-	return {
-		email,
-		primary: false,
-		verified: true,
-		visibility,
 	};
 }
 

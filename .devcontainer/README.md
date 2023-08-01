@@ -23,7 +23,7 @@ set the env var `OAUTH_AUTHORIZE_ENDPOINT=http://localhost:4212/login/oauth/auth
 ### Codespaces login
 
 Because of the way Codespaces work, it's even more awkward to get the login working. As above you can override the
-`/authorize` endpoint, but you need to use the app's public URL (this port will be automatically forwarded):
+`/authorize` endpoint, but you need to use the app's public URL:
 
 ```
 OAUTH_AUTHORIZE_ENDPOINT="https://$CODESPACE_NAME-4212.preview.app.github.dev/login/oauth/authorize"

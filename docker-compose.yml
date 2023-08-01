@@ -19,12 +19,13 @@ services:
             "gitHubId": 123,
             "gitHubLogin": "cyf-admin",
             "name": "Cyf Admin",
-            "publicEmails": ["admin@codeyourfuture.io"]
+            "email": "admin@codeyourfuture.io",
+            "publicEmail": true
           },
           {
             "gitHubId": 456,
             "gitHubLogin": "discreet-volunteer",
-            "privateEmails": ["shh@example.com"]
+            "email": "shh@example.com"
           }
         ]
     init: true

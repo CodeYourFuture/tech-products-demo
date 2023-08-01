@@ -12,14 +12,14 @@ const router = Router();
 passport.use(
 	"github",
 	new GitHubStrategy(
-		{
-			...config.oauth,
-			scopeSeparator: " ",
-			scope: ["read:user", "user:email"],
-		},
+		{ ...config.oauth },
 		async (accessToken, refreshToken, profile, done) => {
 			try {
-				const user = await service.logIn(profile);
+				const user = await service.logIn({
+					email: profile.emails?.[0]?.value,
+					gitHubId: profile.id,
+					name: profile.displayName ?? profile.username,
+				});
 				done(null, user);
 			} catch (err) {
 				done(err);
