@@ -101,17 +101,16 @@ export const authenticateAs = async (identity) => {
 		.set("User-Agent", "supertest")
 		.expect(302)
 		.expect("Location", "/");
-	const { body: user } = await agent
+	let { body: user } = await agent
 		.get("/api/auth/principal")
 		.set("User-Agent", "supertest")
 		.expect(200);
 	if (identity === "admin") {
-		await agent
+		({ body: user } = await agent
 			.patch(`/api/user/${user.id}`)
 			.set("Authorization", `Bearer ${sudoToken}`)
 			.set("User-Agent", "supertest")
-			.expect(200);
-		user.is_admin = true;
+			.expect(200));
 	}
 	return { agent, user };
 };
