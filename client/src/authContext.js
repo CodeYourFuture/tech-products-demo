@@ -9,6 +9,24 @@ import {
 
 const AuthContext = createContext({ logout: () => {} });
 
+/**
+ * If the user is not authenticated, clear the principal.
+ * @returns {typeof fetch}
+ */
+export function useAuthenticatedFetch() {
+	const logout = useLogout();
+	return useCallback(
+		async (...args) => {
+			const res = await fetch(...args);
+			if (res.status === 401) {
+				logout();
+			}
+			return res;
+		},
+		[logout]
+	);
+}
+
 export const useLogout = () => {
 	const { logout } = useContext(AuthContext);
 	return logout;
@@ -22,7 +40,7 @@ export const usePrincipal = () => {
 export default function AuthProvider({ children }) {
 	const [loading, setLoading] = useState(true);
 	const [principal, setPrincipal] = useState();
-	const logout = useCallback(() => setPrincipal(undefined), [setPrincipal]);
+	const logout = useCallback(() => setPrincipal(undefined), []);
 
 	useEffect(() => {
 		fetch("/api/auth/principal")

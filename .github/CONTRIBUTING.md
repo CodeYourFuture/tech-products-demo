@@ -126,7 +126,7 @@ The authentication with the backend is all dealt with automatically. This means 
 
 - The Express server sets a session cookie, which is added to requests by the browser.
 - `client/src/authContext.js` checks whether the user is logged in before loading the rest of the app.
-- The services use a wrapper around fetch that automatically logs the user back out and sends them to the home page if any request responds 401 Unauthorized.
+- The services use a wrapper around fetch that automatically logs the user back out and (if they were on a protected page) sends them to the home page if any request responds 401 Unauthorized.
 
 You can get access to the currently-authenticated user with the `usePrincipal` hook (it will return `undefined` if the user is a guest).
 
