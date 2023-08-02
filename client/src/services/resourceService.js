@@ -18,10 +18,10 @@ export default class ResourceService {
 
 	async getPublished() {
 		const res = await this.fetch(ResourceService.ENDPOINT);
-		if (!res.ok) {
-			throw new Error(res.statusText);
+		if (res.ok) {
+			return res.json();
 		}
-		return res.json();
+		return [];
 	}
 
 	async publish(id) {

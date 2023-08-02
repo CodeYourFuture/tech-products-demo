@@ -26,6 +26,7 @@ describe("Drafts", () => {
 	});
 
 	it("lets those resources be published", async () => {
+		let patchRequest;
 		const resource = {
 			draft: true,
 			id: "abc123",
@@ -39,7 +40,7 @@ describe("Drafts", () => {
 				return res(ctx.json(getResponses.shift()));
 			}),
 			rest.patch("/api/resources/:id", (req, res, ctx) => {
-				expect(req.params.id).toBe(resource.id);
+				patchRequest = req;
 				return res(ctx.json({ ...resource, draft: false }));
 			})
 		);
@@ -53,5 +54,6 @@ describe("Drafts", () => {
 		await waitFor(() =>
 			expect(screen.queryAllByRole("listitem")).toHaveLength(0)
 		);
+		expect(patchRequest.params.id).toBe(resource.id);
 	});
 });

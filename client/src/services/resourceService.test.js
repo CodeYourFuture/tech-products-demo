@@ -1,3 +1,5 @@
+import { randomUUID } from "node:crypto";
+
 import { rest } from "msw";
 
 import { server } from "../../setupTests";
@@ -9,14 +11,15 @@ describe("ResourceService", () => {
 
 	describe("getDrafts", () => {
 		it("sends an appropriate GET request", async () => {
-			expect.assertions(1);
+			let request;
 			server.use(
 				rest.get("/api/resources", (req, res, ctx) => {
-					expect(req.url.searchParams.get("drafts")).toBe("true");
+					request = req;
 					return res(ctx.json([]));
 				})
 			);
 			await service.getDrafts();
+			expect(request.url.searchParams.get("drafts")).toBe("true");
 		});
 
 		it("filters published resources out of the returned payload", async () => {
@@ -38,23 +41,44 @@ describe("ResourceService", () => {
 		});
 	});
 
+	describe("getPublished", () => {
+		it("resolves with resources if request succeeds", async () => {
+			const resources = [
+				{ id: randomUUID(), title: "My Resource", url: "https://example.com" },
+			];
+			server.use(
+				rest.get("/api/resources", (req, res, ctx) => res(ctx.json(resources)))
+			);
+			await expect(service.getPublished()).resolves.toEqual(resources);
+		});
+
+		it("resolves with empty array if request fails", async () => {
+			server.use(
+				rest.get("/api/resources", (req, res, ctx) => res(ctx.status(500)))
+			);
+			await expect(service.getPublished()).resolves.toEqual([]);
+		});
+	});
+
 	describe("publish", () => {
 		it("sends an appropriate PATCH request", async () => {
-			expect.assertions(2);
+			let request;
 			const id = "abc123";
 			server.use(
 				rest.patch("/api/resources/:id", async (req, res, ctx) => {
-					expect(req.params.id).toBe(id);
-					await expect(req.json()).resolves.toEqual({ draft: false });
+					request = req;
 					return res(ctx.json({ draft: false }));
 				})
 			);
 			await service.publish(id);
+			expect(request.params.id).toBe(id);
+			await expect(request.json()).resolves.toEqual({ draft: false });
 		});
 	});
 
 	describe("suggest", () => {
 		it("returns the resource on success", async () => {
+			let request;
 			const submitted = { title: "foo bar", url: "https://example.com" };
 			const created = {
 				...submitted,
@@ -63,11 +87,12 @@ describe("ResourceService", () => {
 			};
 			server.use(
 				rest.post("/api/resources", async (req, res, ctx) => {
-					await expect(req.json()).resolves.toEqual(submitted);
+					request = req;
 					return res(ctx.status(201), ctx.json(created));
 				})
 			);
 			await expect(service.suggest(submitted)).resolves.toEqual(created);
+			await expect(request.json()).resolves.toEqual(submitted);
 		});
 
 		it("throws a useful error on conflict", async () => {

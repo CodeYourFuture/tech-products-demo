@@ -8,10 +8,7 @@ export function Home() {
 	const [resources, setResources] = useState([]);
 
 	useEffect(() => {
-		resourceService
-			.getPublished()
-			.then(setResources)
-			.catch(() => {});
+		resourceService.getPublished().then(setResources);
 	}, [resourceService]);
 
 	return <ResourceList resources={resources} />;
