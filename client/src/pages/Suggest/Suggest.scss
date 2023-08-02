@@ -1,4 +1,4 @@
-form {
+form.form {
 	align-items: flex-end;
 	display: flex;
 	flex-direction: column;
@@ -9,34 +9,6 @@ form {
 
 		&:last-child {
 			margin-bottom: 16px;
-		}
-	}
-
-	button {
-		width: 25%;
-	}
-
-	button.primary {
-		background-color: #bc2a2a;
-		border-radius: 5px;
-		border: 2px solid #bc2a2a;
-		color: white;
-		cursor: pointer;
-		font:
-			400 16px "Lato",
-			sans-serif;
-		line-height: 28px;
-		padding: 0;
-
-		&:hover,
-		&:focus {
-			background-color: #a92525;
-			border-color: #a92525;
-		}
-
-		&:active {
-			background-color: #962121;
-			border-color: #962121;
 		}
 	}
 

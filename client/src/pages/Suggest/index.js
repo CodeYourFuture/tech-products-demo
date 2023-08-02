@@ -2,6 +2,7 @@ import clsx from "clsx";
 import PropTypes from "prop-types";
 import { useCallback, useEffect, useState } from "react";
 
+import { Button } from "../../components";
 import { useResourceService, useTopicService } from "../../services";
 
 import "./Suggest.scss";
@@ -52,6 +53,7 @@ export default function Suggest() {
 			{message && <Message {...message} />}
 			<form
 				aria-label="Suggest resource"
+				className="form"
 				onChange={() => setMessage(undefined)}
 				onSubmit={submitForm}
 			>
@@ -89,9 +91,7 @@ export default function Suggest() {
 							))}
 					</select>
 				</label>
-				<button className="primary" type="submit">
-					Suggest
-				</button>
+				<Button style="primary">Suggest</Button>
 			</form>
 		</>
 	);

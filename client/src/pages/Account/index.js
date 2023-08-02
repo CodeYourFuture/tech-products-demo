@@ -1,6 +1,7 @@
 import { Navigate } from "react-router-dom";
 
 import { usePrincipal } from "../../authContext";
+import { Button } from "../../components";
 
 import "./Account.scss";
 
@@ -29,9 +30,9 @@ export default function Account() {
 				aria-labelledby="logout-button"
 				method="POST"
 			>
-				<button className="secondary" id="logout-button" type="submit">
+				<Button id="logout-button" style="secondary">
 					Log out
-				</button>
+				</Button>
 			</form>
 		</>
 	);
