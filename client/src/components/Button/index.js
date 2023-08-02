@@ -3,12 +3,12 @@ import PropTypes from "prop-types";
 
 import "./Button.scss";
 
-export default function Button({ children, id, style, onClick }) {
+export default function Button({ children, id, onClick, style, type }) {
 	return (
 		<button
 			className={clsx("button", style)}
 			id={id}
-			type={onClick ? "button" : "submit"}
+			type={type || (onClick ? "button" : "submit")}
 		>
 			{children}
 		</button>
@@ -20,4 +20,5 @@ Button.propTypes = {
 	id: PropTypes.string,
 	onClick: PropTypes.func,
 	style: PropTypes.oneOf(["primary", "secondary"]).isRequired,
+	type: PropTypes.oneOf(["button", "reset", "submit"]),
 };

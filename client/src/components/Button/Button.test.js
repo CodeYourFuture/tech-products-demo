@@ -40,4 +40,16 @@ describe("Button", () => {
 			screen.getByRole("button", { name: /click me/i })
 		).toBeInTheDocument();
 	});
+
+	it("uses an explicit type if supplied", () => {
+		render(
+			<Button style="primary" type="reset">
+				Click me
+			</Button>
+		);
+		expect(screen.getByRole("button", { name: /click me/i })).toHaveAttribute(
+			"type",
+			"reset"
+		);
+	});
 });

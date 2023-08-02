@@ -91,7 +91,12 @@ export default function Suggest() {
 							))}
 					</select>
 				</label>
-				<Button style="primary">Suggest</Button>
+				<div>
+					<Button style="secondary" type="reset">
+						Clear
+					</Button>
+					<Button style="primary">Suggest</Button>
+				</div>
 			</form>
 		</>
 	);

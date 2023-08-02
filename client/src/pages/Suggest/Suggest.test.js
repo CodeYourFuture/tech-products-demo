@@ -153,4 +153,26 @@ describe("Suggest", () => {
 		await screen.findByText(/thank you for suggesting a resource/i);
 		expect(requestBody).toHaveProperty("topic", topicId);
 	});
+
+	it("allows the user to reset the form", async () => {
+		const title = "Title";
+		const topic = "Some Topic";
+		const user = userEvent.setup();
+		server.use(
+			rest.get("/api/topics", (_, res, ctx) => {
+				return res(ctx.json([{ id: randomUUID(), name: topic }]));
+			})
+		);
+		render(<Suggest />);
+		await user.type(screen.getByRole("textbox", { name: /title/i }), title);
+		await user.selectOptions(
+			screen.getByRole("combobox", { name: /topic/i }),
+			topic
+		);
+
+		await user.click(screen.getByRole("button", { name: /clear/i }));
+
+		expect(screen.getByRole("textbox", { name: /title/i })).toHaveValue("");
+		expect(screen.getByRole("combobox", { name: /topic/i })).toHaveValue("");
+	});
 });
