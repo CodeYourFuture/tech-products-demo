@@ -91,7 +91,7 @@ export default function Suggest() {
 							))}
 					</select>
 				</label>
-				<div>
+				<div className="buttons">
 					<Button style="secondary" type="reset">
 						Clear
 					</Button>

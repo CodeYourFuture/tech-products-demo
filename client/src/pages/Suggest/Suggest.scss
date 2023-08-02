@@ -7,14 +7,21 @@ form.form {
 
 	> * {
 		margin-top: 16px;
+		width: 100%;
 
 		&:last-child {
 			margin-bottom: 16px;
 		}
 	}
 
-	button {
-		margin-left: 16px;
+	div.buttons {
+		display: flex;
+		flex-direction: row;
+		justify-content: flex-end;
+
+		button:not(:first-child) {
+			margin-left: 16px;
+		}
 	}
 
 	label {
@@ -22,7 +29,6 @@ form.form {
 		display: flex;
 		flex-direction: row;
 		justify-content: space-between;
-		width: 100%;
 
 		input,
 		select,
@@ -57,15 +63,21 @@ p.message {
 }
 
 @media (max-width: 480px) {
-	form.form label {
-		align-items: flex-start;
-		flex-direction: column;
+	form.form {
+		div.buttons {
+			justify-content: space-between;
+		}
 
-		input,
-		select,
-		textarea {
-			width: 100%;
-			margin: 8px 0;
+		label {
+			align-items: flex-start;
+			flex-direction: column;
+
+			input,
+			select,
+			textarea {
+				width: 100%;
+				margin: 8px 0;
+			}
 		}
 	}
 }
