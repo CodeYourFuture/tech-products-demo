@@ -2,7 +2,8 @@ form.form {
 	align-items: flex-end;
 	display: flex;
 	flex-direction: column;
-	max-width: 600px;
+	margin: 0 auto;
+	max-width: 720px;
 
 	> * {
 		margin-top: 16px;
@@ -13,6 +14,7 @@ form.form {
 	}
 
 	label {
+		align-items: center;
 		display: flex;
 		flex-direction: row;
 		justify-content: space-between;
@@ -21,6 +23,15 @@ form.form {
 		input,
 		select,
 		textarea {
+			background-color: white;
+			border: 1px solid #bdbdbd;
+			border-radius: 5px;
+			box-sizing: border-box;
+			font:
+				400 16px "Lato",
+				sans-serif;
+			margin-left: 16px;
+			padding: 8px;
 			width: 75%;
 		}
 	}
@@ -38,5 +49,19 @@ p.message {
 	&.failure {
 		background-color: lightcoral;
 		color: darkred;
+	}
+}
+
+@media (max-width: 480px) {
+	form.form label {
+		align-items: flex-start;
+		flex-direction: column;
+
+		input,
+		select,
+		textarea {
+			width: 100%;
+			margin: 8px 0;
+		}
 	}
 }
