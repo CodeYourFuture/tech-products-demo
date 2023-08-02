@@ -9,34 +9,34 @@ button.button {
 	min-width: 150px;
 
 	&.primary {
-		background-color: #bc2a2a;
-		border: 2px solid #bc2a2a;
+		background-color: #2a2abc;
+		border: 2px solid #2a2abc;
 		color: white;
 
 		&:hover,
 		&:focus {
-			background-color: #a92525;
-			border-color: #a92525;
+			background-color: #2525a9;
+			border-color: #212196;
 		}
 
 		&:active {
-			background-color: #962121;
-			border-color: #962121;
+			background-color: #263fcb;
+			border-color: #263fcb;
 		}
 	}
 
 	&.secondary {
 		background-color: white;
-		border: 2px solid #bc2a2a;
-		color: #bc2a2a;
+		border: 2px solid #2a2abc;
+		color: #2a2abc;
 
 		&:hover,
 		&:focus {
-			background-color: #f8e9e9;
+			background-color: #e9e9f8;
 		}
 
 		&:active {
-			background-color: #f1d4d4;
+			background-color: #d4d4f1;
 		}
 	}
 }
