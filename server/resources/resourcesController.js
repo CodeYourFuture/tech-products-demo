@@ -64,7 +64,7 @@ router
 		}),
 		asyncHandler(async (req, res) => {
 			try {
-				res.send(await service.publish(req.params.id));
+				res.send(await service.publish(req.params.id, req.user?.id ?? null));
 			} catch (err) {
 				if (err instanceof service.MissingResource) {
 					logger.info(err.message);

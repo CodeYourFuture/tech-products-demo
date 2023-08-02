@@ -33,12 +33,12 @@ export const getAll = async ({ draft }) => {
 	return rows;
 };
 
-export const update = async (id, { draft, publication }) => {
+export const update = async (id, { draft, publication, publisher }) => {
 	const {
 		rows: [updated],
 	} = await db.query(
-		"UPDATE resources SET draft = $2, publication = $3 WHERE id = $1 RETURNING *;",
-		[id, draft, publication]
+		"UPDATE resources SET draft = $2, publication = $3, publisher = $4 WHERE id = $1 RETURNING *;",
+		[id, draft, publication, publisher]
 	);
 	return updated;
 };

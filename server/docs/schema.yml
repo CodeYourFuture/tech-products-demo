@@ -103,6 +103,11 @@ components:
               type: string
               format: date-time
               nullable: false
+            publisher:
+              description: |
+                The ID of the user who published the resource (or `null`, if the SUDO token was used).
+              type: string
+              format: uuid
     Resource:
       oneOf:
         - $ref: "#/components/schemas/DraftResource"
