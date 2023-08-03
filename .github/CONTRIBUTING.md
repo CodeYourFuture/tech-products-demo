@@ -18,7 +18,44 @@ In general, a _"test-driven development"_ (TDD) approach is recommended. Not all
   - Compare the coverage report to the GitHub Pages site in the repo, which shows the current coverage on `main`, to ensure it's not falling too much (and is ideally rising!)
 - `git push` the changes and open a pull request, following the guidance in the template.
 
-You can see examples of all of the above in the codebase and the pull requests on the repository. Proceding in this way gives plenty of chances to check in for guidance, e.g. _"does this E2E test reflect your understanding of the user flow"_, or _"do you think this Swagger API design is sensible?"_, before too much work has been done on a possibly-incorrect implementation.
+You can see examples of all of the above in the codebase and the pull requests on the repository. Proceeding in this way gives plenty of chances to check in for guidance, e.g. _"does this E2E test reflect your understanding of the user flow"_, or _"do you think this Swagger API design is sensible?"_, before too much work has been done on a possibly-incorrect implementation.
+
+## Create a test environment
+
+### Deploy
+
+A `render.yaml` file is provided to allow you to deploy a test environment, comprising the app itself and a Postgres database, to [Render]. To do this:
+
+- Log in to the Render Dashboard using GitHub
+- Make sure Render has access to at least your fork of the repo (or give it access to all repos in your account)
+- Click the "New" button and select "Blueprint"
+- Click the "Connect" button on your fork of the repo
+  - Name it something like `{your-github-login}-tech-products-demo`
+  - Click "Generate" for all three environment variables (make sure to note the value of `SUDO_TOKEN` down)
+    - Note the `OAUTH_` values won't actually be correct, but they're needed for the app to start; we'll update them soon
+  - Click "Apply"
+
+Once the deployment succeeds you should have a URL like `https://tech-products-demo-abc123.onrender.com`, let's call this `$URL`.
+
+Update the repository's "About" section in GitHub to use this `$URL` instead of the upstream's Heroku URL.
+
+You can see the current environment variables for your app in Dashboard -> `tech-products-demo` Web Service -> Environment.
+
+### OAuth
+
+Create a new [GitHub OAuth] application.
+
+- Enter `{your name} Tech Products Demo` for the **Application name**
+- Enter the `{$URL}` for the **Homepage URL**
+- Enter `{$URL}/api/auth/callback` for the **Authorization callback URL**
+
+You will now see a client ID; use this value for the `OAUTH_CLIENT_ID` environment variable in Render.
+
+Click "Generate a client secret" in GitHub. You will now see a client secret; use this value for the `OAUTH_CLIENT_SECRET` environment variable in Render.
+
+Click "Save Changes" in Render. This will trigger a redeployment. When it finishes you should be able to visit `$URL` and log into your app using GitHub!
+
+Whenever you push changes to your `main` branch, this site will be automatically redeployed. You can check which commit is deployed at any time by visiting `{$URL}/build-info.txt`.
 
 ## End-to-end tests
 
@@ -143,6 +180,7 @@ The app is set up to use regular CSS files or [SCSS] (the latter allows nesting 
 [cypress variables and aliases]: https://docs.cypress.io/guides/core-concepts/variables-and-aliases
 [express]: https://expressjs.com/
 [flexbox]: https://css-tricks.com/snippets/css/a-guide-to-flexbox/
+[github oauth]: https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-oauth-app
 [jest]: https://jestjs.io/
 [msw]: https://jestjs.io/
 [node-pg-migrate]: https://salsita.github.io/node-pg-migrate/#/
@@ -150,6 +188,7 @@ The app is set up to use regular CSS files or [SCSS] (the latter allows nesting 
 [react]: https://react.dev/
 [react router]: https://reactrouter.com/en/main
 [react testing library]: https://testing-library.com/docs/react-testing-library/intro/
+[render]: https://render.com/
 [scss]: https://sass-lang.com/documentation/syntax/#scss
 [supertest]: https://www.npmjs.com/package/supertest
 [swagger]: https://swagger.io/docs/specification/about/

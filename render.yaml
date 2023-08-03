@@ -1,0 +1,33 @@
+---
+services:
+  - type: web
+    plan: free
+    name: tech-products-demo
+    region: frankfurt
+    env: node
+    buildCommand: npm ci --include dev; npm run build; npm prune --omit dev
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: psql
+          property: connectionString
+      - key: LOG_LEVEL
+        value: info
+      - key: NODE_ENV
+        value: production
+      - key: OAUTH_CLIENT_ID
+        sync: false
+      - key: OAUTH_CLIENT_SECRET
+        sync: false
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: SUDO_TOKEN
+        sync: false
+databases:
+  - name: psql
+    region: frankfurt
+    databaseName: cyf
+    plan: free
+    ipAllowList: [] # only allow internal connections
