@@ -1,7 +1,7 @@
-import { randomUUID } from "node:crypto";
-
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+
+import { resourceStub } from "../../../setupTests";
 
 import ResourceList from "./index";
 
@@ -13,7 +13,7 @@ describe("ResourceList", () => {
 
 	it("shows a publish button if enabled", async () => {
 		const publish = jest.fn();
-		const resource = { id: randomUUID() };
+		const resource = resourceStub();
 		const user = userEvent.setup();
 		render(<ResourceList publish={publish} resources={[resource]} />);
 
@@ -23,7 +23,7 @@ describe("ResourceList", () => {
 	});
 
 	it("shows the topic if available", () => {
-		const resource = { id: randomUUID(), topic_name: "My Topic" };
+		const resource = resourceStub({ topic_name: "My Topic" });
 		render(<ResourceList resources={[resource]} />);
 		expect(screen.getByText(resource.topic_name)).toBeInTheDocument();
 	});

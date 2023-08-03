@@ -1,8 +1,6 @@
-import { randomUUID } from "node:crypto";
-
 import { rest } from "msw";
 
-import { server } from "../../setupTests";
+import { resourceStub, server } from "../../setupTests";
 
 import ResourceService from "./resourceService";
 
@@ -23,7 +21,9 @@ describe("ResourceService", () => {
 		});
 
 		it("filters published resources out of the returned payload", async () => {
-			const resources = [{ draft: true }, { draft: false }, { draft: true }];
+			const resources = [true, false, true].map((draft) =>
+				resourceStub({ draft })
+			);
 			server.use(
 				rest.get("/api/resources", (req, res, ctx) => {
 					return res(ctx.json(resources));
@@ -44,7 +44,7 @@ describe("ResourceService", () => {
 	describe("getPublished", () => {
 		it("resolves with resources if request succeeds", async () => {
 			const resources = [
-				{ id: randomUUID(), title: "My Resource", url: "https://example.com" },
+				resourceStub({ title: "My Resource", url: "https://example.com" }),
 			];
 			server.use(
 				rest.get("/api/resources", (req, res, ctx) => res(ctx.json(resources)))
@@ -80,11 +80,10 @@ describe("ResourceService", () => {
 		it("returns the resource on success", async () => {
 			let request;
 			const submitted = { title: "foo bar", url: "https://example.com" };
-			const created = {
+			const created = resourceStub({
 				...submitted,
-				accession: new Date().toISOString(),
 				draft: true,
-			};
+			});
 			server.use(
 				rest.post("/api/resources", async (req, res, ctx) => {
 					request = req;

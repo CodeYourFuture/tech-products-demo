@@ -2,18 +2,18 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { rest } from "msw";
 
-import { server } from "../../../setupTests";
+import { resourceStub, server } from "../../../setupTests";
 
 import Drafts from "./index";
 
 describe("Drafts", () => {
 	it("shows draft resources", async () => {
-		const resource = {
+		const resource = resourceStub({
 			draft: true,
 			id: "abc123",
 			title: "foo",
 			url: "https://example.com",
-		};
+		});
 		server.use(
 			rest.get("/api/resources", (req, res, ctx) => {
 				return res(ctx.json([resource]));
@@ -27,12 +27,12 @@ describe("Drafts", () => {
 
 	it("lets those resources be published", async () => {
 		let patchRequest;
-		const resource = {
+		const resource = resourceStub({
 			draft: true,
 			id: "abc123",
 			title: "foo",
 			url: "https://example.com",
-		};
+		});
 		const getResponses = [[resource], []];
 		const user = userEvent.setup();
 		server.use(
