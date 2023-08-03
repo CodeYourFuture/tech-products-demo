@@ -9,7 +9,7 @@ it("meets basic accessibility guidelines", () => {
 });
 
 it("shows existing resources", () => {
-	cy.seed("initialResources");
+	cy.seed("onePublishedResource");
 	cy.visit("/");
 	cy.findByRole("link", { name: "JS TDD Ohm" }).should(
 		"have.attr",

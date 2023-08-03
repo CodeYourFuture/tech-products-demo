@@ -1,20 +1,9 @@
 it("lets admin users approve drafts", () => {
 	const adminEmail = "admin@codeyourfuture.io";
-	cy.seed("twoUsersOneResource");
-	cy.request({
-		headers: { Authorization: `Bearer ${Cypress.env("SUDO_TOKEN")}` },
-		method: "GET",
-		url: "/api/users",
-	}).then(({ body }) => {
-		const { id } = body.find(({ email }) => email === adminEmail);
-		cy.request({
-			body: { is_admin: true },
-			headers: { Authorization: `Bearer ${Cypress.env("SUDO_TOKEN")}` },
-			method: "PATCH",
-			url: `/api/users/${id}`,
-		});
-	});
+	cy.seed("admin");
+	cy.seed("oneDraftResource");
 	cy.visit("/");
+
 	cy.logInAs(adminEmail);
 	cy.findByRole("link", { name: /drafts/i }).click();
 	cy.findByText("Joi documentation").should("exist");

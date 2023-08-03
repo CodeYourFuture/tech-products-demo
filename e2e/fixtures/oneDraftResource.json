@@ -1,12 +1,6 @@
 {
 	"users": [
 		{
-			"email": "admin@codeyourfuture.io",
-			"github_id": 123,
-			"id": "a28e8ded-34c3-4c75-8cb7-c8d2a2283215",
-			"name": "Cyf Admin"
-		},
-		{
 			"email": "shh@example.com",
 			"github_id": 456,
 			"id": "2a8e4bb3-6f9c-4602-b084-af343fcbe6f0",
