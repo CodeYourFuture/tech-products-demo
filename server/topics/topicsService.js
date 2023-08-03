@@ -7,7 +7,7 @@ export class MissingTopic extends Error {
 }
 
 export async function getAll() {
-	return await repository.getAll();
+	return await repository.findAll();
 }
 
 export async function getById(id) {

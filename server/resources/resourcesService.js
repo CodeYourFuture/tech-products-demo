@@ -18,7 +18,11 @@ export const create = async (resource) => {
 };
 
 export async function getAll(includeDrafts) {
-	return await repository.getAll({ draft: includeDrafts });
+	const resources = await repository.findAll();
+	if (includeDrafts) {
+		return resources;
+	}
+	return resources.filter(({ draft }) => draft === false);
 }
 
 export async function publish(resourceId, publisherId) {

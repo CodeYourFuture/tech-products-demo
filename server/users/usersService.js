@@ -15,7 +15,7 @@ export async function findByGitHubId(id) {
 }
 
 export async function getAll() {
-	return await repository.getAll();
+	return await repository.findAll();
 }
 
 export async function getById(id) {
