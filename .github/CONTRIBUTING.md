@@ -12,10 +12,10 @@ In general, a _"test-driven development"_ (TDD) approach is recommended. Not all
 - Next the [React] UI:
   - Test-drive updates to or creation of `use<Thing>Service` hooks to allow components to access the updated API using [Jest] and [MSW].
   - Create the pages (with [React Router] routes) and components required, testing them with [Jest] and [React Testing Library].
-  - Apply CSS to polish the visual appearance of the new pages and components.
+  - Apply classes and styles to polish the visual appearance of the new pages and components.
 - Make a commit.
 - Run `npm run ship` to apply the full automated quality checking suite and ensure everything still works.
-  - You can also run `npm run test:cover` to get a coverage report for the Jest (not Cypress) test suite - compare this to the GitHub Pages site in the repo, which shows the current coverage on `main`, to ensure it's not falling (and is ideally rising!)
+  - Compare the coverage report to the GitHub Pages site in the repo, which shows the current coverage on `main`, to ensure it's not falling too much (and is ideally rising!)
 - `git push` the changes and open a pull request, following the guidance in the template.
 
 You can see examples of all of the above in the codebase and the pull requests on the repository. Proceding in this way gives plenty of chances to check in for guidance, e.g. _"does this E2E test reflect your understanding of the user flow"_, or _"do you think this Swagger API design is sensible?"_, before too much work has been done on a possibly-incorrect implementation.
@@ -76,6 +76,7 @@ Migrations are used to update the schema of the database in an automated way, so
   - The `"uuid"` type is provided as a "shorthand" to the default ID column used in tables.
 - Apply the migration (and any other pending migrations) with `npm run prestart` or `npm run migration -- up`.
 - Check it can be reversed and reapplied (i.e. both up and down work) with `npm run migration -- redo`.
+  - The actual queries that were run will be logged out, review these to ensure they're doing what you intended.
 
 These will then be run automatically in production environments when the app is released, to ensure the DB supports the deployed functionality without having to directly access the live instance.
 
