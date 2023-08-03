@@ -11,17 +11,14 @@ export default function ResourceList({ publish, resources }) {
 			{resources.map(({ description, id, title, topic_name, url }) => (
 				<li key={id}>
 					<div>
-						<h3>
-							<a href={url}>{title}</a>
-						</h3>
+						<h3>{title}</h3>
 						{topic_name && <span className="topic">{topic_name}</span>}
 					</div>
 					{description && <p>{description}</p>}
-					{publish && (
-						<div>
-							<button onClick={() => publish(id)}>Publish</button>
-						</div>
-					)}
+					<div>
+						<a href={url}>{formatUrl(url)}</a>
+						{publish && <button onClick={() => publish(id)}>Publish</button>}
+					</div>
 				</li>
 			))}
 		</ul>
@@ -30,5 +27,21 @@ export default function ResourceList({ publish, resources }) {
 
 ResourceList.propTypes = {
 	publish: PropTypes.func,
-	resources: PropTypes.arrayOf(PropTypes.object).isRequired,
+	resources: PropTypes.arrayOf(
+		PropTypes.shape({
+			description: PropTypes.string,
+			id: PropTypes.string.isRequired,
+			title: PropTypes.string.isRequired,
+			topic_name: PropTypes.string,
+			url: PropTypes.string.isRequired,
+		})
+	).isRequired,
 };
+
+function formatUrl(url) {
+	const host = new URL(url).host;
+	if (host.startsWith("www.")) {
+		return host.slice(4);
+	}
+	return host;
+}

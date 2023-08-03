@@ -21,8 +21,8 @@ describe("Drafts", () => {
 		);
 		render(<Drafts />);
 		await expect(
-			screen.findByRole("link", { name: /foo/i })
-		).resolves.toHaveAttribute("href", resource.url);
+			screen.findByRole("heading", { level: 3 })
+		).resolves.toHaveTextContent("foo");
 	});
 
 	it("lets those resources be published", async () => {

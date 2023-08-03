@@ -11,7 +11,8 @@ it("meets basic accessibility guidelines", () => {
 it("shows existing resources", () => {
 	cy.seed("onePublishedResource");
 	cy.visit("/");
-	cy.findByRole("link", { name: "JS TDD Ohm" }).should(
+	cy.findByRole("heading", { level: 3 }).should("contain.text", "JS TDD Ohm");
+	cy.findByRole("link", { name: "blog.jonrshar.pe" }).should(
 		"have.attr",
 		"href",
 		"https://blog.jonrshar.pe/2023/May/23/js-tdd-ohm.html"

@@ -40,7 +40,12 @@ it("lets an authenticated user suggest a resource", () => {
 	);
 	cy.findByText(/thank you for suggesting a resource/i).should("exist");
 	cy.visit("/");
-	cy.findByText(title).should("have.attr", "href", url);
+	cy.findByRole("heading", { level: 3 }).should("contain.text", title);
+	cy.findByRole("link", { name: "example.com" }).should(
+		"have.attr",
+		"href",
+		url
+	);
 	cy.findByText(new RegExp(description)).should("exist");
 });
 

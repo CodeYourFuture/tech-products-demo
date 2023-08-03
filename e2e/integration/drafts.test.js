@@ -11,7 +11,11 @@ it("lets admin users approve drafts", () => {
 	cy.findByText("Joi documentation").should("not.exist");
 	cy.logOut();
 	cy.logInAs("shh@example.com");
-	cy.findByText("Joi documentation").should(
+	cy.findByRole("heading", { level: 3 }).should(
+		"contain.text",
+		"Joi documentation"
+	);
+	cy.findByRole("link", { name: "joi.dev" }).should(
 		"have.attr",
 		"href",
 		"https://joi.dev/"

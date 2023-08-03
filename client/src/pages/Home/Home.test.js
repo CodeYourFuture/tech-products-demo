@@ -21,7 +21,10 @@ describe("Home", () => {
 
 		render(<Home />);
 
-		await expect(screen.findByText(resource.title)).resolves.toHaveAttribute(
+		await expect(
+			screen.findByRole("heading", { level: 3 })
+		).resolves.toHaveTextContent(resource.title);
+		expect(screen.getByRole("link", { name: "example.com" })).toHaveAttribute(
 			"href",
 			resource.url
 		);
