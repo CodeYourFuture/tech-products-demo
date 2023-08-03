@@ -21,9 +21,13 @@ export async function getAll(includeDrafts) {
 	return await repository.getAll({ draft: includeDrafts });
 }
 
-export async function publish(id) {
-	if (!(await repository.findOne(id))) {
-		throw new MissingResource(id);
+export async function publish(resourceId, publisherId) {
+	if (!(await repository.findOne(resourceId))) {
+		throw new MissingResource(resourceId);
 	}
-	return await repository.update(id, { draft: false, publication: new Date() });
+	return await repository.update(resourceId, {
+		draft: false,
+		publisher: publisherId,
+		publication: new Date(),
+	});
 }

@@ -235,6 +235,7 @@ describe("/api/resources", () => {
 				...resource,
 				draft: false,
 				publication: expect.stringMatching(patterns.DATETIME),
+				publisher: null,
 			});
 
 			const { body: resources } = await anonAgent
@@ -293,6 +294,25 @@ describe("/api/resources", () => {
 				.send({ draft: false })
 				.set("User-Agent", "supertest")
 				.expect(401);
+		});
+
+		it("records who published the resource", async () => {
+			const { agent: adminAgent, user: admin } = await authenticateAs("admin");
+			const { agent: userAgent, user } = await authenticateAs("user");
+
+			const { body: created } = await userAgent
+				.post("/api/resources")
+				.send({ title: "Example", url: "https://example.com" })
+				.set("User-Agent", "supertest")
+				.expect(201);
+
+			const { body: published } = await adminAgent
+				.patch(`/api/resources/${created.id}`)
+				.send({ draft: false })
+				.set("User-Agent", "supertest")
+				.expect(200);
+
+			expect(published).toMatchObject({ publisher: admin.id, source: user.id });
 		});
 	});
 });

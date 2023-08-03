@@ -41,6 +41,14 @@ afterAll(async () => {
 	await disconnectDb();
 });
 
+const uniqueIds = new Set([0]);
+
+const generateUniqueId = () => {
+	const id = Math.max(...uniqueIds) + 1;
+	uniqueIds.add(id);
+	return id;
+};
+
 /**
  * Creates a SuperTest-wrapped {@link https://ladjs.github.io/superagent/#agents-for-global-state agent}
  * to use in the tests, and returns it along with the user (if appropriate).
@@ -75,7 +83,11 @@ export const authenticateAs = async (identity) => {
 			config.oauth.userProfileURL ?? "https://api.github.com/user",
 			(req, res, ctx) => {
 				return res(
-					ctx.json({ id: 123, login: identity, name: "Sushma Moolya" })
+					ctx.json({
+						id: generateUniqueId(),
+						login: identity,
+						name: "Sushma Moolya",
+					})
 				);
 			}
 		),
@@ -107,7 +119,7 @@ export const authenticateAs = async (identity) => {
 		.expect(200);
 	if (identity === "admin") {
 		({ body: user } = await agent
-			.patch(`/api/user/${user.id}`)
+			.patch(`/api/users/${user.id}`)
 			.set("Authorization", `Bearer ${sudoToken}`)
 			.set("User-Agent", "supertest")
 			.expect(200));
