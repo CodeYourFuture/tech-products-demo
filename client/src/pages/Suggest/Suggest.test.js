@@ -68,6 +68,8 @@ describe("Suggest", () => {
 	});
 
 	it("gives useful feedback on failure", async () => {
+		const title = "Official React documentation";
+		const url = "https://react.dev/";
 		const user = userEvent.setup();
 		server.use(
 			rest.get("/api/topics", (req, res, ctx) => res(ctx.json([]))),
@@ -76,18 +78,14 @@ describe("Suggest", () => {
 			})
 		);
 		render(<Suggest />);
-		await user.type(
-			screen.getByRole("textbox", { name: /title/i }),
-			"Official React documentation"
-		);
-		await user.type(
-			screen.getByRole("textbox", { name: /url/i }),
-			"https://react.dev/"
-		);
+		await user.type(screen.getByRole("textbox", { name: /title/i }), title);
+		await user.type(screen.getByRole("textbox", { name: /url/i }), url);
 		await user.click(screen.getByRole("button", { name: /suggest/i }));
 		await screen.findByText(
 			"Resource suggestion failed: a very similar resource already exists."
 		);
+		expect(screen.getByRole("textbox", { name: /title/i })).toHaveValue(title);
+		expect(screen.getByRole("textbox", { name: /url/i })).toHaveValue(url);
 	});
 
 	it("shows the list of topics", async () => {
