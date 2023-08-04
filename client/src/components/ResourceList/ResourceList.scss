@@ -1,6 +1,7 @@
 ul.resource-list {
 	list-style-type: none;
-	max-width: 600px;
+	margin: 0 auto;
+	max-width: 720px;
 	padding-left: 0;
 
 	p,
@@ -15,6 +16,11 @@ ul.resource-list {
 		flex-direction: column;
 		padding: 16px;
 		margin: 16px 0;
+
+		&.no-resources {
+			border-color: #656565;
+			color: #656565;
+		}
 
 		h3 {
 			display: inline-block;

@@ -3,11 +3,13 @@ import PropTypes from "prop-types";
 import "./ResourceList.scss";
 
 export default function ResourceList({ publish, resources }) {
-	if (resources.length === 0) {
-		return <em>No resources to show.</em>;
-	}
 	return (
 		<ul className="resource-list">
+			{resources.length === 0 && (
+				<li className="no-resources">
+					<em>No resources to show.</em>
+				</li>
+			)}
 			{resources.map(({ description, id, title, topic_name, url }) => (
 				<li key={id}>
 					<div>

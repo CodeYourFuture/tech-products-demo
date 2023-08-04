@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { rest } from "msw";
 
@@ -51,9 +51,7 @@ describe("Drafts", () => {
 		});
 		await user.click(publishButton);
 
-		await waitFor(() =>
-			expect(screen.queryAllByRole("listitem")).toHaveLength(0)
-		);
+		await screen.findByText(/no resources to show/i);
 		expect(patchRequest.params.id).toBe(resource.id);
 	});
 });
