@@ -8,9 +8,9 @@
       - sudoToken: []
     parameters:
       - in: query
-        name: drafts
+        name: draft
         description: |
-          Whether to include draft resources.
+          Filter resources by draft status.
 
           **Note**: drafts are only available to admin users or with SUDO token.
         schema:
@@ -23,6 +23,8 @@
               type: array
               items:
                 $ref: "#/components/schemas/EnrichedResource"
+      403:
+        $ref: "#/components/responses/ForbiddenError"
       500:
         $ref: "#/components/responses/InternalServerError"
   post:

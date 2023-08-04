@@ -7,13 +7,11 @@ export default class ResourceService {
 
 	async getDrafts() {
 		const res = await this.fetch(
-			`${ResourceService.ENDPOINT}?${new URLSearchParams({ drafts: true })}`
+			`${ResourceService.ENDPOINT}?${new URLSearchParams({ draft: true })}`
 		);
 		if (res.ok) {
 			const resources = await res.json();
-			return resources
-				.filter(({ draft }) => draft)
-				.map(this._revive.bind(this));
+			return resources.map(this._revive.bind(this));
 		}
 		return [];
 	}

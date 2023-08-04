@@ -17,12 +17,9 @@ export const create = async (resource) => {
 	return await repository.add(resource);
 };
 
-export async function getAll(includeDrafts) {
+export async function getAll({ draft = false }) {
 	const resources = await repository.findAll();
-	if (includeDrafts) {
-		return resources;
-	}
-	return resources.filter(({ draft }) => draft === false);
+	return resources.filter((resource) => resource.draft === draft);
 }
 
 export async function publish(resourceId, publisherId) {

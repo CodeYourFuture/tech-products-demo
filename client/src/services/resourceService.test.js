@@ -17,11 +17,11 @@ describe("ResourceService", () => {
 				})
 			);
 			await service.getDrafts();
-			expect(request.url.searchParams.get("drafts")).toBe("true");
+			expect(request.url.searchParams.get("draft")).toBe("true");
 		});
 
-		it("filters published resources out of the returned payload", async () => {
-			const resources = [true, false, true].map((draft) =>
+		it("returns resources on success", async () => {
+			const resources = [true, true, true].map((draft) =>
 				resourceStub({ draft })
 			);
 			server.use(
@@ -30,7 +30,7 @@ describe("ResourceService", () => {
 				})
 			);
 
-			await expect(service.getDrafts()).resolves.toHaveLength(2);
+			await expect(service.getDrafts()).resolves.toHaveLength(3);
 		});
 
 		it("returns an empty array on error", async () => {

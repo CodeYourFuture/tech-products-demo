@@ -21,9 +21,11 @@ router
 	.get(
 		validated({ query: Joi.object({ drafts: Joi.boolean() }).unknown() }),
 		asyncHandler(async (req, res) => {
-			const includeDrafts =
-				(req.superuser || req.user?.is_admin) && req.query.drafts === "true";
-			res.send(await service.getAll(includeDrafts));
+			const draft = req.query.draft === "true";
+			if (draft && !req.superuser && !req.user?.is_admin) {
+				return res.sendStatus(403);
+			}
+			res.send(await service.getAll({ draft }));
 		})
 	)
 	.post(

@@ -141,7 +141,7 @@ describe("/api/resources", () => {
 	});
 
 	describe("GET /", () => {
-		it("allows superuser to see all resources", async () => {
+		it("allows superuser to see draft resources", async () => {
 			const { agent: anonAgent } = await authenticateAs("anonymous");
 			const { agent } = await authenticateAs("user");
 			const resource = { title: "foo", url: "https://example.com" };
@@ -153,7 +153,7 @@ describe("/api/resources", () => {
 
 			const { body } = await anonAgent
 				.get("/api/resources")
-				.query({ drafts: true })
+				.query({ draft: true })
 				.set("Authorization", `Bearer ${sudoToken}`)
 				.set("User-Agent", "supertest")
 				.expect(200);
@@ -174,9 +174,9 @@ describe("/api/resources", () => {
 
 			await anonAgent
 				.get("/api/resources")
-				.query({ drafts: true })
+				.query({ draft: true })
 				.set("User-Agent", "supertest")
-				.expect(200, []);
+				.expect(403, "Forbidden");
 		});
 
 		it("includes the topic name if present", async () => {
@@ -203,7 +203,7 @@ describe("/api/resources", () => {
 				body: [draft],
 			} = await anonAgent
 				.get("/api/resources")
-				.query({ drafts: true })
+				.query({ draft: true })
 				.set("Authorization", `Bearer ${sudoToken}`)
 				.set("User-Agent", "supertest")
 				.expect(200);

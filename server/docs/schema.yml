@@ -32,6 +32,13 @@ components:
           schema:
             type: string
             example: Conflict
+    ForbiddenError:
+      description: The user is not allowed to see the specified resource.
+      content:
+        text/plain:
+          schema:
+            type: string
+            example: Forbidden
     InternalServerError:
       description: Something unexpected went wrong.
       content:
