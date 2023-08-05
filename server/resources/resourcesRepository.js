@@ -32,8 +32,20 @@ export const add = async ({ description, source, title, topic, url }) => {
 	}
 };
 
-export const findAll = async () => {
-	const { rows } = await db.query(resourceQuery);
+export const count = async ({ draft }) => {
+	const {
+		rows: [{ count }],
+	} = await db.query("SELECT COUNT(*) FROM resources WHERE draft = $1;", [
+		draft,
+	]);
+	return parseInt(count, 10);
+};
+
+export const findAll = async ({ draft, limit, offset }) => {
+	const { rows } = await db.query(
+		`${resourceQuery} WHERE draft = $1 LIMIT $2 OFFSET $3;`,
+		[draft, limit, offset]
+	);
 	return rows;
 };
 

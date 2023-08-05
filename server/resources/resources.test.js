@@ -141,6 +141,67 @@ describe("/api/resources", () => {
 	});
 
 	describe("GET /", () => {
+		describe("pagination", () => {
+			beforeEach(async () => {
+				const { agent: userAgent } = await authenticateAs("user");
+				for (let index = 0; index < 25; index++) {
+					await userAgent
+						.post("/api/resources")
+						.send({
+							title: `Resource ${index}`,
+							url: `https://example.com/${index}`,
+						})
+						.set("User-Agent", "supertest")
+						.expect(201);
+				}
+			});
+
+			it("returns the first page of 20 by default", async () => {
+				const { agent: adminAgent } = await authenticateAs("admin");
+				const { body: envelope } = await adminAgent
+					.get("/api/resources")
+					.query({ draft: true })
+					.set("User-Agent", "supertest")
+					.expect(200);
+				expect(envelope).toEqual({
+					page: 1,
+					lastPage: 2,
+					perPage: 20,
+					resources: expect.any(Array),
+					totalCount: 25,
+				});
+				expect(envelope.resources).toHaveLength(20);
+			});
+
+			it("lets subsequent pages be selected", async () => {
+				const { agent: adminAgent } = await authenticateAs("admin");
+				const { body: envelope } = await adminAgent
+					.get("/api/resources")
+					.query({ draft: true, page: 2, perPage: 10 })
+					.set("User-Agent", "supertest")
+					.expect(200);
+				expect(envelope).toEqual({
+					page: 2,
+					lastPage: 3,
+					perPage: 10,
+					resources: expect.any(Array),
+					totalCount: 25,
+				});
+			});
+
+			it("rejects bad inputs", async () => {
+				const { agent } = await authenticateAs("admin");
+				await agent
+					.get("/api/resources")
+					.query({ draft: true, page: 0, perPage: "foo" })
+					.set("User-Agent", "supertest")
+					.expect(400, {
+						page: '"page" must be greater than or equal to 1',
+						perPage: '"perPage" must be a number',
+					});
+			});
+		});
+
 		it("allows superuser to see draft resources", async () => {
 			const { agent: anonAgent } = await authenticateAs("anonymous");
 			const { agent } = await authenticateAs("user");
@@ -151,15 +212,17 @@ describe("/api/resources", () => {
 				.set("User-Agent", "supertest")
 				.expect(201);
 
-			const { body } = await anonAgent
+			const {
+				body: { resources },
+			} = await anonAgent
 				.get("/api/resources")
 				.query({ draft: true })
 				.set("Authorization", `Bearer ${sudoToken}`)
 				.set("User-Agent", "supertest")
 				.expect(200);
 
-			expect(body).toHaveLength(1);
-			expect(body[0]).toMatchObject(resource);
+			expect(resources).toHaveLength(1);
+			expect(resources[0]).toMatchObject(resource);
 		});
 
 		it("prevents non-superusers from seeing draft resources", async () => {
@@ -200,7 +263,9 @@ describe("/api/resources", () => {
 				.expect(201);
 
 			const {
-				body: [draft],
+				body: {
+					resources: [draft],
+				},
 			} = await anonAgent
 				.get("/api/resources")
 				.query({ draft: true })
@@ -238,9 +303,9 @@ describe("/api/resources", () => {
 				publisher: null,
 			});
 
-			const { body: resources } = await anonAgent
-				.get("/api/resources")
-				.set("User-Agent", "supertest");
+			const {
+				body: { resources },
+			} = await anonAgent.get("/api/resources").set("User-Agent", "supertest");
 			expect(resources).toHaveLength(1);
 		});
 

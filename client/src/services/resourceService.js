@@ -10,19 +10,24 @@ export default class ResourceService {
 			`${ResourceService.ENDPOINT}?${new URLSearchParams({ draft: true })}`
 		);
 		if (res.ok) {
-			const resources = await res.json();
+			const { resources } = await res.json();
 			return resources.map(this._revive.bind(this));
 		}
 		return [];
 	}
 
-	async getPublished() {
-		const res = await this.fetch(ResourceService.ENDPOINT);
+	async getPublished({ page, perPage } = {}) {
+		const res = await this.fetch(
+			`${ResourceService.ENDPOINT}?${new URLSearchParams(
+				Object.entries({ page, perPage }).filter(
+					([, value]) => value !== undefined
+				)
+			)}`
+		);
 		if (res.ok) {
-			const resources = await res.json();
-			return resources.map(this._revive.bind(this));
+			const { resources, ...rest } = await res.json();
+			return { ...rest, resources: resources.map(this._revive.bind(this)) };
 		}
-		return [];
 	}
 
 	async publish(id) {

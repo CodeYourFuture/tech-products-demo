@@ -16,7 +16,7 @@ describe("Drafts", () => {
 		});
 		server.use(
 			rest.get("/api/resources", (req, res, ctx) => {
-				return res(ctx.json([resource]));
+				return res(ctx.json({ resources: [resource] }));
 			})
 		);
 		render(<Drafts />);
@@ -37,7 +37,7 @@ describe("Drafts", () => {
 		const user = userEvent.setup();
 		server.use(
 			rest.get("/api/resources", (req, res, ctx) => {
-				return res(ctx.json(getResponses.shift()));
+				return res(ctx.json({ resources: getResponses.shift() }));
 			}),
 			rest.patch("/api/resources/:id", (req, res, ctx) => {
 				patchRequest = req;

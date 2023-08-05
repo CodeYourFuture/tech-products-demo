@@ -13,7 +13,7 @@ describe("ResourceService", () => {
 			server.use(
 				rest.get("/api/resources", (req, res, ctx) => {
 					request = req;
-					return res(ctx.json([]));
+					return res(ctx.json({ resources: [] }));
 				})
 			);
 			await service.getDrafts();
@@ -26,7 +26,7 @@ describe("ResourceService", () => {
 			);
 			server.use(
 				rest.get("/api/resources", (req, res, ctx) => {
-					return res(ctx.json(resources));
+					return res(ctx.json({ resources }));
 				})
 			);
 
@@ -42,21 +42,36 @@ describe("ResourceService", () => {
 	});
 
 	describe("getPublished", () => {
+		it("includes query parameters if supplied", async () => {
+			let request;
+			server.use(
+				rest.get("/api/resources", (req, res, ctx) => {
+					request = req;
+					return res(ctx.json({ resources: [] }));
+				})
+			);
+			await service.getPublished({ page: 123, perPage: 456 });
+			expect(request.url.searchParams.get("page")).toBe("123");
+			expect(request.url.searchParams.get("perPage")).toBe("456");
+		});
+
 		it("resolves with resources if request succeeds", async () => {
 			const resources = [
 				resourceStub({ title: "My Resource", url: "https://example.com" }),
 			];
 			server.use(
-				rest.get("/api/resources", (req, res, ctx) => res(ctx.json(resources)))
+				rest.get("/api/resources", (req, res, ctx) =>
+					res(ctx.json({ resources }))
+				)
 			);
-			await expect(service.getPublished()).resolves.toEqual(resources);
+			await expect(service.getPublished()).resolves.toEqual({ resources });
 		});
 
-		it("resolves with empty array if request fails", async () => {
+		it("resolves with undefined if request fails", async () => {
 			server.use(
 				rest.get("/api/resources", (req, res, ctx) => res(ctx.status(500)))
 			);
-			await expect(service.getPublished()).resolves.toEqual([]);
+			await expect(service.getPublished()).resolves.toBeUndefined();
 		});
 	});
 

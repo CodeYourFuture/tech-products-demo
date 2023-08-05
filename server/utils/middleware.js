@@ -84,7 +84,7 @@ export const sudoOnly = (req, res, next) => {
 };
 
 export const validated = (rules) => (req, res, next) => {
-	validate(rules, { keyByField: true }, { abortEarly: false })(
+	validate(rules, { context: true, keyByField: true }, { abortEarly: false })(
 		req,
 		res,
 		(err) => {

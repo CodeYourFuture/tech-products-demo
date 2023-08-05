@@ -17,9 +17,20 @@ export const create = async (resource) => {
 	return await repository.add(resource);
 };
 
-export async function getAll({ draft = false }) {
-	const resources = await repository.findAll();
-	return resources.filter((resource) => resource.draft === draft);
+export async function getAll({ draft = false }, { page, perPage }) {
+	const resources = await repository.findAll({
+		draft,
+		limit: perPage,
+		offset: (page - 1) * perPage,
+	});
+	const totalCount = await repository.count({ draft });
+	return {
+		lastPage: Math.ceil(totalCount / perPage) || 1,
+		page,
+		perPage,
+		resources,
+		totalCount,
+	};
 }
 
 export async function publish(resourceId, publisherId) {

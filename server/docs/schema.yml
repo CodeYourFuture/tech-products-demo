@@ -136,6 +136,32 @@ components:
           type: string
           format: uri
           example: https://syllabus.codeyourfuture.io/
+    PaginatedResources:
+      allOf:
+        - $ref: "#/components/schemas/Pagination"
+        - type: object
+          required: [resources]
+          properties:
+            resources:
+              type: array
+              items:
+                $ref: "#/components/schemas/EnrichedResource"
+    Pagination:
+      type: object
+      required: [page, lastPage, perPage, totalCount]
+      properties:
+        lastPage:
+          type: number
+          example: 3
+        page:
+          type: number
+          example: 1
+        perPage:
+          type: number
+          example: 20
+        totalCount:
+          type: number
+          example: 52
     Topic:
       type: object
       required: [id, name]
