@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { rest } from "msw";
+import { MemoryRouter } from "react-router-dom";
 
 import { resourceStub, server } from "../../../setupTests";
 
@@ -15,11 +16,23 @@ describe("Home", () => {
 		});
 		server.use(
 			rest.get("/api/resources", (req, res, ctx) => {
-				return res(ctx.json([resource]));
+				return res(
+					ctx.json({
+						lastPage: 1,
+						page: 1,
+						perPage: 20,
+						resources: [resource],
+						totalCount: 1,
+					})
+				);
 			})
 		);
 
-		render(<Home />);
+		render(
+			<MemoryRouter>
+				<Home />
+			</MemoryRouter>
+		);
 
 		await expect(
 			screen.findByRole("heading", { level: 3 })

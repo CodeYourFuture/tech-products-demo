@@ -15,7 +15,7 @@ export default function Header() {
 					&nbsp;Resources
 				</Link>
 			</h1>
-			<nav>
+			<nav aria-label="site navigation">
 				<ul>
 					<li>{principal && <NavLink to="/suggest">Suggest</NavLink>}</li>
 					<li>

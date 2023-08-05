@@ -19,11 +19,19 @@ const router = Router();
 router
 	.route("/")
 	.get(
-		validated({ query: Joi.object({ drafts: Joi.boolean() }).unknown() }),
+		validated({
+			query: Joi.object({
+				draft: Joi.boolean(),
+				page: Joi.number().integer().min(1),
+				perPage: Joi.number().integer().min(1),
+			}).unknown(),
+		}),
 		asyncHandler(async (req, res) => {
-			const includeDrafts =
-				(req.superuser || req.user?.is_admin) && req.query.drafts === "true";
-			res.send(await service.getAll(includeDrafts));
+			const { draft, page = 1, perPage = 20 } = req.query;
+			if (draft && !req.superuser && !req.user?.is_admin) {
+				return res.sendStatus(403);
+			}
+			res.send(await service.getAll({ draft }, { page, perPage }));
 		})
 	)
 	.post(

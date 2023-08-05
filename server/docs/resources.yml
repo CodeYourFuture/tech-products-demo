@@ -8,21 +8,33 @@
       - sudoToken: []
     parameters:
       - in: query
-        name: drafts
+        name: draft
         description: |
-          Whether to include draft resources.
+          Filter resources by draft status.
 
           **Note**: drafts are only available to admin users or with SUDO token.
         schema:
           type: boolean
+      - in: query
+        name: page
+        description: Which page of resources to fetch.
+        schema:
+          type: number
+          minimum: 1
+      - in: query
+        name: perPage
+        description: How many resources to include in each page.
+        schema:
+          type: number
+          minimum: 1
     responses:
       200:
         content:
           application/json:
             schema:
-              type: array
-              items:
-                $ref: "#/components/schemas/EnrichedResource"
+              $ref: "#/components/schemas/PaginatedResources"
+      403:
+        $ref: "#/components/responses/ForbiddenError"
       500:
         $ref: "#/components/responses/InternalServerError"
   post:

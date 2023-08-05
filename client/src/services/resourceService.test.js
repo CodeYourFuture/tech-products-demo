@@ -13,24 +13,24 @@ describe("ResourceService", () => {
 			server.use(
 				rest.get("/api/resources", (req, res, ctx) => {
 					request = req;
-					return res(ctx.json([]));
+					return res(ctx.json({ resources: [] }));
 				})
 			);
 			await service.getDrafts();
-			expect(request.url.searchParams.get("drafts")).toBe("true");
+			expect(request.url.searchParams.get("draft")).toBe("true");
 		});
 
-		it("filters published resources out of the returned payload", async () => {
-			const resources = [true, false, true].map((draft) =>
+		it("returns resources on success", async () => {
+			const resources = [true, true, true].map((draft) =>
 				resourceStub({ draft })
 			);
 			server.use(
 				rest.get("/api/resources", (req, res, ctx) => {
-					return res(ctx.json(resources));
+					return res(ctx.json({ resources }));
 				})
 			);
 
-			await expect(service.getDrafts()).resolves.toHaveLength(2);
+			await expect(service.getDrafts()).resolves.toHaveLength(3);
 		});
 
 		it("returns an empty array on error", async () => {
@@ -42,21 +42,36 @@ describe("ResourceService", () => {
 	});
 
 	describe("getPublished", () => {
+		it("includes query parameters if supplied", async () => {
+			let request;
+			server.use(
+				rest.get("/api/resources", (req, res, ctx) => {
+					request = req;
+					return res(ctx.json({ resources: [] }));
+				})
+			);
+			await service.getPublished({ page: 123, perPage: 456 });
+			expect(request.url.searchParams.get("page")).toBe("123");
+			expect(request.url.searchParams.get("perPage")).toBe("456");
+		});
+
 		it("resolves with resources if request succeeds", async () => {
 			const resources = [
 				resourceStub({ title: "My Resource", url: "https://example.com" }),
 			];
 			server.use(
-				rest.get("/api/resources", (req, res, ctx) => res(ctx.json(resources)))
+				rest.get("/api/resources", (req, res, ctx) =>
+					res(ctx.json({ resources }))
+				)
 			);
-			await expect(service.getPublished()).resolves.toEqual(resources);
+			await expect(service.getPublished()).resolves.toEqual({ resources });
 		});
 
-		it("resolves with empty array if request fails", async () => {
+		it("resolves with undefined if request fails", async () => {
 			server.use(
 				rest.get("/api/resources", (req, res, ctx) => res(ctx.status(500)))
 			);
-			await expect(service.getPublished()).resolves.toEqual([]);
+			await expect(service.getPublished()).resolves.toBeUndefined();
 		});
 	});
 
