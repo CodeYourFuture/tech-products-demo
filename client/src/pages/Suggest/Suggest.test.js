@@ -27,7 +27,9 @@ describe("Suggest", () => {
 		await user.type(screen.getByRole("textbox", { name: /url/i }), url);
 		await user.click(screen.getByRole("button", { name: /suggest/i }));
 
-		await screen.findByText(/thank you for suggesting a resource/i);
+		await expect(
+			screen.findByText(/thank you for suggesting a resource/i)
+		).resolves.toHaveClass("message", "success");
 		expect(requestBody).toEqual({ title, url });
 		expect(screen.getByRole("form")).toHaveFormValues({
 			description: "",
@@ -81,9 +83,11 @@ describe("Suggest", () => {
 		await user.type(screen.getByRole("textbox", { name: /title/i }), title);
 		await user.type(screen.getByRole("textbox", { name: /url/i }), url);
 		await user.click(screen.getByRole("button", { name: /suggest/i }));
-		await screen.findByText(
-			"Resource suggestion failed: a very similar resource already exists."
-		);
+		await expect(
+			screen.findByText(
+				"Resource suggestion failed: a very similar resource already exists."
+			)
+		).resolves.toHaveClass("message", "failure");
 		expect(screen.getByRole("textbox", { name: /title/i })).toHaveValue(title);
 		expect(screen.getByRole("textbox", { name: /url/i })).toHaveValue(url);
 	});

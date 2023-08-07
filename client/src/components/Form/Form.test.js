@@ -69,6 +69,48 @@ describe("Form", () => {
 			"foo value"
 		);
 	});
+
+	describe("Input", () => {
+		it('defaults to [type="text"]', () => {
+			render(
+				<TestForm>
+					<FormControls.Input label="input" name="text" />
+				</TestForm>
+			);
+			expect(screen.getByRole("textbox", /input/i)).toHaveAttribute(
+				"type",
+				"text"
+			);
+		});
+	});
+
+	describe("Label", () => {
+		it("highlights required fields", () => {
+			render(
+				<TestForm>
+					<FormControls.Textarea label="Text area" name="text" required />
+				</TestForm>
+			);
+			expect(screen.getByRole("textbox", /^text area$/i)).toBeInTheDocument();
+			expect(screen.getByText("*")).toHaveAttribute("aria-hidden", "true");
+		});
+	});
+
+	describe("Select", () => {
+		it("is disabled if no options exist", () => {
+			render(
+				<TestForm>
+					<FormControls.Select
+						label="select"
+						name="select"
+						options={undefined}
+						placeholder="select"
+					/>
+				</TestForm>
+			);
+			expect(screen.getByRole("combobox", /select/i)).toBeDisabled();
+		});
+	});
 });
 
 // eslint-disable-next-line react/prop-types
