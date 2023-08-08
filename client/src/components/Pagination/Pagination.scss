@@ -74,4 +74,13 @@ nav[aria-label="pagination"] {
 			padding: 8px;
 		}
 	}
+
+	@media (max-width: 480px) {
+		flex-direction: column;
+
+		& > label,
+		& > ul {
+			margin: 8px 0;
+		}
+	}
 }
