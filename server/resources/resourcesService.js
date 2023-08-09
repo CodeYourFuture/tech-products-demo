@@ -17,7 +17,7 @@ export const create = async (resource) => {
 	return await repository.add(resource);
 };
 
-export async function getAll({ draft = false }, { page, perPage }) {
+export async function getAll({ draft = false }, { page = 1, perPage = 20 }) {
 	const resources = await repository.findAll({
 		draft,
 		limit: perPage,

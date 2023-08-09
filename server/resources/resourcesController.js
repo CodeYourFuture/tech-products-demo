@@ -27,7 +27,7 @@ router
 			}).unknown(),
 		}),
 		asyncHandler(async (req, res) => {
-			const { draft, page = 1, perPage = 20 } = req.query;
+			const { draft, page, perPage } = req.query;
 			if (draft && !req.superuser && !req.user?.is_admin) {
 				return res.sendStatus(403);
 			}

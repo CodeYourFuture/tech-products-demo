@@ -83,14 +83,17 @@ export function insertQuery(tableName, columns) {
  *     FROM some_table
  *     WHERE some_field = $1;
  * `;
- * @param {string} query
+ * @param {string[]} strings
+ * @param {string[]} replacements
  * @returns {string}
  */
-export function singleLine([query]) {
-	return query
-		.trim()
+export function singleLine(strings, ...replacements) {
+	return strings
+		.flatMap((string, index) => [string, replacements[index]])
+		.join(" ")
 		.split("\n")
 		.map((line) => line.trim())
+		.filter((line) => line !== "")
 		.join(" ");
 }
 /**

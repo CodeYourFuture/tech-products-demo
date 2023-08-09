@@ -171,6 +171,8 @@ describe("/api/resources", () => {
 					totalCount: 25,
 				});
 				expect(envelope.resources).toHaveLength(20);
+				expect(envelope.resources[0]).toMatchObject({ title: "Resource 24" });
+				expect(envelope.resources[19]).toMatchObject({ title: "Resource 5" });
 			});
 
 			it("lets subsequent pages be selected", async () => {
@@ -187,6 +189,9 @@ describe("/api/resources", () => {
 					resources: expect.any(Array),
 					totalCount: 25,
 				});
+				expect(envelope.resources).toHaveLength(10);
+				expect(envelope.resources[0]).toMatchObject({ title: "Resource 14" });
+				expect(envelope.resources[9]).toMatchObject({ title: "Resource 5" });
 			});
 
 			it("rejects bad inputs", async () => {

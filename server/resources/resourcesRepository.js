@@ -9,6 +9,14 @@ const resourceQuery = singleLine`
 	ON r.topic = t.id
 `;
 
+const pagedResourceQuery = singleLine`
+		${resourceQuery}
+		WHERE draft = $1
+		ORDER BY accession DESC
+		LIMIT $2
+		OFFSET $3;
+	`;
+
 export const add = async ({ description, source, title, topic, url }) => {
 	try {
 		const {
@@ -42,10 +50,7 @@ export const count = async ({ draft }) => {
 };
 
 export const findAll = async ({ draft, limit, offset }) => {
-	const { rows } = await db.query(
-		`${resourceQuery} WHERE draft = $1 LIMIT $2 OFFSET $3;`,
-		[draft, limit, offset]
-	);
+	const { rows } = await db.query(pagedResourceQuery, [draft, limit, offset]);
 	return rows;
 };
 
