@@ -9,17 +9,28 @@ nav[aria-label="pagination"] {
 	& > ul {
 		display: flex;
 		flex-direction: row;
+		flex-wrap: wrap;
 		list-style-type: none;
 		margin: 0;
 		padding: 0;
 
 		li {
+			display: flex;
+
+			&:first-child > * {
+				margin-left: 0;
+			}
+
+			&:last-child > * {
+				margin-right: 0;
+			}
+
 			> * {
-				border: 2px solid #1f891f;
+				border-width: 2px;
+				border-style: solid;
 				border-radius: 5px;
-				color: #1f891f;
-				padding: 2px 8px;
-				margin: 0 8px;
+				margin: 8px;
+				padding: 4px 8px;
 			}
 
 			> span {
@@ -29,6 +40,8 @@ nav[aria-label="pagination"] {
 			}
 
 			> a {
+				border-color: #1f891f;
+				color: #1f891f;
 				text-decoration: none;
 
 				&:hover,
@@ -60,7 +73,11 @@ nav[aria-label="pagination"] {
 	}
 
 	label {
+		align-items: center;
+		display: flex;
+		flex-direction: row;
 		margin-left: 16px;
+		text-align: end;
 
 		& > select {
 			background-color: white;
@@ -70,17 +87,18 @@ nav[aria-label="pagination"] {
 			font:
 				400 16px "Lato",
 				sans-serif;
-			margin-left: 16px;
+			margin-left: 8px;
 			padding: 8px;
+			width: fit-content;
 		}
 	}
 
-	@media (max-width: 480px) {
+	@media (max-width: 720px) {
 		flex-direction: column;
 
-		& > label,
-		& > ul {
-			margin: 8px 0;
+		label {
+			margin-left: 0;
+			margin-top: 8px;
 		}
 	}
 }

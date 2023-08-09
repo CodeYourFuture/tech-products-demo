@@ -9,10 +9,60 @@ import "./Pagination.scss";
 
 const DEFAULT_PAGINATION = { page: 1, perPage: 20 };
 
+const a11yText = (page, lastPage) => {
+	if (page === 1) {
+		return "page 1 (first page)";
+	}
+	if (page === lastPage) {
+		return `page ${lastPage} (last page)`;
+	}
+	return `page ${page}`;
+};
+
 const mergeWithoutDefaults = (...objects) =>
 	Object.entries(Object.assign({}, ...objects)).filter(
 		([key, value]) => DEFAULT_PAGINATION[key] !== value
 	);
+
+const pages = (currentPage, lastPage) => {
+	const allPages = [...Array(lastPage)]
+		.map((_, index) => index + 1)
+		.map((page) => {
+			if (
+				page === 1 ||
+				page === lastPage ||
+				(currentPage - 2 <= page && page <= currentPage + 2)
+			) {
+				return page;
+			}
+			return "...";
+		});
+	return [
+		{
+			a11y: "previous page",
+			active: false,
+			display: "<",
+			enabled: currentPage > 1,
+			page: currentPage - 1,
+		},
+		...allPages
+			.filter((page, index) => page !== "..." || allPages[index + 1] !== "...")
+			.map((page) => ({
+				a11y: a11yText(page, lastPage),
+				active: page === currentPage,
+				display: page,
+				enabled: page !== "...",
+				page,
+			})),
+		{
+			a11y: "next page",
+			active: false,
+			display: ">",
+			enabled: currentPage < lastPage,
+			page: currentPage + 1,
+		},
+	];
+};
 
 /**
  * Based on {@link https://design-system.w3.org/components/pagination.html W3C design system}.
@@ -35,36 +85,24 @@ export default function Pagination({ lastPage }) {
 	return (
 		<nav aria-label="pagination">
 			<ul>
-				<li>
-					{searchParams.page !== 1 ? (
-						<Link to={createRoute({ page: searchParams.page - 1 })}>
-							<span aria-hidden>&lt;</span>
-							<span className="visuallyhidden">previous page</span>
-						</Link>
-					) : (
-						<span aria-hidden>&lt;</span>
-					)}
-				</li>
-				{[...new Array(lastPage)].map((_, index) => (
-					<li key={index}>
-						<PageLink
-							currentPage={searchParams.page}
-							page={index + 1}
-							lastPage={lastPage}
-							to={createRoute({ page: index + 1 })}
-						/>
-					</li>
-				))}
-				<li>
-					{searchParams.page !== lastPage ? (
-						<Link to={createRoute({ page: searchParams.page + 1 })}>
-							<span aria-hidden>&gt;</span>
-							<span className="visuallyhidden">Next page</span>
-						</Link>
-					) : (
-						<span aria-hidden>&gt;</span>
-					)}
-				</li>
+				{pages(searchParams.page, lastPage).map(
+					({ a11y, active, display, enabled, page }, index) => (
+						<li key={index}>
+							{enabled ? (
+								<Link
+									aria-current={page === searchParams.page && "page"}
+									className={clsx(active && "active")}
+									to={createRoute({ page })}
+								>
+									<span aria-hidden>{display}</span>
+									<span className="visuallyhidden">{a11y}</span>
+								</Link>
+							) : (
+								<span aria-hidden>{display}</span>
+							)}
+						</li>
+					)
+				)}
 			</ul>
 			<label>
 				Items per page
@@ -87,30 +125,4 @@ export default function Pagination({ lastPage }) {
 
 Pagination.propTypes = {
 	lastPage: PropTypes.number.isRequired,
-};
-
-function PageLink({ currentPage, lastPage, page, to }) {
-	return (
-		<Link
-			aria-current={page === currentPage && "page"}
-			className={clsx(page === currentPage && "active")}
-			to={to}
-		>
-			<span className="visuallyhidden">Page </span>
-			{page}
-			{lastPage > 1 && page === 1 && (
-				<span className="visuallyhidden">(first page)</span>
-			)}
-			{lastPage > 1 && page === lastPage && (
-				<span className="visuallyhidden">(last page)</span>
-			)}
-		</Link>
-	);
-}
-
-PageLink.propTypes = {
-	currentPage: PropTypes.number.isRequired,
-	lastPage: PropTypes.number.isRequired,
-	page: PropTypes.number.isRequired,
-	to: PropTypes.string.isRequired,
 };

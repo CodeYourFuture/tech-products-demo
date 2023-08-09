@@ -61,7 +61,7 @@ describe("Pagination", () => {
 		});
 	});
 
-	it("reset page when page size changes", async () => {
+	it("resets page when page size changes", async () => {
 		const user = userEvent.setup();
 		renderInRouter(3, { page: 2 });
 		await user.selectOptions(
@@ -72,6 +72,21 @@ describe("Pagination", () => {
 			"href",
 			"/test?perPage=50"
 		);
+	});
+
+	it("shows ellipses for long pagination", () => {
+		renderInRouter(9, { page: 5 });
+		[1, 3, 4, 5, 6, 7, 9].forEach((page) => {
+			expect(
+				screen.getByRole("link", { name: new RegExp(`page ${page}`, "i") })
+			).toBeInTheDocument();
+		});
+		[2, 8].forEach((page) => {
+			expect(
+				screen.queryByRole("link", { name: new RegExp(`page ${page}`, "i") })
+			).not.toBeInTheDocument();
+		});
+		expect(screen.getAllByText("...")).toHaveLength(2);
 	});
 });
 
