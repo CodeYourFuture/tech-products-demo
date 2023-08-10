@@ -1,5 +1,6 @@
 @import "../../styles/layout";
 @import "../../styles/palette";
+@import "../../styles/typography";
 
 form.form {
 	align-items: flex-end;
@@ -40,9 +41,7 @@ form.form {
 			border: 1px solid $light-grey;
 			border-radius: $border-radius;
 			box-sizing: border-box;
-			font:
-				400 16px "Lato",
-				sans-serif;
+			font: $body-text;
 			margin-left: calc($baseline * 4);
 			padding: calc($baseline * 2);
 			width: 75%;

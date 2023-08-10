@@ -1,10 +1,9 @@
 @import "./styles/palette";
+@import "./styles/typography";
 
 body {
 	color: $dark-grey;
-	font:
-		400 16px "Lato",
-		sans-serif;
+	font: $body-text;
 	margin: 0;
 
 	h1,
@@ -13,8 +12,8 @@ body {
 	h4,
 	h5,
 	h6 {
-		font-family: "Raleway", sans-serif;
-		font-weight: 700;
+		font-family: $heading-text-family;
+		font-weight: $heading-text-weight;
 	}
 
 	.visuallyhidden {

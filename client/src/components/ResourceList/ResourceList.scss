@@ -1,6 +1,7 @@
 @use "sass:color";
 @import "../../styles/layout";
 @import "../../styles/palette";
+@import "../../styles/typography";
 
 ul.resource-list {
 	list-style-type: none;
@@ -49,9 +50,7 @@ ul.resource-list {
 		border-radius: $border-radius;
 		color: $blue;
 		cursor: pointer;
-		font:
-			400 14px "Lato",
-			sans-serif;
+		font: $body-text-weight calc($body-text-size * 0.875) $body-text-family;
 		margin-left: calc($baseline * 2);
 
 		&:hover,

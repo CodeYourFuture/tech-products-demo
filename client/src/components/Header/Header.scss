@@ -1,5 +1,6 @@
 @import "../../styles/layout";
 @import "../../styles/palette";
+@import "../../styles/typography";
 
 header {
 	align-items: center;
@@ -54,9 +55,8 @@ header {
 
 			li > a {
 				color: inherit;
-				font:
-					700 18px "Raleway",
-					sans-serif;
+				font: $heading-text-weight calc($body-text-size * 1.125)
+					$heading-text-family;
 				text-decoration: none;
 
 				&.active,
