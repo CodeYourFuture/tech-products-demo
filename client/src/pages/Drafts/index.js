@@ -27,7 +27,9 @@ export default function Drafts() {
 		<>
 			<h2>Drafts</h2>
 			<p>Review resources that have been submitted but not yet published.</p>
-			<ResourceList publish={publish} resources={drafts} />
+			<section>
+				<ResourceList publish={publish} resources={drafts} />
+			</section>
 		</>
 	);
 }

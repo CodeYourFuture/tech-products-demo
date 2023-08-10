@@ -6,8 +6,6 @@ form.form {
 	align-items: flex-end;
 	display: flex;
 	flex-direction: column;
-	margin: 0 auto;
-	max-width: 720px;
 
 	> * {
 		margin-top: calc($baseline * 2);

@@ -16,7 +16,7 @@ const App = () => (
 	<>
 		<Header />
 		<main role="main">
-			<section>
+			<article>
 				<Routes>
 					<Route path="/" element={<Home />} />
 					<Route path="/about" element={<About />} />
@@ -29,7 +29,7 @@ const App = () => (
 					</Route>
 					<Route path="*" element={<NotFound />} />
 				</Routes>
-			</section>
+			</article>
 		</main>
 	</>
 );

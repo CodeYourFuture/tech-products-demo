@@ -1,12 +1,17 @@
 @import "./styles/layout";
 @import "./styles/palette";
 
-main > section {
+main > article {
 	padding: calc($baseline * 4);
 
-	h2 {
-		border-bottom: $red;
+	> h2 {
+		border-bottom: 2px solid $red;
 		display: inline-block;
 		padding-bottom: calc($baseline / 2);
+	}
+
+	> section {
+		margin: 0 auto;
+		max-width: 720px;
 	}
 }

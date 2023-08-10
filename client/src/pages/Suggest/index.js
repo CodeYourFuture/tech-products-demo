@@ -47,25 +47,27 @@ export default function Suggest() {
 				appear on the home page immediately, as it needs to be reviewed by an
 				administrator.
 			</p>
-			{message && <Message {...message} />}
-			<Form
-				label="Suggest resource"
-				onChange={() => setMessage(undefined)}
-				onSubmit={submitForm}
-				resetButton="Clear"
-				submitButton="Suggest"
-			>
-				<FormControls.Input label="Title" name="title" required />
-				<FormControls.Input label="URL" name="url" required type="url" />
-				<FormControls.Textarea label="Description" name="description" />
-				<FormControls.Select
-					label="Topic"
-					placeholder="Select a topic"
-					name="topic"
-					options={topics}
-					title="topic"
-				/>
-			</Form>
+			<section>
+				{message && <Message {...message} />}
+				<Form
+					label="Suggest resource"
+					onChange={() => setMessage(undefined)}
+					onSubmit={submitForm}
+					resetButton="Clear"
+					submitButton="Suggest"
+				>
+					<FormControls.Input label="Title" name="title" required />
+					<FormControls.Input label="URL" name="url" required type="url" />
+					<FormControls.Textarea label="Description" name="description" />
+					<FormControls.Select
+						label="Topic"
+						placeholder="Select a topic"
+						name="topic"
+						options={topics}
+						title="topic"
+					/>
+				</Form>
+			</section>
 		</>
 	);
 }
