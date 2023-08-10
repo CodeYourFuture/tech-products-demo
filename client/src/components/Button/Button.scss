@@ -1,14 +1,15 @@
 @use "sass:color";
+@import "../../styles/layout";
 @import "../../styles/palette";
 
 button.button {
-	border-radius: 5px;
+	border-radius: $border-radius;
 	cursor: pointer;
 	font:
 		400 16px "Lato",
 		sans-serif;
 	line-height: 28px;
-	padding: 0 16px;
+	padding: 0 calc($baseline * 4);
 	min-width: 150px;
 
 	&.primary {

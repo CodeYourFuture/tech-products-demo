@@ -1,4 +1,5 @@
 @use "sass:color";
+@import "../../styles/layout";
 @import "../../styles/palette";
 
 ul.resource-list {
@@ -14,11 +15,11 @@ ul.resource-list {
 
 	li {
 		border: 1px solid $dark-grey;
-		border-radius: 5px;
+		border-radius: $border-radius;
 		display: flex;
 		flex-direction: column;
-		padding: 16px;
-		margin: 16px 0;
+		padding: calc($baseline * 4);
+		margin: calc($baseline * 4) 0;
 
 		&.no-resources {
 			border-color: $mid-grey;
@@ -27,14 +28,14 @@ ul.resource-list {
 
 		h3 {
 			display: inline-block;
-			font-size: 16px;
+			font-size: calc($baseline * 4);
 		}
 
 		& > * {
 			display: flex;
 			flex-direction: row;
 			justify-content: space-between;
-			margin-bottom: 16px;
+			margin-bottom: calc($baseline * 4);
 
 			&:last-child {
 				margin-bottom: 0;
@@ -45,13 +46,13 @@ ul.resource-list {
 	button {
 		background-color: white;
 		border: 2px solid $blue;
-		border-radius: 5px;
+		border-radius: $border-radius;
 		color: $blue;
 		cursor: pointer;
 		font:
 			400 14px "Lato",
 			sans-serif;
-		margin-left: 8px;
+		margin-left: calc($baseline * 2);
 
 		&:hover,
 		&:focus {

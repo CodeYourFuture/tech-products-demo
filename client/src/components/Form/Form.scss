@@ -1,3 +1,4 @@
+@import "../../styles/layout";
 @import "../../styles/palette";
 
 form.form {
@@ -8,11 +9,11 @@ form.form {
 	max-width: 720px;
 
 	> * {
-		margin-top: 16px;
+		margin-top: calc($baseline * 4);
 		width: 100%;
 
 		&:last-child {
-			margin-bottom: 16px;
+			margin-bottom: calc($baseline * 4);
 		}
 	}
 
@@ -22,7 +23,7 @@ form.form {
 		justify-content: flex-end;
 
 		button:not(:first-child) {
-			margin-left: 16px;
+			margin-left: calc($baseline * 4);
 		}
 	}
 
@@ -37,13 +38,13 @@ form.form {
 		textarea {
 			background-color: white;
 			border: 1px solid $light-grey;
-			border-radius: 5px;
+			border-radius: $border-radius;
 			box-sizing: border-box;
 			font:
 				400 16px "Lato",
 				sans-serif;
-			margin-left: 16px;
-			padding: 8px;
+			margin-left: calc($baseline * 4);
+			padding: calc($baseline * 2);
 			width: 75%;
 
 			&:invalid {
@@ -52,7 +53,7 @@ form.form {
 		}
 	}
 
-	@media (max-width: 480px) {
+	@media (max-width: $mobile) {
 		div.buttons {
 			justify-content: space-between;
 		}
@@ -65,7 +66,7 @@ form.form {
 			select,
 			textarea {
 				width: 100%;
-				margin: 8px 0;
+				margin: calc($baseline * 2) 0;
 			}
 		}
 	}
