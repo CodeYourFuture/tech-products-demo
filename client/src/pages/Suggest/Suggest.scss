@@ -1,14 +1,19 @@
+@use "sass:color";
+@import "../../styles/palette";
+
 p.message {
-	font-weight: bold;
-	padding: 8px;
+	border-radius: 5px;
+	font-weight: 700;
+	margin: 16px 0;
+	padding: 16px;
 
 	&.success {
-		background-color: palegreen;
-		color: darkgreen;
+		background-color: color.change($green, $lightness: 95%);
+		color: color.change($green, $lightness: 30%);
 	}
 
 	&.failure {
-		background-color: lightcoral;
-		color: darkred;
+		background-color: color.change($red, $lightness: 95%);
+		color: color.change($red, $lightness: 30%);
 	}
 }

@@ -1,3 +1,6 @@
+@use "sass:color";
+@import "../../styles/palette";
+
 nav[aria-label="pagination"] {
 	align-items: center;
 	display: flex;
@@ -34,38 +37,38 @@ nav[aria-label="pagination"] {
 			}
 
 			> span {
-				border-color: #88e488;
-				color: #88e488;
+				border-color: $light-grey;
+				color: $light-grey;
 				cursor: not-allowed;
 			}
 
 			> a {
-				border-color: #1f891f;
-				color: #1f891f;
+				border-color: $green;
+				color: $green;
 				text-decoration: none;
 
 				&:hover,
 				&:focus {
-					background-color: #e8fae8;
+					background-color: color.change($green, $lightness: 95%);
 				}
 
 				&:active {
-					background-color: #d8f6d8;
+					background-color: color.change($green, $lightness: 90%);
 				}
 
 				&.active {
-					background-color: #1f891f;
+					background-color: $green;
 					color: white;
 
 					&:hover,
 					&:focus {
-						background-color: #1b791b;
-						border-color: #1b791b;
+						background-color: color.scale($green, $lightness: -10%);
+						border-color: color.scale($green, $lightness: -10%);
 					}
 
 					&:active {
-						background-color: #186918;
-						border-color: #186918;
+						background-color: color.scale($green, $lightness: -20%);
+						border-color: color.scale($green, $lightness: -20%);
 					}
 				}
 			}
@@ -81,7 +84,7 @@ nav[aria-label="pagination"] {
 
 		& > select {
 			background-color: white;
-			border: 1px solid #bdbdbd;
+			border: 1px solid $light-grey;
 			border-radius: 5px;
 			box-sizing: border-box;
 			font:

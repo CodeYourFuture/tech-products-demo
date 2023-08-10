@@ -29,4 +29,7 @@ module.exports = merge(common, {
 		static: false,
 	},
 	mode: "development",
+	stats: {
+		loggingDebug: ["sass-loader"],
+	},
 });

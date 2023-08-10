@@ -1,3 +1,6 @@
+@use "sass:color";
+@import "../../styles/palette";
+
 ul.resource-list {
 	list-style-type: none;
 	margin: 0 auto;
@@ -10,7 +13,7 @@ ul.resource-list {
 	}
 
 	li {
-		border: 1px solid #3f3f3f;
+		border: 1px solid $dark-grey;
 		border-radius: 5px;
 		display: flex;
 		flex-direction: column;
@@ -18,8 +21,8 @@ ul.resource-list {
 		margin: 16px 0;
 
 		&.no-resources {
-			border-color: #656565;
-			color: #656565;
+			border-color: $mid-grey;
+			color: $mid-grey;
 		}
 
 		h3 {
@@ -41,9 +44,9 @@ ul.resource-list {
 
 	button {
 		background-color: white;
-		border: 2px solid #1976d2;
+		border: 2px solid $blue;
 		border-radius: 5px;
-		color: #1976d2;
+		color: $blue;
 		cursor: pointer;
 		font:
 			400 14px "Lato",
@@ -52,11 +55,11 @@ ul.resource-list {
 
 		&:hover,
 		&:focus {
-			background-color: #e8f1fa;
+			background-color: color.change($blue, $lightness: 95%);
 		}
 
 		&:active {
-			background-color: #d1e3f6;
+			background-color: color.change($blue, $lightness: 90%);
 		}
 	}
 }

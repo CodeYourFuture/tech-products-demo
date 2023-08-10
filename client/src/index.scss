@@ -1,5 +1,7 @@
+@import "./styles/palette";
+
 body {
-	color: #3f3f3f;
+	color: $dark-grey;
 	font:
 		400 16px "Lato",
 		sans-serif;

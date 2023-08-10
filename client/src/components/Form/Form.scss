@@ -1,3 +1,5 @@
+@import "../../styles/palette";
+
 form.form {
 	align-items: flex-end;
 	display: flex;
@@ -34,7 +36,7 @@ form.form {
 		select,
 		textarea {
 			background-color: white;
-			border: 1px solid #bdbdbd;
+			border: 1px solid $light-grey;
 			border-radius: 5px;
 			box-sizing: border-box;
 			font:
@@ -45,7 +47,7 @@ form.form {
 			width: 75%;
 
 			&:invalid {
-				border-color: #bc2a2a;
+				border-color: $red;
 			}
 		}
 	}

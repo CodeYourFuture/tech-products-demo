@@ -1,6 +1,8 @@
+@import "../../styles/palette";
+
 header {
 	align-items: center;
-	background-color: #efefef;
+	background-color: $ultralight-grey;
 	display: flex;
 	justify-content: space-between;
 	padding: 0 32px;
@@ -59,8 +61,8 @@ header {
 				&.active,
 				&:focus,
 				&:hover {
-					border-bottom: 2px solid #bc2a2a;
-					color: #bc2a2a;
+					border-bottom: 2px solid $red;
+					color: $red;
 					padding-bottom: 0.125em;
 				}
 			}
