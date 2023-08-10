@@ -7,10 +7,10 @@ header {
 	background-color: $ultralight-grey;
 	display: flex;
 	justify-content: space-between;
-	padding: 0 calc($baseline * 8);
+	padding: 0 calc($baseline * 4);
 
 	h1 {
-		margin-right: calc($baseline * 8);
+		margin-right: calc($baseline * 4);
 
 		a {
 			align-items: center;
@@ -19,8 +19,8 @@ header {
 			text-decoration: none;
 
 			img {
-				height: calc($baseline * 8);
-				margin-right: $baseline;
+				height: calc($baseline * 4);
+				margin-right: calc($baseline / 2);
 			}
 		}
 	}
@@ -41,7 +41,7 @@ header {
 				justify-content: flex-start;
 
 				li:not(:last-of-type) {
-					padding-right: calc($baseline * 4);
+					padding-right: calc($baseline * 2);
 				}
 			}
 
@@ -49,7 +49,7 @@ header {
 				justify-content: flex-end;
 
 				li:not(:first-of-type) {
-					padding-left: calc($baseline * 4);
+					padding-left: calc($baseline * 2);
 				}
 			}
 
@@ -57,6 +57,7 @@ header {
 				color: inherit;
 				font: $heading-text-weight calc($body-text-size * 1.125)
 					$heading-text-family;
+				padding-bottom: calc($baseline / 2);
 				text-decoration: none;
 
 				&.active,
@@ -64,7 +65,6 @@ header {
 				&:hover {
 					border-bottom: 2px solid $red;
 					color: $red;
-					padding-bottom: $baseline;
 				}
 			}
 		}
@@ -75,7 +75,7 @@ header {
 		flex-direction: column;
 
 		nav ul {
-			padding-bottom: calc($baseline * 4);
+			padding-bottom: calc($baseline * 2);
 		}
 	}
 

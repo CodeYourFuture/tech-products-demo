@@ -1,5 +1,5 @@
 @import "../../styles/layout";
 
 form[action="/api/auth/logout"] {
-	margin-top: calc($baseline * 6);
+	margin-top: calc($baseline * 3);
 }

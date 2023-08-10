@@ -34,8 +34,8 @@ nav[aria-label="pagination"] {
 				border-width: 2px;
 				border-style: solid;
 				border-radius: $border-radius;
-				margin: calc($baseline * 2);
-				padding: $baseline calc($baseline * 2);
+				margin: $baseline;
+				padding: calc($baseline / 2) $baseline;
 			}
 
 			> span {
@@ -81,7 +81,7 @@ nav[aria-label="pagination"] {
 		align-items: center;
 		display: flex;
 		flex-direction: row;
-		margin-left: calc($baseline * 4);
+		margin-left: calc($baseline * 2);
 		text-align: end;
 
 		& > select {
@@ -90,8 +90,8 @@ nav[aria-label="pagination"] {
 			border-radius: $border-radius;
 			box-sizing: border-box;
 			font: $body-text;
-			margin-left: calc($baseline * 2);
-			padding: calc($baseline * 2);
+			margin-left: $baseline;
+			padding: $baseline;
 			width: fit-content;
 		}
 	}
@@ -101,7 +101,7 @@ nav[aria-label="pagination"] {
 
 		label {
 			margin-left: 0;
-			margin-top: calc($baseline * 2);
+			margin-top: calc($baseline / 2);
 		}
 	}
 }

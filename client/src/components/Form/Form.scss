@@ -10,11 +10,11 @@ form.form {
 	max-width: 720px;
 
 	> * {
-		margin-top: calc($baseline * 4);
+		margin-top: calc($baseline * 2);
 		width: 100%;
 
 		&:last-child {
-			margin-bottom: calc($baseline * 4);
+			margin-bottom: calc($baseline * 2);
 		}
 	}
 
@@ -24,7 +24,7 @@ form.form {
 		justify-content: flex-end;
 
 		button:not(:first-child) {
-			margin-left: calc($baseline * 4);
+			margin-left: calc($baseline * 2);
 		}
 	}
 
@@ -42,8 +42,8 @@ form.form {
 			border-radius: $border-radius;
 			box-sizing: border-box;
 			font: $body-text;
-			margin-left: calc($baseline * 4);
-			padding: calc($baseline * 2);
+			margin-left: calc($baseline * 2);
+			padding: $baseline;
 			width: 75%;
 
 			&:invalid {
@@ -65,7 +65,7 @@ form.form {
 			select,
 			textarea {
 				width: 100%;
-				margin: calc($baseline * 2) 0;
+				margin: $baseline 0;
 			}
 		}
 	}

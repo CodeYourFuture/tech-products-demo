@@ -2,11 +2,11 @@
 @import "./styles/palette";
 
 main > section {
-	padding: calc($baseline * 8);
+	padding: calc($baseline * 4);
 
 	h2 {
 		border-bottom: $red;
 		display: inline-block;
-		padding-bottom: $baseline;
+		padding-bottom: calc($baseline / 2);
 	}
 }
