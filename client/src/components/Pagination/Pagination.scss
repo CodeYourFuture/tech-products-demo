@@ -39,6 +39,8 @@ nav[aria-label="pagination"] {
 				border-color: $light-grey;
 				color: $light-grey;
 				cursor: not-allowed;
+				-webkit-user-select: none;
+				user-select: none;
 			}
 
 			> a {
