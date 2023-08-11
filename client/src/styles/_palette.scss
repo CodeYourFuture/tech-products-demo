@@ -8,3 +8,19 @@ $dark-grey: #3f3f3f;
 $mid-grey: color.change($dark-grey, $lightness: 40%);
 $light-grey: color.change($dark-grey, $lightness: 75%);
 $ultralight-grey: color.change($dark-grey, $lightness: 90%);
+
+@function active-dark($color) {
+	@return color.scale($color, $lightness: -20%);
+}
+
+@function active-light($color) {
+	@return color.change($color, $lightness: 90%);
+}
+
+@function hover-dark($color) {
+	@return color.scale($color, $lightness: -10%);
+}
+
+@function hover-light($color) {
+	@return color.change($color, $lightness: 95%);
+}

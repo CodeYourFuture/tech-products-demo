@@ -1,4 +1,3 @@
-@use "sass:color";
 @import "../../styles/layout";
 @import "../../styles/palette";
 @import "../../styles/typography";
@@ -53,11 +52,11 @@ ul.resource-list {
 
 		&:hover,
 		&:focus {
-			background-color: color.change($blue, $lightness: 95%);
+			background-color: hover-light($blue);
 		}
 
 		&:active {
-			background-color: color.change($blue, $lightness: 90%);
+			background-color: active-light($blue);
 		}
 	}
 }
