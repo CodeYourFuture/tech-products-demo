@@ -1,3 +1,5 @@
+@use "../../styles/layout";
+
 form[action="/api/auth/logout"] {
-	margin-top: 24px;
+	margin-top: calc(#{layout.$baseline} * 3);
 }

@@ -1,14 +1,20 @@
+@use "sass:color";
+@use "../../styles/layout";
+@use "../../styles/palette";
+
 p.message {
-	font-weight: bold;
-	padding: 8px;
+	border-radius: layout.$border-radius;
+	font-weight: 700;
+	margin: calc(#{layout.$baseline} * 4) 0;
+	padding: calc(#{layout.$baseline} * 4);
 
 	&.success {
-		background-color: palegreen;
-		color: darkgreen;
+		background-color: color.change(palette.$green, $lightness: 95%);
+		color: color.change(palette.$green, $lightness: 30%);
 	}
 
 	&.failure {
-		background-color: lightcoral;
-		color: darkred;
+		background-color: color.change(palette.$red, $lightness: 95%);
+		color: color.change(palette.$red, $lightness: 30%);
 	}
 }

@@ -1,7 +1,9 @@
+@use "../../styles/layout";
+@use "../../styles/palette";
+@use "../../styles/typography";
+
 ul.resource-list {
 	list-style-type: none;
-	margin: 0 auto;
-	max-width: 720px;
 	padding-left: 0;
 
 	p,
@@ -10,28 +12,28 @@ ul.resource-list {
 	}
 
 	li {
-		border: 1px solid #3f3f3f;
-		border-radius: 5px;
+		border: 1px solid palette.$dark-grey;
+		border-radius: layout.$border-radius;
 		display: flex;
 		flex-direction: column;
-		padding: 16px;
-		margin: 16px 0;
+		padding: calc(#{layout.$baseline} * 2);
+		margin: calc(#{layout.$baseline} * 2) 0;
 
 		&.no-resources {
-			border-color: #656565;
-			color: #656565;
+			border-color: palette.$mid-grey;
+			color: palette.$mid-grey;
 		}
 
 		h3 {
 			display: inline-block;
-			font-size: 16px;
+			font-size: calc(#{layout.$baseline} * 2);
 		}
 
 		& > * {
 			display: flex;
 			flex-direction: row;
 			justify-content: space-between;
-			margin-bottom: 16px;
+			margin-bottom: calc(#{layout.$baseline} * 2);
 
 			&:last-child {
 				margin-bottom: 0;
@@ -41,22 +43,21 @@ ul.resource-list {
 
 	button {
 		background-color: white;
-		border: 2px solid #1976d2;
-		border-radius: 5px;
-		color: #1976d2;
+		border: 2px solid palette.$blue;
+		border-radius: layout.$border-radius;
+		color: palette.$blue;
 		cursor: pointer;
-		font:
-			400 14px "Lato",
-			sans-serif;
-		margin-left: 8px;
+		font: typography.$body-text-weight
+			calc(#{typography.$body-text-size} * 0.875) typography.$body-text-family;
+		margin-left: layout.$baseline;
 
 		&:hover,
 		&:focus {
-			background-color: #e8f1fa;
+			background-color: palette.hover-light(palette.$blue);
 		}
 
 		&:active {
-			background-color: #d1e3f6;
+			background-color: palette.active-light(palette.$blue);
 		}
 	}
 }

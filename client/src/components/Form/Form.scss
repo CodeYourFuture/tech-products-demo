@@ -1,16 +1,18 @@
+@use "../../styles/layout";
+@use "../../styles/palette";
+@use "../../styles/typography";
+
 form.form {
 	align-items: flex-end;
 	display: flex;
 	flex-direction: column;
-	margin: 0 auto;
-	max-width: 720px;
 
 	> * {
-		margin-top: 16px;
+		margin-top: calc(#{layout.$baseline} * 2);
 		width: 100%;
 
 		&:last-child {
-			margin-bottom: 16px;
+			margin-bottom: calc(#{layout.$baseline} * 2);
 		}
 	}
 
@@ -20,7 +22,7 @@ form.form {
 		justify-content: flex-end;
 
 		button:not(:first-child) {
-			margin-left: 16px;
+			margin-left: calc(#{layout.$baseline} * 2);
 		}
 	}
 
@@ -34,23 +36,21 @@ form.form {
 		select,
 		textarea {
 			background-color: white;
-			border: 1px solid #bdbdbd;
-			border-radius: 5px;
+			border: 1px solid palette.$light-grey;
+			border-radius: layout.$border-radius;
 			box-sizing: border-box;
-			font:
-				400 16px "Lato",
-				sans-serif;
-			margin-left: 16px;
-			padding: 8px;
+			font: typography.$body-text;
+			margin-left: calc(#{layout.$baseline} * 2);
+			padding: layout.$baseline;
 			width: 75%;
 
 			&:invalid {
-				border-color: #bc2a2a;
+				border-color: palette.$red;
 			}
 		}
 	}
 
-	@media (max-width: 480px) {
+	@media (max-width: layout.$mobile) {
 		div.buttons {
 			justify-content: space-between;
 		}
@@ -63,7 +63,7 @@ form.form {
 			select,
 			textarea {
 				width: 100%;
-				margin: 8px 0;
+				margin: layout.$baseline 0;
 			}
 		}
 	}

@@ -1,9 +1,11 @@
+@use "../../styles/layout";
+@use "../../styles/palette";
+@use "../../styles/typography";
+
 nav[aria-label="pagination"] {
 	align-items: center;
 	display: flex;
 	justify-content: flex-end;
-	max-width: 720px;
-	margin: 0 auto;
 	width: 100%;
 
 	& > ul {
@@ -28,44 +30,46 @@ nav[aria-label="pagination"] {
 			> * {
 				border-width: 2px;
 				border-style: solid;
-				border-radius: 5px;
-				margin: 8px;
-				padding: 4px 8px;
+				border-radius: layout.$border-radius;
+				margin: layout.$baseline;
+				padding: calc(#{layout.$baseline} / 2) layout.$baseline;
 			}
 
 			> span {
-				border-color: #88e488;
-				color: #88e488;
+				border-color: palette.$light-grey;
+				color: palette.$light-grey;
 				cursor: not-allowed;
+				-webkit-user-select: none;
+				user-select: none;
 			}
 
 			> a {
-				border-color: #1f891f;
-				color: #1f891f;
+				border-color: palette.$green;
+				color: palette.$green;
 				text-decoration: none;
 
 				&:hover,
 				&:focus {
-					background-color: #e8fae8;
+					background-color: palette.hover-light(palette.$green);
 				}
 
 				&:active {
-					background-color: #d8f6d8;
+					background-color: palette.active-light(palette.$green);
 				}
 
 				&.active {
-					background-color: #1f891f;
+					background-color: palette.$green;
 					color: white;
 
 					&:hover,
 					&:focus {
-						background-color: #1b791b;
-						border-color: #1b791b;
+						background-color: palette.hover-dark(palette.$green);
+						border-color: palette.hover-dark(palette.$green);
 					}
 
 					&:active {
-						background-color: #186918;
-						border-color: #186918;
+						background-color: palette.active-dark(palette.$green);
+						border-color: palette.active-dark(palette.$green);
 					}
 				}
 			}
@@ -76,29 +80,27 @@ nav[aria-label="pagination"] {
 		align-items: center;
 		display: flex;
 		flex-direction: row;
-		margin-left: 16px;
+		margin-left: calc(#{layout.$baseline} * 2);
 		text-align: end;
 
 		& > select {
 			background-color: white;
-			border: 1px solid #bdbdbd;
-			border-radius: 5px;
+			border: 1px solid palette.$light-grey;
+			border-radius: layout.$border-radius;
 			box-sizing: border-box;
-			font:
-				400 16px "Lato",
-				sans-serif;
-			margin-left: 8px;
-			padding: 8px;
+			font: typography.$body-text;
+			margin-left: layout.$baseline;
+			padding: layout.$baseline;
 			width: fit-content;
 		}
 	}
 
-	@media (max-width: 720px) {
+	@media (max-width: layout.$tablet) {
 		flex-direction: column;
 
 		label {
 			margin-left: 0;
-			margin-top: 8px;
+			margin-top: calc(#{layout.$baseline} / 2);
 		}
 	}
 }

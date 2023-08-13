@@ -1,9 +1,17 @@
-main > section {
-	padding: 32px;
+@use "./styles/layout";
+@use "./styles/palette";
 
-	h2 {
-		border-bottom: 2px solid #d12f2f;
+main > article {
+	padding: calc(#{layout.$baseline} * 4);
+
+	> h2 {
+		border-bottom: 2px solid palette.$red;
 		display: inline-block;
-		padding-bottom: 0.125em;
+		padding-bottom: calc(#{layout.$baseline} / 2);
+	}
+
+	> section {
+		margin: 0 auto;
+		max-width: 720px;
 	}
 }

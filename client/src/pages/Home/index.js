@@ -14,10 +14,10 @@ export function Home() {
 	}, [resourceService, searchParams]);
 
 	return (
-		<>
+		<section>
 			<ResourceList resources={resources ?? []} />
 			<Pagination lastPage={lastPage ?? 1} />
-		</>
+		</section>
 	);
 }
 
