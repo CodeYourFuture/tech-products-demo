@@ -1,9 +1,9 @@
-@import "./styles/palette";
-@import "./styles/typography";
+@use "./styles/palette";
+@use "./styles/typography";
 
 body {
-	color: $dark-grey;
-	font: $body-text;
+	color: palette.$dark-grey;
+	font: typography.$body-text;
 	margin: 0;
 
 	h1,
@@ -12,8 +12,8 @@ body {
 	h4,
 	h5,
 	h6 {
-		font-family: $heading-text-family;
-		font-weight: $heading-text-weight;
+		font-family: typography.$heading-text-family;
+		font-weight: typography.$heading-text-weight;
 	}
 
 	.visuallyhidden {

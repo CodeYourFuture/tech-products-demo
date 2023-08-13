@@ -1,6 +1,6 @@
-@import "../../styles/layout";
-@import "../../styles/palette";
-@import "../../styles/typography";
+@use "../../styles/layout";
+@use "../../styles/palette";
+@use "../../styles/typography";
 
 nav[aria-label="pagination"] {
 	align-items: center;
@@ -30,46 +30,46 @@ nav[aria-label="pagination"] {
 			> * {
 				border-width: 2px;
 				border-style: solid;
-				border-radius: $border-radius;
-				margin: $baseline;
-				padding: calc($baseline / 2) $baseline;
+				border-radius: layout.$border-radius;
+				margin: layout.$baseline;
+				padding: calc(#{layout.$baseline} / 2) layout.$baseline;
 			}
 
 			> span {
-				border-color: $light-grey;
-				color: $light-grey;
+				border-color: palette.$light-grey;
+				color: palette.$light-grey;
 				cursor: not-allowed;
 				-webkit-user-select: none;
 				user-select: none;
 			}
 
 			> a {
-				border-color: $green;
-				color: $green;
+				border-color: palette.$green;
+				color: palette.$green;
 				text-decoration: none;
 
 				&:hover,
 				&:focus {
-					background-color: hover-light($green);
+					background-color: palette.hover-light(palette.$green);
 				}
 
 				&:active {
-					background-color: active-light($green);
+					background-color: palette.active-light(palette.$green);
 				}
 
 				&.active {
-					background-color: $green;
+					background-color: palette.$green;
 					color: white;
 
 					&:hover,
 					&:focus {
-						background-color: hover-dark($green);
-						border-color: hover-dark($green);
+						background-color: palette.hover-dark(palette.$green);
+						border-color: palette.hover-dark(palette.$green);
 					}
 
 					&:active {
-						background-color: active-dark($green);
-						border-color: active-dark($green);
+						background-color: palette.active-dark(palette.$green);
+						border-color: palette.active-dark(palette.$green);
 					}
 				}
 			}
@@ -80,27 +80,27 @@ nav[aria-label="pagination"] {
 		align-items: center;
 		display: flex;
 		flex-direction: row;
-		margin-left: calc($baseline * 2);
+		margin-left: calc(#{layout.$baseline} * 2);
 		text-align: end;
 
 		& > select {
 			background-color: white;
-			border: 1px solid $light-grey;
-			border-radius: $border-radius;
+			border: 1px solid palette.$light-grey;
+			border-radius: layout.$border-radius;
 			box-sizing: border-box;
-			font: $body-text;
-			margin-left: $baseline;
-			padding: $baseline;
+			font: typography.$body-text;
+			margin-left: layout.$baseline;
+			padding: layout.$baseline;
 			width: fit-content;
 		}
 	}
 
-	@media (max-width: $tablet) {
+	@media (max-width: layout.$tablet) {
 		flex-direction: column;
 
 		label {
 			margin-left: 0;
-			margin-top: calc($baseline / 2);
+			margin-top: calc(#{layout.$baseline} / 2);
 		}
 	}
 }

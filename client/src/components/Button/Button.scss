@@ -1,44 +1,44 @@
-@import "../../styles/layout";
-@import "../../styles/palette";
-@import "../../styles/typography";
+@use "../../styles/layout";
+@use "../../styles/palette";
+@use "../../styles/typography";
 
 button.button {
-	border-radius: $border-radius;
+	border-radius: layout.$border-radius;
 	cursor: pointer;
-	font: $body-text;
-	line-height: calc($body-text-size * 1.75);
-	padding: 0 calc($baseline * 2);
+	font: typography.$body-text;
+	line-height: calc(#{typography.$body-text-size} * 1.75);
+	padding: 0 calc(#{layout.$baseline} * 2);
 	min-width: 150px;
 
 	&.primary {
-		background-color: $blue;
-		border: 2px solid $blue;
+		background-color: palette.$blue;
+		border: 2px solid palette.$blue;
 		color: white;
 
 		&:hover,
 		&:focus {
-			background-color: hover-dark($blue);
-			border-color: hover-dark($blue);
+			background-color: palette.hover-dark(palette.$blue);
+			border-color: palette.hover-dark(palette.$blue);
 		}
 
 		&:active {
-			background-color: active-dark($blue);
-			border-color: active-dark($blue);
+			background-color: palette.active-dark(palette.$blue);
+			border-color: palette.active-dark(palette.$blue);
 		}
 	}
 
 	&.secondary {
 		background-color: white;
-		border: 2px solid $blue;
-		color: $blue;
+		border: 2px solid palette.$blue;
+		color: palette.$blue;
 
 		&:hover,
 		&:focus {
-			background-color: hover-light($blue);
+			background-color: palette.hover-light(palette.$blue);
 		}
 
 		&:active {
-			background-color: active-light($blue);
+			background-color: palette.active-light(palette.$blue);
 		}
 	}
 }

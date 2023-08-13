@@ -1,20 +1,20 @@
 @use "sass:color";
-@import "../../styles/layout";
-@import "../../styles/palette";
+@use "../../styles/layout";
+@use "../../styles/palette";
 
 p.message {
-	border-radius: $border-radius;
+	border-radius: layout.$border-radius;
 	font-weight: 700;
-	margin: calc($baseline * 4) 0;
-	padding: calc($baseline * 4);
+	margin: calc(#{layout.$baseline} * 4) 0;
+	padding: calc(#{layout.$baseline} * 4);
 
 	&.success {
-		background-color: color.change($green, $lightness: 95%);
-		color: color.change($green, $lightness: 30%);
+		background-color: color.change(palette.$green, $lightness: 95%);
+		color: color.change(palette.$green, $lightness: 30%);
 	}
 
 	&.failure {
-		background-color: color.change($red, $lightness: 95%);
-		color: color.change($red, $lightness: 30%);
+		background-color: color.change(palette.$red, $lightness: 95%);
+		color: color.change(palette.$red, $lightness: 30%);
 	}
 }

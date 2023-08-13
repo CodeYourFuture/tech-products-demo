@@ -1,13 +1,13 @@
-@import "./styles/layout";
-@import "./styles/palette";
+@use "./styles/layout";
+@use "./styles/palette";
 
 main > article {
-	padding: calc($baseline * 4);
+	padding: calc(#{layout.$baseline} * 4);
 
 	> h2 {
-		border-bottom: 2px solid $red;
+		border-bottom: 2px solid palette.$red;
 		display: inline-block;
-		padding-bottom: calc($baseline / 2);
+		padding-bottom: calc(#{layout.$baseline} / 2);
 	}
 
 	> section {
