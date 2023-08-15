@@ -16,6 +16,13 @@ export default class ResourceService {
 		return [];
 	}
 
+	async getOne(id) {
+		const res = await this.fetch(`${ResourceService.ENDPOINT}/${id}`);
+		if (res.ok) {
+			return this._revive(await res.json());
+		}
+	}
+
 	async getPublished({ page, perPage } = {}) {
 		const res = await this.fetch(
 			`${ResourceService.ENDPOINT}?${new URLSearchParams(
