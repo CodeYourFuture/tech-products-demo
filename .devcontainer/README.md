@@ -10,9 +10,9 @@ Allows the project to be started in a [dev container] for [GitHub Codespaces] or
 
 Follow the same instructions in the root README, except that:
 
-- you can skip step 3 (as the environment variables are set for you);
-- you can skip step 4 (as the services are started for you); and
-- if `npx cypress verify` says Cypress isn't installed inside the container run `npx cypress install`.
+- you can skip copying the env file (as the environment variables are set for you);
+- you can skip starting the services (as they're started for you); and
+- if `npx cypress verify` says Cypress isn't installed inside the container, run `npx cypress install`.
 
 If you want to connect directly to the DB, you can use `psql $DATABASE_URL`.
 
