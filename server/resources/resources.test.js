@@ -281,6 +281,64 @@ describe("/api/resources", () => {
 		});
 	});
 
+	describe("GET /:id", () => {
+		it("returns details of a specific resource", async () => {
+			const { agent: anonAgent } = await authenticateAs("anonymous");
+			const { agent: userAgent, user } = await authenticateAs("user");
+			const { agent: adminAgent, user: admin } = await authenticateAs("admin");
+			const { body: topics } = await anonAgent
+				.get("/api/topics")
+				.set("User-Agent", "supertest")
+				.expect(200);
+
+			const title = "The Art of Agile Development (2nd Ed.)";
+			const topic = topics.find(
+				({ name }) => name === "Professional Development"
+			);
+			const url = "https://www.jamesshore.com/v2/books/aoad2";
+
+			const { body: created } = await userAgent
+				.post("/api/resources")
+				.send({ title, topic: topic.id, url })
+				.set("User-Agent", "supertest")
+				.expect(201);
+			await adminAgent
+				.patch(`/api/resources/${created.id}`)
+				.send({ draft: false })
+				.set("User-Agent", "supertest")
+				.expect(200);
+
+			const { body: resource } = await anonAgent
+				.get(`/api/resources/${created.id}`)
+				.set("User-Agent", "supertest")
+				.expect(200);
+			expect(resource).toEqual({
+				accession: expect.stringMatching(patterns.DATETIME),
+				description: null,
+				draft: false,
+				id: expect.stringMatching(patterns.UUID),
+				publication: expect.stringMatching(patterns.DATETIME),
+				publisher: admin.id,
+				publisher_name: admin.name,
+				source: user.id,
+				source_name: user.name,
+				title,
+				topic: topic.id,
+				topic_name: topic.name,
+				url,
+			});
+		});
+
+		it("returns 404 for missing resource", async () => {
+			const { agent } = await authenticateAs("anonymous");
+
+			await agent
+				.get(`/api/resources/${randomUUID()}`)
+				.set("User-Agent", "supertest")
+				.expect(404);
+		});
+	});
+
 	describe("PATCH /:id", () => {
 		it("allows superusers to publish a draft resource", async () => {
 			const { agent: anonAgent } = await authenticateAs("anonymous");

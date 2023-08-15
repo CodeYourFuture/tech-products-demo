@@ -1,0 +1,14 @@
+@use "../../styles/layout";
+
+table.resource-details {
+	width: 100%;
+
+	tbody th {
+		text-align: end;
+
+		&:after {
+			content: ":";
+			margin-right: layout.$baseline;
+		}
+	}
+}
