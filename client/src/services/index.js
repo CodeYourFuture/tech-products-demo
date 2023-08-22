@@ -19,17 +19,9 @@ export function useService(Service) {
 }
 
 export function useResourceService() {
-	const authenticatedFetch = useAuthenticatedFetch();
-	return useMemo(
-		() => new ResourceService(authenticatedFetch),
-		[authenticatedFetch]
-	);
+	return useService(ResourceService);
 }
 
 export function useTopicService() {
-	const authenticatedFetch = useAuthenticatedFetch();
-	return useMemo(
-		() => new TopicService(authenticatedFetch),
-		[authenticatedFetch]
-	);
+	return useService(TopicService);
 }
