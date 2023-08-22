@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 
 import { Pagination, ResourceList } from "../../components";
 import { useSearchParams } from "../../hooks";
-import { useResourceService } from "../../services";
+import { ResourceService, useService } from "../../services";
 
 export function Home() {
-	const resourceService = useResourceService();
+	const resourceService = useService(ResourceService);
 	const searchParams = useSearchParams();
 	const [{ lastPage, resources } = {}, setEnvelope] = useState();
 

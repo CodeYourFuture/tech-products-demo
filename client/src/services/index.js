@@ -2,8 +2,8 @@ import { useMemo } from "react";
 
 import { useAuthenticatedFetch } from "../authContext";
 
-import ResourceService from "./resourceService";
-import TopicService from "./topicService";
+export { default as ResourceService } from "./resourceService";
+export { default as TopicService } from "./topicService";
 
 /**
  * Inject the authenticated fetch wrapper into the specified service.
@@ -16,12 +16,4 @@ export function useService(Service) {
 	return useMemo(() => {
 		return new Service(authenticatedFetch);
 	}, [authenticatedFetch, Service]);
-}
-
-export function useResourceService() {
-	return useService(ResourceService);
-}
-
-export function useTopicService() {
-	return useService(TopicService);
 }

@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
 
 import { ResourceList } from "../../components";
-import { useResourceService } from "../../services";
+import { ResourceService, useService } from "../../services";
 
 export default function Drafts() {
 	const [drafts, setDrafts] = useState([]);
-	const resourceService = useResourceService();
+	const resourceService = useService(ResourceService);
 
 	const refreshDrafts = useCallback(async () => {
 		setDrafts(await resourceService.getDrafts());

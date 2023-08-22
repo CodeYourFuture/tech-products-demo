@@ -3,15 +3,15 @@ import PropTypes from "prop-types";
 import { useCallback, useEffect, useState } from "react";
 
 import { Form, FormControls } from "../../components";
-import { useResourceService, useTopicService } from "../../services";
+import { ResourceService, TopicService, useService } from "../../services";
 
 import "./Suggest.scss";
 
 export default function Suggest() {
 	const [message, setMessage] = useState(undefined);
 	const [topics, setTopics] = useState(undefined);
-	const resourceService = useResourceService();
-	const topicService = useTopicService();
+	const resourceService = useService(ResourceService);
+	const topicService = useService(TopicService);
 
 	useEffect(() => {
 		topicService.getTopics().then(setTopics);
