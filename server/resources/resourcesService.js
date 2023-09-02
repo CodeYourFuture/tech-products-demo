@@ -43,3 +43,9 @@ export async function publish(resourceId, publisherId) {
 		publication: new Date(),
 	});
 }
+
+export async function getById(resourceId) {
+	const resource = await repository.findResource(resourceId);
+
+	return resource;
+}

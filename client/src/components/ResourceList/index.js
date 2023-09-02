@@ -1,6 +1,6 @@
-import PropTypes from "prop-types";
-
 import "./ResourceList.scss";
+import PropTypes from "prop-types";
+import { NavLink } from "react-router-dom";
 
 export default function ResourceList({ publish, resources }) {
 	return (
@@ -10,16 +10,20 @@ export default function ResourceList({ publish, resources }) {
 					<em>No resources to show.</em>
 				</li>
 			)}
-			{resources.map(({ description, id, title, topic_name, url }) => (
-				<li key={id}>
+			{resources.map(({ description, id: draftId, title, topic_name, url }) => (
+				<li key={draftId}>
 					<div>
-						<h3>{title}</h3>
+						<h3>
+							<NavLink to={`/drafts/${draftId}`}>{title}</NavLink>
+						</h3>
 						{topic_name && <span className="topic">{topic_name}</span>}
 					</div>
 					{description && <p>{description}</p>}
 					<div>
 						<a href={url}>{formatUrl(url)}</a>
-						{publish && <button onClick={() => publish(id)}>Publish</button>}
+						{publish && (
+							<button onClick={() => publish(draftId)}>Publish</button>
+						)}
 					</div>
 				</li>
 			))}

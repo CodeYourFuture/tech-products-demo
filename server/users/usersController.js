@@ -25,6 +25,18 @@ router
 
 router
 	.route("/:id")
+	.get(
+		asyncHandler(async (req, res) => {
+			try {
+				res.json(await service.getById(req.params.id));
+			} catch (err) {
+				if (err instanceof MissingUser) {
+					return res.sendStatus(404);
+				}
+				return res.sendStatus(500);
+			}
+		})
+	)
 	.patch(
 		sudoOnly,
 		validated({

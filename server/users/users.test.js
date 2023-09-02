@@ -20,6 +20,35 @@ describe("/api/users", () => {
 				.set("User-Agent", "supertest")
 				.expect(200, [user]);
 		});
+
+		describe("Get /:id", () => {
+			it("gives a single user details", async () => {
+				let { agent, user } = await authenticateAs("user");
+
+				({ body: user } = await agent
+					.get(`/api/users/${user.id}`)
+					.set("User-Agent", "supertest")
+					.expect(200));
+			});
+
+			it("gives error when user not found", async () => {
+				let { agent } = await authenticateAs("user");
+
+				await agent
+					.get("/api/users/2b62c129-c735-4b8a-8bef-624bbcdbb0a9")
+					.set("User-Agent", "supertest")
+					.expect(404);
+			});
+
+			it("throws error when invalid ID", async () => {
+				let { agent } = await authenticateAs("user");
+
+				await agent
+					.get("/api/users/invalid_user_ID")
+					.set("User-Agent", "supertest")
+					.expect(500);
+			});
+		});
 	});
 
 	describe("PATCH /:id", () => {

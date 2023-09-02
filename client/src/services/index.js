@@ -4,6 +4,7 @@ import { useAuthenticatedFetch } from "../authContext";
 
 export { default as ResourceService } from "./resourceService";
 export { default as TopicService } from "./topicService";
+export { default as MemberService } from "./memberService";
 
 /**
  * Inject the authenticated fetch wrapper into the specified service.

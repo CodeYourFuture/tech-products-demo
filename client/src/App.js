@@ -10,6 +10,7 @@ import {
 	Home,
 	NotFound,
 	Suggest,
+	DraftDetails,
 } from "./pages";
 
 const App = () => (
@@ -23,6 +24,7 @@ const App = () => (
 					<Route path="/account" element={<Account />} />
 					<Route path="/drafts" element={<Authenticated adminOnly />}>
 						<Route index element={<Drafts />} />
+						<Route path=":draftId" element={<DraftDetails />} />
 					</Route>
 					<Route path="/suggest" element={<Authenticated />}>
 						<Route index element={<Suggest />} />

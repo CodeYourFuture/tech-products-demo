@@ -15,6 +15,8 @@
 		"e2e": "cross-env DOTENV_CONFIG_PATH=e2e/.env concurrently --kill-others --success first --names \"app,e2e\" \"npm:serve\" \"npm:e2e:run\"",
 		"pree2e:run": "wait-on --log --timeout 60000 http-get://localhost:4201",
 		"e2e:run": "cypress run",
+		"e2e:interactive": "cross-env DOTENV_CONFIG_PATH=e2e/.env concurrently --kill-others --success first --names \"app,e2e\" \"npm:dev\" \"npm:e2e:open\"",
+		"e2e:open": "cypress open",
 		"lint": "npm run lint:eslint . && npm run lint:prettier -- --check .",
 		"lint:eslint": "eslint --config .config/.eslintrc.json --ignore-path .config/.lintignore",
 		"lint:fix": "npm run lint:eslint -- --fix . && npm run lint:prettier -- --write .",

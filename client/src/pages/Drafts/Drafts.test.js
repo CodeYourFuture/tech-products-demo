@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { rest } from "msw";
+import { BrowserRouter } from "react-router-dom";
 
 import { resourceStub, server } from "../../../setupTests";
 
@@ -19,7 +20,7 @@ describe("Drafts", () => {
 				return res(ctx.json({ resources: [resource] }));
 			})
 		);
-		render(<Drafts />);
+		renderComponent();
 		await expect(
 			screen.findByRole("heading", { level: 3 })
 		).resolves.toHaveTextContent("foo");
@@ -44,8 +45,7 @@ describe("Drafts", () => {
 				return res(ctx.json({ ...resource, draft: false }));
 			})
 		);
-		render(<Drafts />);
-
+		renderComponent();
 		const publishButton = await screen.findByRole("button", {
 			name: /publish/i,
 		});
@@ -55,3 +55,11 @@ describe("Drafts", () => {
 		expect(patchRequest.params.id).toBe(resource.id);
 	});
 });
+
+function renderComponent() {
+	render(
+		<BrowserRouter>
+			<Drafts />
+		</BrowserRouter>
+	);
+}

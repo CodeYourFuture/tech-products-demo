@@ -42,6 +42,7 @@ router
 				title: Joi.string().required(),
 				topic: Joi.string().uuid(),
 				url: Joi.string().uri({ allowRelative: false }).required(),
+				recommender: Joi.string().uuid(),
 			}),
 		}),
 		asyncHandler(async (req, res) => {
@@ -63,6 +64,14 @@ router
 
 router
 	.route("/:id")
+	.get(
+		authOnly,
+		asyncHandler(async (req, res) => {
+			const resource = await service.getById(req.params.id);
+
+			res.status(200).send(resource);
+		})
+	)
 	.patch(
 		sudoOnly,
 		validated({

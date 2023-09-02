@@ -12,7 +12,8 @@
 			"draft": true,
 			"source": "2a8e4bb3-6f9c-4602-b084-af343fcbe6f0",
 			"title": "Joi documentation",
-			"url": "https://joi.dev/"
+			"url": "https://joi.dev/",
+			"recommender": "2a8e4bb3-6f9c-4602-b084-af343fcbe6f0"
 		}
 	]
 }

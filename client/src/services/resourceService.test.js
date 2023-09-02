@@ -1,3 +1,5 @@
+import { randomUUID } from "node:crypto";
+
 import { rest } from "msw";
 
 import { resourceStub, server } from "../../setupTests";
@@ -38,6 +40,49 @@ describe("ResourceService", () => {
 				rest.get("/api/resources", (req, res, ctx) => res(ctx.status(400)))
 			);
 			await expect(service.getDrafts()).resolves.toEqual([]);
+		});
+	});
+
+	describe("getDrafById", () => {
+		const resourceID = randomUUID();
+
+		it("should return resource correctly", async () => {
+			const mockResource = resourceStub({
+				recommender: randomUUID(),
+				id: resourceID,
+				accession: "2023-09-02T08:19:30.771Z",
+			});
+
+			server.use(
+				rest.get(`/api/resources/${resourceID}`, (_, res, ctx) => {
+					return res(ctx.json(mockResource));
+				})
+			);
+
+			const expectedResource = await service.getDraftById(resourceID);
+
+			expect(expectedResource.data).toEqual(mockResource);
+			expect(expectedResource.error).toBeUndefined();
+		});
+
+		it("should handle server error", async () => {
+			server.use(
+				rest.get(`/api/resources/${resourceID}`, (_, res, ctx) => {
+					return res(ctx.status(503));
+				})
+			);
+
+			const expectedResource = await service.getDraftById(resourceID);
+
+			expect(expectedResource.data).toBeUndefined();
+			expect(expectedResource.error).toBe("error with status 503");
+		});
+
+		it("should handle exception error", async () => {
+			const response = await service.getDraftById("unknownID");
+
+			expect(response.data).toBeUndefined();
+			expect(response.error).toBeDefined();
 		});
 	});
 

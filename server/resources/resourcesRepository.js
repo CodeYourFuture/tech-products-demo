@@ -17,7 +17,14 @@ const pagedResourceQuery = singleLine`
 		OFFSET $3;
 	`;
 
-export const add = async ({ description, source, title, topic, url }) => {
+export const add = async ({
+	description,
+	source,
+	title,
+	topic,
+	url,
+	recommender,
+}) => {
 	try {
 		const {
 			rows: [created],
@@ -28,8 +35,9 @@ export const add = async ({ description, source, title, topic, url }) => {
 				"title",
 				"topic",
 				"url",
+				"recommender",
 			]),
-			[description, source, title, topic, url]
+			[description, source, title, topic, url, recommender]
 		);
 		return created;
 	} catch (err) {
@@ -69,4 +77,12 @@ export const update = async (id, { draft, publication, publisher }) => {
 		[id, draft, publication, publisher]
 	);
 	return updated;
+};
+
+export const findResource = async (id) => {
+	const {
+		rows: [resource],
+	} = await db.query("SELECT * FROM resources WHERE id = $1;", [id]);
+
+	return resource;
 };

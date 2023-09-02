@@ -5,14 +5,18 @@ import userEvent from "@testing-library/user-event";
 import { rest } from "msw";
 
 import { server } from "../../../setupTests";
+import * as authContext from "../../authContext";
 
 import Suggest from "./index";
+
+jest.mock("../../authContext");
 
 describe("Suggest", () => {
 	it("allows the user to submit a resource", async () => {
 		let requestBody;
 		const title = "hello";
 		const url = "https://example.com";
+		const recommender = "2b62c129-c735-4b8a-8bef-624bbcdbb0a9";
 		const user = userEvent.setup();
 		server.use(
 			rest.get("/api/topics", (req, res, ctx) => res(ctx.json([]))),
@@ -21,7 +25,7 @@ describe("Suggest", () => {
 				return res(ctx.status(201), ctx.json({}));
 			})
 		);
-		render(<Suggest />);
+		renderComponent();
 
 		await user.type(screen.getByRole("textbox", { name: /title/i }), title);
 		await user.type(screen.getByRole("textbox", { name: /url/i }), url);
@@ -30,7 +34,7 @@ describe("Suggest", () => {
 		await expect(
 			screen.findByText(/thank you for suggesting a resource/i)
 		).resolves.toHaveClass("message", "success");
-		expect(requestBody).toEqual({ title, url });
+		expect(requestBody).toEqual({ title, url, recommender });
 		expect(screen.getByRole("form")).toHaveFormValues({
 			description: "",
 			title: "",
@@ -49,7 +53,7 @@ describe("Suggest", () => {
 				return res(ctx.status(201), ctx.json({}));
 			})
 		);
-		render(<Suggest />);
+		renderComponent();
 
 		await user.type(
 			screen.getByRole("textbox", { name: /description/i }),
@@ -108,7 +112,7 @@ describe("Suggest", () => {
 			})
 		);
 
-		render(<Suggest />);
+		renderComponent();
 
 		expect(
 			within(screen.getByRole("combobox", { name: /topic/i })).getByRole(
@@ -140,7 +144,7 @@ describe("Suggest", () => {
 			})
 		);
 
-		render(<Suggest />);
+		renderComponent();
 		await user.type(screen.getByRole("textbox", { name: /title/i }), "Title");
 		await user.type(
 			screen.getByRole("textbox", { name: /url/i }),
@@ -165,7 +169,7 @@ describe("Suggest", () => {
 				return res(ctx.json([{ id: randomUUID(), name: topic }]));
 			})
 		);
-		render(<Suggest />);
+		renderComponent();
 		await user.type(screen.getByRole("textbox", { name: /title/i }), title);
 		await user.selectOptions(
 			screen.getByRole("combobox", { name: /topic/i }),
@@ -178,3 +182,10 @@ describe("Suggest", () => {
 		expect(screen.getByRole("combobox", { name: /topic/i })).toHaveValue("");
 	});
 });
+
+function renderComponent() {
+	authContext.usePrincipal.mockReturnValue({
+		id: "2b62c129-c735-4b8a-8bef-624bbcdbb0a9",
+	});
+	render(<Suggest />);
+}

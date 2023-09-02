@@ -16,6 +16,30 @@ export default class ResourceService {
 		return [];
 	}
 
+	async getDraftById(id) {
+		let result = {
+			data: undefined,
+			error: undefined,
+		};
+
+		try {
+			const response = await this.fetch(`${ResourceService.ENDPOINT}/${id}`);
+
+			if (response.ok) {
+				result.data = await response.json();
+			} else {
+				result.error = `error with status ${response?.status}`;
+			}
+		} catch (error) {
+			let fetchError = new Error("error in fetch");
+			fetchError.data = { name: "resource servicer", desc: error };
+
+			result.error = fetchError;
+		}
+
+		return result;
+	}
+
 	async getPublished({ page, perPage } = {}) {
 		const res = await this.fetch(
 			`${ResourceService.ENDPOINT}?${new URLSearchParams(

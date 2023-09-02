@@ -31,6 +31,23 @@ describe("/api/resources", () => {
 			});
 		});
 
+		it("accepts a recommender", async () => {
+			const { agent } = await authenticateAs("user");
+			const resource = {
+				recommender: "2b62c129-c735-4b8a-8bef-624bbcdbb0a9",
+				title: "Node PG Migrate",
+				url: "https://salsita.github.io/node-pg-migrate/#/",
+			};
+
+			const { body } = await agent
+				.post("/api/resources")
+				.send(resource)
+				.set("User-Agent", "supertest")
+				.expect(201);
+
+			expect(body).toMatchObject(resource);
+		});
+
 		it("accepts a description", async () => {
 			const { agent } = await authenticateAs("user");
 			const resource = {
@@ -204,6 +221,34 @@ describe("/api/resources", () => {
 						page: '"page" must be greater than or equal to 1',
 						perPage: '"perPage" must be a number',
 					});
+			});
+		});
+
+		describe("single Get", () => {
+			let resourceID;
+			const RESOURCE_TITLE = "Resource 2b62c129";
+			beforeEach(async () => {
+				const { agent: userAgent } = await authenticateAs("user");
+				const result = await userAgent
+					.post("/api/resources")
+					.send({
+						title: RESOURCE_TITLE,
+						url: "https://example.com/2b62c129",
+					})
+					.set("User-Agent", "supertest")
+					.expect(201);
+
+				resourceID = result.body.id;
+			});
+
+			it("gets single resource", async () => {
+				const { agent: userAgent } = await authenticateAs("user");
+				const { body: resource } = await userAgent
+					.get(`/api/resources/${resourceID}`)
+					.set("User-Agent", "supertest")
+					.expect(200);
+
+				expect(resource.title).toBe(RESOURCE_TITLE);
 			});
 		});
 

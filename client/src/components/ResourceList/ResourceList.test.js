@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { BrowserRouter } from "react-router-dom";
 
 import { resourceStub } from "../../../setupTests";
 
@@ -13,7 +14,9 @@ describe("ResourceList", () => {
 			title: "Data Binding in React",
 			url: "https://www.joshwcomeau.com/react/data-binding/",
 		});
-		render(<ResourceList resources={[resource]} />);
+
+		renderComponent(resource);
+
 		expect(screen.getByRole("heading", { level: 3 })).toHaveTextContent(
 			resource.title
 		);
@@ -32,7 +35,7 @@ describe("ResourceList", () => {
 		const publish = jest.fn();
 		const resource = resourceStub();
 		const user = userEvent.setup();
-		render(<ResourceList publish={publish} resources={[resource]} />);
+		renderComponent(resource, publish);
 
 		await user.click(screen.getByRole("button", { name: /publish/i }));
 
@@ -41,7 +44,15 @@ describe("ResourceList", () => {
 
 	it("shows the topic if available", () => {
 		const resource = resourceStub({ topic_name: "My Topic" });
-		render(<ResourceList resources={[resource]} />);
+		renderComponent(resource);
 		expect(screen.getByText(resource.topic_name)).toBeInTheDocument();
 	});
 });
+
+function renderComponent(resource, publish) {
+	render(
+		<BrowserRouter>
+			<ResourceList resources={[resource]} publish={publish} />
+		</BrowserRouter>
+	);
+}
