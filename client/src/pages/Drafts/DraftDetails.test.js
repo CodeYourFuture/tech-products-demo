@@ -7,8 +7,8 @@ import { ResourceService, MemberService } from "../../services";
 
 import DraftDetails from "./DraftDetails";
 
-jest.mock("../../services/MemberService");
-jest.mock("../../services/ResourceService");
+jest.mock("../../services/memberService");
+jest.mock("../../services/resourceService");
 
 jest.mock("react-router-dom", () => ({
 	...jest.requireActual("react-router-dom"),
