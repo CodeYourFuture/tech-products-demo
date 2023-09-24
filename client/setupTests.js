@@ -15,7 +15,6 @@ export const resourceStub = (overrides = {}) => ({
 	title: "",
 	topic: null,
 	topic_name: null,
-	recommender: null,
 	url: "https://example.com",
 	...overrides,
 });

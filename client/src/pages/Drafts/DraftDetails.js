@@ -8,77 +8,63 @@ const style = {
 	secondary: "#bc2a2a",
 };
 
-const initialUserDetails = {
-	email: "UNK Email",
-	github_id: "UNK github ID",
-	id: "UNK ID",
-	is_admin: "UNK",
-	name: "NA Name",
-};
-
 function DraftDetails() {
 	const navigate = useNavigate();
 	const { draftId } = useParams();
 	const memberService = useService(MemberService);
 	const resourceService = useService(ResourceService);
-	const [userDetails, setUserDetails] = useState(initialUserDetails);
+	const [error, setError] = useState(false);
+	const [userDetails, setUserDetails] = useState(undefined);
 
 	useEffect(() => {
 		const getUserDetails = async () => {
 			const resource = await resourceService.getDraftById(draftId);
-			if (resource?.data?.recommender) {
-				const result = await memberService.getUserById(
-					resource.data.recommender
-				);
-
+			if (resource.data?.source) {
+				const result = await memberService.getUserById(resource.data.source);
+				setError(false);
 				setUserDetails(result.data);
+			}
+			if (resource.error) {
+				setError(true);
 			}
 		};
 
 		getUserDetails();
 	}, [draftId, resourceService, memberService]);
 
-	return (
-		<section>
-			<div style={{ display: "flex" }}>
-				<button
-					aria-label="back"
-					style={{
-						background: "white",
-						border: 0,
-						color: style.secondary,
-						fontSize: "35px",
-						cursor: "pointer",
-					}}
-					onClick={() => navigate(-1)}
-				>
-					&#x261C;
-				</button>
-				<h2>Recommender Details</h2>
-			</div>
+	if (error) {
+		return <div>Resource Not Found!</div>;
+	}
 
-			<div>
-				<img
-					alt="user"
-					src="/a79342f2f7bf2dee2c6861b2b9a76f94.png"
-					width="200px"
-					height="200px"
-					style={{
-						border: `1px solid ${style.secondary}`,
-						borderRadius: "50%",
-						margin: "20px",
-						float: "left",
-						shapeOutside: "circle(50%)",
-						objectFit: "contain",
-					}}
-				/>
-				<Info label="Name" content={userDetails.name} />
-				<Info label="Email" content={userDetails.email} />
-				<Info label="Github ID" content={userDetails.github_id} />
-				<Info label="Admin" content={userDetails.is_admin ? "Yes" : "No"} />
-			</div>
-		</section>
-	);
+	if (userDetails) {
+		return (
+			<section>
+				<div style={{ display: "flex" }}>
+					<button
+						aria-label="back"
+						style={{
+							background: "white",
+							border: 0,
+							color: style.secondary,
+							fontSize: "35px",
+							cursor: "pointer",
+						}}
+						onClick={() => navigate(-1)}
+					>
+						&#x261C;
+					</button>
+					<h2>Source Details</h2>
+				</div>
+
+				<div>
+					<Info label="Name" content={userDetails.name} />
+					<Info label="Email" content={userDetails.email} />
+				</div>
+			</section>
+		);
+	}
+
+	return <></>;
 }
 
 function Info({ label, content }) {

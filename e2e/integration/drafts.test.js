@@ -1,6 +1,5 @@
 it("lets admin users approve drafts", () => {
 	const adminEmail = "admin@codeyourfuture.io";
-	const baseUrl = Cypress.config().baseUrl;
 	cy.seed("admin");
 	cy.seed("oneDraftResource");
 	cy.visit("/");
@@ -8,10 +7,8 @@ it("lets admin users approve drafts", () => {
 	cy.logInAs(adminEmail);
 	cy.findByRole("link", { name: /drafts/i }).click();
 	cy.findByText("Joi documentation").click();
-	cy.url().should("contain", `${baseUrl}/drafts/`);
 	cy.contains("shh@example.com");
 	cy.contains("discreet-volunteer");
-	cy.contains(456);
 	cy.findByRole("button", { name: "back" }).click();
 	cy.findByRole("button", { name: /publish/i }).click();
 	cy.findByText("Joi documentation").should("not.exist");

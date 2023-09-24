@@ -42,7 +42,6 @@ router
 				title: Joi.string().required(),
 				topic: Joi.string().uuid(),
 				url: Joi.string().uri({ allowRelative: false }).required(),
-				recommender: Joi.string().uuid(),
 			}),
 		}),
 		asyncHandler(async (req, res) => {

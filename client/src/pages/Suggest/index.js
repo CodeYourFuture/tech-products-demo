@@ -2,7 +2,6 @@ import clsx from "clsx";
 import PropTypes from "prop-types";
 import { useCallback, useEffect, useState } from "react";
 
-import { usePrincipal } from "../../authContext";
 import { Form, FormControls } from "../../components";
 import { ResourceService, TopicService, useService } from "../../services";
 import "./Suggest.scss";
@@ -12,7 +11,6 @@ export default function Suggest() {
 	const [topics, setTopics] = useState(undefined);
 	const resourceService = useService(ResourceService);
 	const topicService = useService(TopicService);
-	const principle = usePrincipal();
 
 	useEffect(() => {
 		topicService.getTopics().then(setTopics);
@@ -23,13 +21,9 @@ export default function Suggest() {
 			const suggestion = Object.fromEntries(
 				Object.entries(formData).filter(([, value]) => value !== "")
 			);
-			const suggestionDetails = {
-				recommender: principle.id,
-				...suggestion,
-			};
 
 			try {
-				await resourceService.suggest(suggestionDetails);
+				await resourceService.suggest(suggestion);
 				setMessage({
 					success: true,
 					text: "Thank you for suggesting a resource!",
@@ -42,7 +36,7 @@ export default function Suggest() {
 				throw err;
 			}
 		},
-		[resourceService, principle]
+		[resourceService]
 	);
 
 	return (

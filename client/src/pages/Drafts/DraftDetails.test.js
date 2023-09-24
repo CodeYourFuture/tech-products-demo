@@ -1,7 +1,7 @@
 import { randomUUID } from "node:crypto";
 
-import { render, waitFor } from "@testing-library/react";
-import Router, { BrowserRouter } from "react-router-dom";
+import { render, waitFor, screen } from "@testing-library/react";
+import { MemoryRouter, Routes, Route } from "react-router-dom";
 
 import { ResourceService, MemberService } from "../../services";
 
@@ -10,15 +10,15 @@ import DraftDetails from "./DraftDetails";
 jest.mock("../../services/memberService");
 jest.mock("../../services/resourceService");
 
-jest.mock("react-router-dom", () => ({
-	...jest.requireActual("react-router-dom"),
-	useParams: jest.fn(),
-}));
+const VALIDE_DRAFT_ID = randomUUID();
+const SOURCE_ID = randomUUID();
+const SOURCE_NAME = "John Doe";
+const SOURCE_EMAIL = "John@example.com";
 
 const mockedGetDraftByID = jest.fn().mockImplementation((id) => {
 	if (id === VALIDE_DRAFT_ID) {
 		return {
-			data: { id, title: "Draft Title", recommender: RECOMMENDER_ID },
+			data: { id, title: "Draft Title", source: SOURCE_ID },
 			error: undefined,
 		};
 	}
@@ -26,55 +26,75 @@ const mockedGetDraftByID = jest.fn().mockImplementation((id) => {
 });
 
 const mockedGetUserByID = jest.fn().mockImplementation((id) => {
-	if (id === RECOMMENDER_ID) {
-		return { data: { id, name: RECOMMENDER_NAME }, error: undefined };
+	if (id === SOURCE_ID) {
+		return {
+			data: { id, name: SOURCE_NAME, email: SOURCE_EMAIL },
+			error: undefined,
+		};
 	}
 	return { data: undefined, error: new Error("mock error") };
 });
 
-const VALIDE_DRAFT_ID = randomUUID();
-const RECOMMENDER_ID = randomUUID();
-const RECOMMENDER_NAME = "John Doe";
-
 describe("Draft Details", () => {
-	beforeEach(() => {
-		jest
-			.spyOn(Router, "useParams")
-			.mockReturnValue({ draftId: VALIDE_DRAFT_ID });
+	describe("success", () => {
+		beforeEach(() => {
+			MemberService.mockImplementation(() => {
+				return {
+					getUserById: mockedGetUserByID,
+				};
+			});
 
-		MemberService.mockImplementation(() => {
-			return {
-				getUserById: mockedGetUserByID,
-			};
+			ResourceService.mockImplementation(() => {
+				return {
+					getDraftById: mockedGetDraftByID,
+				};
+			});
 		});
 
-		ResourceService.mockImplementation(() => {
-			return {
-				getDraftById: mockedGetDraftByID,
-			};
+		afterEach(() => {
+			jest.clearAllMocks();
+		});
+
+		it("should make two get calls", async () => {
+			renderComponent(VALIDE_DRAFT_ID);
+
+			await waitFor(() => {
+				expect(mockedGetDraftByID).toHaveBeenCalledWith(VALIDE_DRAFT_ID);
+			});
+
+			expect(mockedGetUserByID).toHaveBeenCalledWith(SOURCE_ID);
+		});
+
+		it("should show user information", async () => {
+			renderComponent(VALIDE_DRAFT_ID);
+
+			await waitFor(() => {
+				const userName = screen.getByText(SOURCE_NAME);
+				expect(userName).toBeVisible();
+			});
+
+			const userEmail = screen.getByText(SOURCE_EMAIL);
+			expect(userEmail).toBeVisible();
 		});
 	});
 
-	afterEach(() => {
-		jest.clearAllMocks();
-	});
+	describe("error", () => {
+		it("should show message when resource details not found", async () => {
+			renderComponent();
 
-	it("should show make get calls", async () => {
-		renderComponent();
+			const errorMessage = await screen.findByText(/Resource Not Found!/);
 
-		expect(Router.useParams).toHaveBeenCalled();
-
-		await waitFor(() => {
-			expect(mockedGetDraftByID).toHaveBeenCalledWith(VALIDE_DRAFT_ID);
+			expect(errorMessage).toBeVisible();
 		});
-		expect(mockedGetUserByID).toHaveBeenCalledWith(RECOMMENDER_ID);
 	});
 });
 
-function renderComponent() {
+function renderComponent(draftId) {
 	render(
-		<BrowserRouter>
-			<DraftDetails />
-		</BrowserRouter>
+		<MemoryRouter initialEntries={[`/drafts/${draftId}`]}>
+			<Routes>
+				<Route path="drafts/:draftId" element={<DraftDetails />} />
+			</Routes>
+		</MemoryRouter>
 	);
 }

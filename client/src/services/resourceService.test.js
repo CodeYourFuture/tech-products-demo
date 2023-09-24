@@ -48,7 +48,6 @@ describe("ResourceService", () => {
 
 		it("should return resource correctly", async () => {
 			const mockResource = resourceStub({
-				recommender: randomUUID(),
 				id: resourceID,
 				accession: "2023-09-02T08:19:30.771Z",
 			});
