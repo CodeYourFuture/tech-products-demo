@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { Joi } from "express-validation";
 
-import { MissingTopic } from "../topics/topicsService";
+import { topicsService } from "../topics";
 import logger from "../utils/logger";
 import {
 	asyncHandler,
@@ -52,7 +52,7 @@ router
 			} catch (err) {
 				if (err instanceof DuplicateResource) {
 					return res.sendStatus(409);
-				} else if (err instanceof MissingTopic) {
+				} else if (err instanceof topicsService.MissingTopic) {
 					return res.status(400).json({ topic: '"topic" must exist' });
 				}
 				throw err;
