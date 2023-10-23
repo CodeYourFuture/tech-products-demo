@@ -3,6 +3,14 @@
  */
 module.exports = {
 	coverageDirectory: "../reports/coverage",
+	globals: {
+		fetch,
+		Request,
+		Response,
+		Headers,
+		FormData,
+		ReadableStream,
+	},
 	projects: [
 		{
 			displayName: "client",
