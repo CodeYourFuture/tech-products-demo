@@ -9,21 +9,33 @@ const Home = () => {
 	const searchParams = useSearchParams();
 	const [{ lastPage, resources } = {}, setEnvelope] = useState({});
 
-	// New state for  page size and set it from local storage on initial load
-	const [pageSize, setPageSize] = useState(
-		localStorage.getItem("pageSizePreference") || "default"
-	);
+	const storedPageSize = localStorage.getItem("pageSizePreference");
+	let initialPageSize;
+
+	try {
+		initialPageSize = storedPageSize ? JSON.parse(storedPageSize) : "default";
+	} catch (error) {
+		// Handle the error as needed
+		initialPageSize = "default";
+		throw new Error("Error parsing page size preference:", error);
+	}
+
+	const [pageSize, setPageSize] = useState(initialPageSize);
 
 	// This function is to save the selected page-size into local storage
 	const savePageSizePreference = (pageSize) => {
-		localStorage.setItem("pageSizePreference", pageSize);
+		localStorage.setItem("pageSizePreference", JSON.stringify(pageSize));
 	};
 
 	useEffect(() => {
 		// Using the selected page size in my API request
 		resourceService
 			.getPublished({ ...searchParams, pageSize })
-			.then(setEnvelope);
+			.then(setEnvelope)
+			.catch((error) => {
+				// Handle the error from the API request as needed
+				throw new Error("Error fetching published resources:", error);
+			});
 	}, [resourceService, searchParams, pageSize]);
 
 	return (
