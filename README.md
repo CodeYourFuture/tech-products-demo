@@ -18,7 +18,7 @@ There are two tasks, corresponding to the main tasks developers in our teams car
 
 ## Create a PR
 
-- Look through the backlog and select an un-blocked open feature to complete
+- Look through the [backlog][unblocked-features] and select an un-blocked open feature to complete
   - Think about how you can best demonstrate your skills - does the feature require shiny new UI, updates to the backend logic, or a mix of both?
 - Implement the feature you've selected, following the guidance in [`.github/CONTRIBUTING.md`][contributing]
   - Remember this is a simulation of working in the team - try to follow the patterns already established in the codebase
@@ -58,3 +58,4 @@ From there see [`.github/CONTRIBUTING.md`][contributing] for details on recommen
 [dev containers]: https://code.visualstudio.com/docs/devcontainers/containers
 [fork]: https://docs.github.com/en/get-started/quickstart/fork-a-repo
 [merged-prs]: https://github.com/CodeYourFuture/tech-products-demo/pulls?q=is%3Apr+is%3Amerged+
+[unblocked-features]: https://github.com/CodeYourFuture/tech-products-demo/issues?q=is%3Aopen+is%3Aissue+-label%3Ablocked+label%3A%22%3Asparkles%3A+feature%22
