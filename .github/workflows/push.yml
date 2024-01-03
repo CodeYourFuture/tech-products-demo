@@ -14,17 +14,12 @@ jobs:
       DATABASE_URL: postgres://postgres:@localhost:4211/postgres
     runs-on: ubuntu-22.04
     steps:
-      - name: Check out source code
-        uses: actions/checkout@v3
-      - name: Set up appropriate Node version
-        uses: actions/setup-node@v3
+      - name: Set up Node.js environment
+        uses: textbook/take-action@nodejs
         with:
-          cache: "npm"
           node-version-file: ".nvmrc"
       - name: Start dev service containers
         run: docker compose up --detach
-      - name: Install dependencies
-        run: npm ci
       - name: Apply database migrations
         run: npm run migration -- up
       - name: Check code style
@@ -55,7 +50,7 @@ jobs:
           docker compose down
       - name: Store Cypress test outputs
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           if-no-files-found: ignore
           name: cypress-outputs
@@ -79,9 +74,9 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Check out source code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Download coverage report
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: coverage-report
           path: reports/coverage/
