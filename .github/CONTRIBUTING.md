@@ -15,7 +15,7 @@ In general, a _"test-driven development"_ (TDD) approach is recommended. Not all
   - Apply classes and styles to polish the visual appearance of the new pages and components.
 - Make a commit.
 - Run `npm run ship` to apply the full automated quality checking suite and ensure everything still works.
-  - Compare the coverage report to the GitHub Pages site in the repo, which shows the current coverage on `main`, to ensure it's not falling too much (and is ideally rising!)
+  - Compare the coverage report to the [GitHub Pages site][coverage] in the repo, which shows the current coverage on `main`, to ensure it's not falling too much (and is ideally rising!)
 - `git push` the changes and open a pull request, following the guidance in the template.
 
 You can see examples of all of the above in the codebase and the pull requests on the repository. Proceeding in this way gives plenty of chances to check in for guidance, e.g. _"does this E2E test reflect your understanding of the user flow"_, or _"do you think this Swagger API design is sensible?"_, before too much work has been done on a possibly-incorrect implementation.
@@ -172,6 +172,7 @@ You can get access to the currently-authenticated user with the `usePrincipal` h
 
 The app is set up to use regular CSS files or [SCSS] (the latter allows nesting rules). Layout is mostly done with [Flexbox]. Responsive design should be desktop-first (~1,024px width), with breakpoints for smaller devices as needed.
 
+[coverage]: https://codeyourfuture.github.io/tech-products-demo/
 [cypress]: https://www.cypress.io/
 [cypress task]: https://docs.cypress.io/guides/tooling/plugins-guide#cytask
 [cy.fixture]: https://docs.cypress.io/api/commands/fixture
