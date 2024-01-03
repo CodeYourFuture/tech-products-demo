@@ -2,6 +2,28 @@
 
 [![Node.js CI](https://github.com/CodeYourFuture/tech-products-demo/workflows/Node.js%20CI/badge.svg)](https://github.com/CodeYourFuture/tech-products-demo/actions)
 
+This is a "work sample simulation", an experience of what it's like to work in one of our teams. This gives you the opportunity to both demonstrate the skills you'd bring to the role and decide whether the role is something you'd enjoy doing.
+
+Follow the instructions [below](#dev-setup) to create a fork, clone it and get your local dev environment set up.
+
+There are two tasks, corresponding to the main tasks developers in our teams carry out; you may do them in either order. If you have any problems, feel free to ask questions in [#join-cyf-tech-products](https://codeyourfuture.slack.com/archives/C05AAMJSAKC); that's also part of the simulation!
+
+## Review a PR
+
+- In your fork, create a PR from `feature/resource-page` to `main`, using the content of `pull_request.md` as the description
+- Check out that branch locally so you can run the scripts and try out the functionality
+  - If you've made any database updates, run `npm run migration -- down` to roll them back _before_ checking out the branch
+  - If you've made any dependency updates, re-run `npm ci` _after_ checking out the branch
+- Carry out a review of the pull request in GitHub, adding comments to the implementation and deciding whether it's ready to merge ("Approve") or not ("Request changes")
+
+## Create a PR
+
+- Look through the backlog and select an un-blocked open feature to complete
+  - Think about how you can best demonstrate your skills - does the feature require shiny new UI, updates to the backend logic, or a mix of both?
+- Implement the feature you've selected, following the guidance in [`.github/CONTRIBUTING.md`][contributing]
+  - Remember this is a simulation of working in the team - try to follow the patterns already established in the codebase
+- Look at [previous examples][merged-prs] to get an idea of what a PR should look like
+
 ## Dev Setup
 
 The prerequisites are:
@@ -23,7 +45,7 @@ If you're using [dev containers], see `.devcontainer/README.md`. Otherwise:
    - UI: http://localhost:4201
    - API docs: http://localhost:4201/docs
 
-From there see `.github/CONTRIBUTING.md` for details on recommended workflows.
+From there see [`.github/CONTRIBUTING.md`][contributing] for details on recommended workflows.
 
 ### Ports used
 
@@ -32,5 +54,7 @@ From there see `.github/CONTRIBUTING.md` for details on recommended workflows.
 - 4211: Postgres
 - 4212: GitStub (mock GitHub OAuth/API)
 
+[contributing]: .github/CONTRIBUTING.md
 [dev containers]: https://code.visualstudio.com/docs/devcontainers/containers
 [fork]: https://docs.github.com/en/get-started/quickstart/fork-a-repo
+[merged-prs]: https://github.com/CodeYourFuture/tech-products-demo/pulls?q=is%3Apr+is%3Amerged+
