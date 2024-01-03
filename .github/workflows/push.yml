@@ -14,12 +14,15 @@ jobs:
       DATABASE_URL: postgres://postgres:@localhost:4211/postgres
     runs-on: ubuntu-22.04
     steps:
+      - name: Check out source code
+        uses: actions/checkout@v4
+      - name: Start dev service containers
+        run: docker compose up --detach
       - name: Set up Node.js environment
         uses: textbook/take-action@nodejs
         with:
+          checkout: "false"
           node-version-file: ".nvmrc"
-      - name: Start dev service containers
-        run: docker compose up --detach
       - name: Apply database migrations
         run: npm run migration -- up
       - name: Check code style
