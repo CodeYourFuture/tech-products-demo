@@ -1,0 +1,17 @@
+name: "Housekeeping tasks"
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 0 * * 0" # https://crontab.guru/
+
+permissions:
+  contents: "read"
+  pull-requests: "write"
+
+jobs:
+  prune:
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: "actions/checkout@v4"
+      - run: "./bin/close_stale.sh"
