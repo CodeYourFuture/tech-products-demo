@@ -12,12 +12,19 @@ gnuDate() {
 
 ONE_MONTH_AGO="$(gnuDate -d '- 1 month' +%Y-%m-%d)"
 
-for PR in $(
+PULL_REQUESTS=$(
   gh pr list \
     --jq '.[].number' \
     --json 'number' \
     --search "updated:<=$ONE_MONTH_AGO" \
     --state 'open'
-); do
+)
+
+if [[ -z "$PULL_REQUESTS" ]]; then
+  echo 'No stale PRs'
+  exit 0
+fi
+
+for PR in $PULL_REQUESTS; do
   gh pr close "$PR" --comment '🍞 Closing as stale (more than one month without updates)'
 done
