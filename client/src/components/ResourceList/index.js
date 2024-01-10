@@ -16,7 +16,7 @@ export default function ResourceList({ publish, resources }) {
 						<h3>{title}</h3>
 						{topic_name && <span className="topic">{topic_name}</span>}
 					</div>
-					{description && <p>{description}</p>}
+					{description && <p className="resource-description">{description}</p>}
 					<div>
 						<a href={url}>{formatUrl(url)}</a>
 						{publish && <button onClick={() => publish(id)}>Publish</button>}
