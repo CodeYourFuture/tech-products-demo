@@ -1,29 +1,82 @@
 import PropTypes from "prop-types";
+import { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 
+import { FormControls } from "../../components";
+import { TopicService, useService, ResourceService } from "../../services";
 import "./ResourceList.scss";
 
 export default function ResourceList({ publish, resources }) {
+	const [topics, setTopics] = useState(undefined);
+	const [drafts, setDrafts] = useState([]);
+	const topicService = useService(TopicService);
+	const [selectedTopic, setSelectedTopic] = useState(null);
+	const [filteredResources, setFilteredResources] = useState([]);
+	const resourceService = useService(ResourceService);
+	const location = useLocation();
+
+	useEffect(() => {
+		resourceService.getDrafts().then(setDrafts);
+		topicService.getTopics().then(setTopics);
+	}, [topicService, resourceService]);
+
+	useEffect(() => {
+		if (selectedTopic) {
+			setFilteredResources(
+				resources.filter((resource) => resource.topic_name === selectedTopic)
+			);
+		} else {
+			setFilteredResources(resources);
+		}
+	}, [selectedTopic, resources]);
+
 	return (
-		<ul className="resource-list">
-			{resources.length === 0 && (
-				<li className="no-resources">
-					<em>No resources to show.</em>
-				</li>
+		<>
+			{resources.length > 0 &&
+				drafts.length > 0 &&
+				location.pathname === "/" && (
+				<form>
+					{/* <label htmlFor="topic">Filter Topic:</label> */}
+
+					<FormControls.Select
+						label="Filter Topic"
+						placeholder="Select a topic"
+						name="topic"
+						options={topics}
+						value={selectedTopic}
+						onChange={(value) => {
+							setSelectedTopic(value);
+						}}
+					/>
+				</form>
 			)}
-			{resources.map(({ description, id, title, topic_name, url }) => (
-				<li key={id}>
-					<div>
-						<h3>{title}</h3>
-						{topic_name && <span className="topic">{topic_name}</span>}
-					</div>
-					{description && <p>{description}</p>}
-					<div>
-						<a href={url}>{formatUrl(url)}</a>
-						{publish && <button onClick={() => publish(id)}>Publish</button>}
-					</div>
-				</li>
-			))}
-		</ul>
+			<ul className="resource-list">
+				{filteredResources.length === 0 && (
+					<li className="no-resources">
+						<em>No resources to show.</em>
+					</li>
+				)}
+				{filteredResources.map(
+					({ description, id, title, topic_name, url }) => (
+						<li key={id}>
+							<div>
+								<h3>
+									<Link to={`/resource/${id}`}>{title}</Link>
+								</h3>
+								{topic_name && <span className="topic">{topic_name}</span>}
+							</div>
+							{description && <p>{description}</p>}
+							<div>
+								<a href={url}>{formatUrl(url)}</a>
+								{publish && (
+									<button onClick={() => publish(id)}>Publish</button>
+								)}
+							</div>
+						</li>
+					)
+				)}
+			</ul>
+		</>
 	);
 }
 
