@@ -8,33 +8,37 @@ import "./ResourceList.scss";
 
 export default function ResourceList({ publish, resources }) {
 	const [topics, setTopics] = useState(undefined);
-	const [drafts, setDrafts] = useState([]);
 	const topicService = useService(TopicService);
-	const [selectedTopic, setSelectedTopic] = useState(null);
+	const [selectedTopic, setSelectedTopic] = useState("");
 	const [filteredResources, setFilteredResources] = useState([]);
 	const resourceService = useService(ResourceService);
 	const location = useLocation();
 
 	useEffect(() => {
-		resourceService.getDrafts().then(setDrafts);
 		topicService.getTopics().then(setTopics);
 	}, [topicService, resourceService]);
 
 	useEffect(() => {
+		const filtered = resources.filter(
+			(resource) => resource.topic_name === selectedTopic
+		);
+
 		if (selectedTopic) {
-			setFilteredResources(
-				resources.filter((resource) => resource.topic_name === selectedTopic)
-			);
+			setFilteredResources(filtered);
 		} else {
 			setFilteredResources(resources);
 		}
 	}, [selectedTopic, resources]);
 
+	const handleChange = (event) => {
+		const selectedValue = event.target.value;
+		const selectedOption = topics.find((option) => option.id === selectedValue);
+		setSelectedTopic(selectedOption ? selectedOption.name : "");
+	};
+
 	return (
 		<>
-			{resources.length > 0 &&
-				drafts.length > 0 &&
-				location.pathname === "/" && (
+			{resources.length > 0 && location.pathname === "/" && (
 				<form>
 					{/* <label htmlFor="topic">Filter Topic:</label> */}
 
@@ -43,10 +47,7 @@ export default function ResourceList({ publish, resources }) {
 						placeholder="Select a topic"
 						name="topic"
 						options={topics}
-						value={selectedTopic}
-						onChange={(value) => {
-							setSelectedTopic(value);
-						}}
+						onChange={handleChange}
 					/>
 				</form>
 			)}

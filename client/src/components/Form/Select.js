@@ -9,26 +9,16 @@ export default function Select({
 	options,
 	placeholder,
 	required,
-	value,
 	onChange = () => {},
 }) {
-	const handleChange = (event) => {
-		const selectedValue = event.target.value;
-		const selectedOption = options.find(
-			(option) => option.id === selectedValue
-		);
-		onChange(selectedOption ? selectedOption.name : "");
-	};
-
 	return (
 		<Label required={required} text={label}>
 			<select
 				defaultValue={defaultValue}
-				value={value}
 				disabled={options === undefined}
 				name={name}
 				required={required}
-				onChange={handleChange}
+				onChange={onChange}
 			>
 				<option disabled value="">
 					{placeholder}
@@ -56,6 +46,5 @@ Select.propTypes = {
 	),
 	placeholder: PropTypes.string.isRequired,
 	required: PropTypes.bool,
-	value: PropTypes.string,
 	onChange: PropTypes.func,
 };
