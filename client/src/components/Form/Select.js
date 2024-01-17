@@ -10,6 +10,7 @@ export default function Select({
 	placeholder,
 	required,
 	onChange = () => {},
+	className,
 }) {
 	return (
 		<Label required={required} text={label}>
@@ -19,6 +20,7 @@ export default function Select({
 				name={name}
 				required={required}
 				onChange={onChange}
+				className={className}
 			>
 				<option disabled value="">
 					{placeholder}
@@ -36,6 +38,7 @@ export default function Select({
 
 Select.propTypes = {
 	defaultValue: PropTypes.string,
+	className: PropTypes.string,
 	label: PropTypes.string.isRequired,
 	name: PropTypes.string.isRequired,
 	options: PropTypes.arrayOf(

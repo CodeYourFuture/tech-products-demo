@@ -39,7 +39,7 @@ export default function ResourceList({ publish, resources }) {
 	return (
 		<>
 			{resources.length > 0 && location.pathname === "/" && (
-				<form>
+				<div>
 					{/* <label htmlFor="topic">Filter Topic:</label> */}
 
 					<FormControls.Select
@@ -48,8 +48,9 @@ export default function ResourceList({ publish, resources }) {
 						name="topic"
 						options={topics}
 						onChange={handleChange}
+						className="custom-select"
 					/>
-				</form>
+				</div>
 			)}
 			<ul className="resource-list">
 				{filteredResources.length === 0 && (
