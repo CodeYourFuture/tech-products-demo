@@ -19,16 +19,24 @@ export default function ResourceList({ publish, resources }) {
 	}, [topicService, resourceService]);
 
 	useEffect(() => {
-		const filtered = resources.filter(
-			(resource) => resource.topic_name === selectedTopic
-		);
+		const fetchResourcesByTopic = async () => {
+			try {
+				const allResources = await resourceService.getPublished();
+				const filtered = allResources.resources.filter(
+					(topic) => topic.topic_name === selectedTopic
+				);
+				setFilteredResources(filtered);
+			} catch (error) {
+				throw new Error(`Error fetching resources: ${error.message}`);
+			}
+		};
 
 		if (selectedTopic) {
-			setFilteredResources(filtered);
+			fetchResourcesByTopic();
 		} else {
 			setFilteredResources(resources);
 		}
-	}, [selectedTopic, resources]);
+	}, [selectedTopic, resourceService, resources]);
 
 	const handleChange = (event) => {
 		const selectedValue = event.target.value;
@@ -40,8 +48,6 @@ export default function ResourceList({ publish, resources }) {
 		<>
 			{resources.length > 0 && location.pathname === "/" && (
 				<div>
-					{/* <label htmlFor="topic">Filter Topic:</label> */}
-
 					<FormControls.Select
 						label="Filter Topic"
 						placeholder="Select a topic"
