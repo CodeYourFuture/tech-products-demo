@@ -5,7 +5,7 @@
 	"extends": ["plugin:jsx-a11y/strict", "plugin:react/recommended"],
 	"overrides": [
 		{
-			"files": ["setupTests.js", "**/*.test.js"],
+			"files": ["setupTests.js", "**/*.test.js?(x)"],
 			"extends": ["plugin:testing-library/react"]
 		}
 	],

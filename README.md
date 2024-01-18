@@ -50,7 +50,7 @@ From there see [`.github/CONTRIBUTING.md`][contributing] for details on recommen
 
 ### Ports used
 
-- 4201: client application (Webpack in dev mode, Express in production mode)
+- 4201: client application (Vite in dev mode, Express in production mode)
 - 4202: Express server (dev mode only)
 - 4211: Postgres
 - 4212: GitStub (mock GitHub OAuth/API)

@@ -7,7 +7,7 @@
 	"ignorePatterns": ["*.d.ts"],
 	"overrides": [
 		{
-			"files": ["setupTests.js", "**/*.test.js"],
+			"files": ["setupTests.js", "**/*.test.js?(x)"],
 			"excludedFiles": ["e2e/**/*.js"],
 			"extends": ["plugin:jest/recommended"],
 			"rules": {
