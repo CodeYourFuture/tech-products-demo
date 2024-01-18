@@ -58,7 +58,6 @@ export default function ResourceList({ publish, resources }) {
 					/>
 				</div>
 			)}
-
 			<ul className="resource-list">
 				{filteredResources.length === 0 && (
 					<li className="no-resources">
@@ -86,7 +85,6 @@ export default function ResourceList({ publish, resources }) {
 				)}
 			</ul>
 		</>
-
 	);
 }
 
