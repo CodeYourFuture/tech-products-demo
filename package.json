@@ -97,7 +97,7 @@
 		"react-dom": "^18.2.0",
 		"react-router-dom": "^6.21.2",
 		"sass": "^1.70.0",
-		"sass-loader": "^13.3.3",
+		"sass-loader": "^14.0.0",
 		"style-loader": "^3.3.4",
 		"supertest": "^6.3.4",
 		"wait-on": "^7.2.0",
