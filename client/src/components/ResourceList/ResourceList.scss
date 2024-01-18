@@ -60,4 +60,8 @@ ul.resource-list {
 			background-color: palette.active-light(palette.$blue);
 		}
 	}
+	.resource-description {
+		white-space: pre-line;
+		word-break: break-word;
+	}
 }
