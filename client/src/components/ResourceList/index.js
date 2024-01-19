@@ -1,6 +1,5 @@
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 
 import { FormControls } from "../../components";
 import { TopicService, useService, ResourceService } from "../../services";
@@ -67,9 +66,7 @@ export default function ResourceList({ publish, resources, pathname }) {
 					({ description, id, title, topic_name, url }) => (
 						<li key={id}>
 							<div>
-								<h3>
-									<Link to={`/resource/${id}`}>{title}</Link>
-								</h3>
+								<h3>{title}</h3>
 								{topic_name && <span className="topic">{topic_name}</span>}
 							</div>
 							{description && <p>{description}</p>}
