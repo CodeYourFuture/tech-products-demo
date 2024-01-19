@@ -15,7 +15,7 @@ export function Home() {
 
 	return (
 		<section>
-			<ResourceList resources={resources ?? []} />
+			<ResourceList resources={resources ?? []} pathname="/" />
 			<Pagination lastPage={lastPage ?? 1} />
 		</section>
 	);

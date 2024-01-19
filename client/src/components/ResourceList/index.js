@@ -1,18 +1,17 @@
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import { FormControls } from "../../components";
 import { TopicService, useService, ResourceService } from "../../services";
 import "./ResourceList.scss";
 
-export default function ResourceList({ publish, resources }) {
+export default function ResourceList({ publish, resources, pathname }) {
 	const [topics, setTopics] = useState(undefined);
 	const topicService = useService(TopicService);
 	const [selectedTopic, setSelectedTopic] = useState("");
 	const [filteredResources, setFilteredResources] = useState([]);
 	const resourceService = useService(ResourceService);
-	const location = useLocation();
 
 	useEffect(() => {
 		topicService.getTopics().then(setTopics);
@@ -46,7 +45,7 @@ export default function ResourceList({ publish, resources }) {
 
 	return (
 		<>
-			{resources.length > 0 && location.pathname === "/" && (
+			{resources.length > 0 && pathname !== "/drafts" && (
 				<div>
 					<FormControls.Select
 						label="Filter Topic"
@@ -99,6 +98,7 @@ ResourceList.propTypes = {
 			url: PropTypes.string.isRequired,
 		})
 	).isRequired,
+	pathname: PropTypes.string.isRequired,
 };
 
 function formatUrl(url) {
