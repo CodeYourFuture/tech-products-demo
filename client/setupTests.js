@@ -2,8 +2,8 @@ import { randomUUID } from "node:crypto";
 
 import "@testing-library/jest-dom";
 import "whatwg-fetch";
+import { rest } from "msw";
 import { setupServer } from "msw/node";
-
 export const resourceStub = (overrides = {}) => ({
 	accession: new Date(),
 	description: null,
@@ -26,6 +26,17 @@ beforeAll(() =>
 		onUnhandledRequest({ method, url }) {
 			throw new Error(`unhandled ${method} request to ${url}`);
 		},
+	})
+);
+
+server.use(
+	rest.get("/api/topics", (req, res, ctx) => {
+		const mockTopics = [
+			{ id: randomUUID(), name: "Topic 1" },
+			{ id: randomUUID(), name: "Topic 2" },
+		];
+
+		return res(ctx.json(mockTopics));
 	})
 );
 
