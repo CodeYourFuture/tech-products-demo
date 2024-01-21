@@ -32,7 +32,7 @@
 		"test:client": "vitest run --config client/vite.config.mjs",
 		"test:cover": "npm run test:client -- --coverage && npm run test:server -- --coverage",
 		"posttest:cover": "nyc report --report-dir reports/coverage --reporter html",
-		"test:server": "jest --config .config/jest.config.js --runInBand",
+		"test:server": "jest --config server/jest.config.js --runInBand",
 		"test:watch": "echo 'watch not supported'",
 		"uuid": "node --print 'require(\"node:crypto\").randomUUID()'"
 	},
