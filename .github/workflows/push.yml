@@ -86,4 +86,4 @@ jobs:
       - name: Publish coverage report
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: reports/coverage/lcov-report
+          folder: reports/coverage/
