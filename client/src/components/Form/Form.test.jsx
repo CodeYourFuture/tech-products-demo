@@ -23,7 +23,7 @@ describe("Form", () => {
 	});
 
 	it("calls onSubmit with the form data", async () => {
-		const onSubmit = jest.fn();
+		const onSubmit = vi.fn();
 		const user = userEvent.setup();
 		render(
 			<TestForm onSubmit={onSubmit}>
@@ -39,7 +39,7 @@ describe("Form", () => {
 	});
 
 	it("resets the form when onSubmit resolves", async () => {
-		const onSubmit = jest.fn().mockResolvedValue(undefined);
+		const onSubmit = vi.fn().mockResolvedValue(undefined);
 		const user = userEvent.setup();
 		render(
 			<TestForm onSubmit={onSubmit}>
@@ -54,7 +54,7 @@ describe("Form", () => {
 	});
 
 	it("keeps the inputs if onSubmit rejects", async () => {
-		const onSubmit = jest.fn().mockRejectedValue(new Error("whoops!"));
+		const onSubmit = vi.fn().mockRejectedValue(new Error("whoops!"));
 		const user = userEvent.setup();
 		render(
 			<TestForm onSubmit={onSubmit}>
@@ -118,8 +118,8 @@ function TestForm({ children, ...overrides } = {}) {
 	return (
 		<Form
 			label="Test form"
-			onChange={jest.fn()}
-			onSubmit={jest.fn()}
+			onChange={vi.fn()}
+			onSubmit={vi.fn()}
 			submitButton="Submit"
 			{...overrides}
 		>

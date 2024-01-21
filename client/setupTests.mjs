@@ -1,8 +1,12 @@
 import { randomUUID } from "node:crypto";
 
 import "@testing-library/jest-dom";
-import "whatwg-fetch";
 import { setupServer } from "msw/node";
+import { setGlobalOrigin } from "undici";
+import { fetch as whatwgFetch } from "whatwg-fetch";
+
+setGlobalOrigin(window.location.href);
+global.fetch = whatwgFetch;
 
 export const resourceStub = (overrides = {}) => ({
 	accession: new Date(),

@@ -2,10 +2,16 @@
 	"env": {
 		"browser": true
 	},
-	"extends": ["plugin:jsx-a11y/strict", "plugin:react/recommended"],
+	"extends": [
+		"plugin:jsx-a11y/strict",
+		"plugin:react/recommended",
+		"plugin:react/jsx-runtime",
+		"plugin:vitest/recommended"
+	],
 	"overrides": [
 		{
-			"files": ["setupTests.js", "**/*.test.js?(x)"],
+			"files": ["setupTests.mjs", "**/*.test.js?(x)"],
+			"env": { "vitest/env": true },
 			"extends": ["plugin:testing-library/react"]
 		}
 	],
@@ -14,7 +20,6 @@
 		"react/jsx-tag-spacing": "error",
 		"react/no-unused-prop-types": "error",
 		"react/prop-types": "error",
-		"react/react-in-jsx-scope": "off",
 		"react-hooks/rules-of-hooks": "error",
 		"react-hooks/exhaustive-deps": "error"
 	},

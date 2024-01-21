@@ -5,7 +5,7 @@ import Button from "./index";
 describe("Button", () => {
 	it("renders a button", () => {
 		render(
-			<Button onClick={jest.fn()} style="primary">
+			<Button onClick={vi.fn()} style="primary">
 				Click me
 			</Button>
 		);
