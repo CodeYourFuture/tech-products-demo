@@ -19,7 +19,9 @@ export default defineConfig({
 	},
 	test: {
 		coverage: {
-			reportsDirectory: "../reports/client-coverage/",
+			provider: "istanbul",
+			reporter: [["json", { file: "client.json" }], ["text"]],
+			reportsDirectory: "../.nyc_output/",
 		},
 		environment: "jsdom",
 		globals: true,

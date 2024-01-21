@@ -2,7 +2,8 @@
  * @type {import("jest").Config}
  */
 module.exports = {
-	coverageDirectory: "<rootDir>/reports/server-coverage/",
+	coverageDirectory: "<rootDir>/.nyc_output/",
+	coverageReporters: [["json", { file: "server.json" }], "text"],
 	rootDir: "..",
 	setupFilesAfterEnv: ["<rootDir>/server/setupTests.js"],
 	testEnvironment: "node",
