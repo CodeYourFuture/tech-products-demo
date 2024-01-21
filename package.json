@@ -29,11 +29,13 @@
 		"prestart": "node bin/run-migrations.js",
 		"start": "node dist/server.js",
 		"test": "npm run test:client && npm run test:server",
-		"test:client": "vitest run --config client/vite.config.mjs",
+		"test:client": "vitest --config client/vite.config.mjs --run",
 		"test:cover": "npm run test:client -- --coverage && npm run test:server -- --coverage",
 		"posttest:cover": "nyc report --report-dir reports/coverage --reporter html",
 		"test:server": "jest --config server/jest.config.js --runInBand",
-		"test:watch": "echo 'watch not supported'",
+		"test:watch": "echo 'global watch not supported'",
+		"test:watch:client": "npm run test:client -- --no-run",
+		"test:watch:server": "npm run test:server -- --watch",
 		"uuid": "node --print 'require(\"node:crypto\").randomUUID()'"
 	},
 	"lint-staged": {
