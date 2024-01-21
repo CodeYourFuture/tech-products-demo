@@ -43,7 +43,9 @@
 			}
 		}
 	],
-	"parser": "@babel/eslint-parser",
+	"parserOptions": {
+		"ecmaVersion": 2022
+	},
 	"plugins": ["import"],
 	"root": true,
 	"rules": {
@@ -54,9 +56,10 @@
 				"newlines-between": "always"
 			}
 		],
-		"object-shorthand": "error",
-		"operator-linebreak": "off",
+		"comma-dangle": "off",
 		"no-console": "error",
-		"no-warning-comments": "warn"
+		"no-warning-comments": "warn",
+		"object-shorthand": "error",
+		"operator-linebreak": "off"
 	}
 }
