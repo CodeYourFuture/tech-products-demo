@@ -10,8 +10,8 @@ In general, a _"test-driven development"_ (TDD) approach is recommended. Not all
   - Drive out the functionality needed in the API by writing integration tests with [Jest] and [SuperTest].
   - Implement [Express] endpoints
 - Next the [React] UI:
-  - Test-drive updates to or creation of `use<Thing>Service` hooks to allow components to access the updated API using [Jest] and [MSW].
-  - Create the pages (with [React Router] routes) and components required, testing them with [Jest] and [React Testing Library].
+  - Test-drive updates to or creation of `use<Thing>Service` hooks to allow components to access the updated API using [Vitest] and [MSW].
+  - Create the pages (with [React Router] routes) and components required, testing them with [Vitest] and [React Testing Library].
   - Apply classes and styles to polish the visual appearance of the new pages and components.
 - Make a commit.
 - Run `npm run ship` to apply the full automated quality checking suite and ensure everything still works.
@@ -193,3 +193,4 @@ The app is set up to use regular CSS files or [SCSS] (the latter allows nesting 
 [scss]: https://sass-lang.com/documentation/syntax/#scss
 [supertest]: https://www.npmjs.com/package/supertest
 [swagger]: https://swagger.io/docs/specification/about/
+[vitest]: https://vitest.dev/
