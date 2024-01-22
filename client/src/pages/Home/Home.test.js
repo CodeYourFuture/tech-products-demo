@@ -31,13 +31,9 @@ describe("Home", () => {
 					{ id: "1", name: "Topic 1" },
 					{ id: "2", name: "Topic 2" },
 				];
-		
 				return res(ctx.json(mockTopics));
 			})
-
-
 		);
-
 		render(
 			<MemoryRouter>
 				<Home />
