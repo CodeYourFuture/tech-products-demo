@@ -31,7 +31,7 @@
 		"test": "npm run test:client && npm run test:server",
 		"test:client": "vitest --config client/vite.config.mjs --run",
 		"test:cover": "npm run test:client -- --coverage && npm run test:server -- --coverage",
-		"posttest:cover": "nyc report --report-dir reports/coverage --reporter html",
+		"posttest:cover": "nyc report --report-dir reports/coverage --reporter lcov",
 		"test:server": "jest --config server/jest.config.js --runInBand",
 		"test:watch": "echo 'global watch not supported'",
 		"test:watch:client": "npm run test:client -- --no-run",
