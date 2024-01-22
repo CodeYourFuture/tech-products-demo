@@ -13,8 +13,18 @@ export default function ResourceList({ publish, resources, pathname }) {
 	const resourceService = useService(ResourceService);
 
 	useEffect(() => {
-		topicService.getTopics().then(setTopics);
-	}, [topicService, resourceService]);
+		const fetchTopics = async () => {
+			try {
+				const fetchedTopics = await topicService.getTopics();
+
+				setTopics(fetchedTopics || []);
+			} catch (error) {
+				console.error("Error fetching topics:", error);
+			}
+		};
+
+		fetchTopics();
+	}, [topicService]);
 
 	useEffect(() => {
 		const fetchResourcesByTopic = async () => {
