@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-
-import { resourceStub } from "../../../setupTests";
+import { rest } from "msw";
+import { resourceStub, server } from "../../../setupTests";
 
 import ResourceList from "./index";
 
@@ -32,6 +32,16 @@ describe("ResourceList", () => {
 		const publish = jest.fn();
 		const resource = resourceStub();
 		const user = userEvent.setup();
+		server.use(
+			rest.get("/api/topics", (req, res, ctx) => {
+				const mockTopics = [
+					{ id: "1", name: "Topic 1" },
+					{ id: "2", name: "Topic 2" },
+				];
+				return res(ctx.json(mockTopics));
+			})
+		);
+
 		render(
 			<ResourceList
 				publish={publish}
