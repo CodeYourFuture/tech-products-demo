@@ -19,7 +19,7 @@ export default function ResourceList({ publish, resources, pathname }) {
 
 				setTopics(fetchedTopics || []);
 			} catch (error) {
-				throw new Error(`Error fetching topics: ${error.message}`);
+				return null;
 			}
 		};
 
