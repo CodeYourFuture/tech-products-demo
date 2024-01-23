@@ -15,9 +15,11 @@ export default function ResourceList({ publish, resources, pathname }) {
 	useEffect(() => {
 		const fetchTopics = async () => {
 			try {
-				const fetchedTopics = await topicService.getTopics();
+				const isTopic = true;
 
-				setTopics(fetchedTopics || []);
+				const fetchedTopics = isTopic ? [] : await topicService.getTopics();
+
+				setTopics(fetchedTopics);
 			} catch (error) {
 				throw new Error(`Error fetching topics: ${error.message}`);
 			}
@@ -29,7 +31,7 @@ export default function ResourceList({ publish, resources, pathname }) {
 	useEffect(() => {
 		const fetchResourcesByTopic = async () => {
 			try {
-				const allResources = await resourceService.getPublished();
+				const allResources = await resourceService.getPublished({});
 				const filtered = allResources.resources.filter(
 					(topic) => topic.topic_name === selectedTopic
 				);
