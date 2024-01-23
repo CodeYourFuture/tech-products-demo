@@ -6,7 +6,7 @@ import { TopicService, useService, ResourceService } from "../../services";
 import "./ResourceList.scss";
 
 export default function ResourceList({ publish, resources, pathname }) {
-	const [topics, setTopics] = useState(undefined);
+	const [topics, setTopics] = useState([]);
 	const topicService = useService(TopicService);
 	const [selectedTopic, setSelectedTopic] = useState("");
 	const [filteredResources, setFilteredResources] = useState([]);
@@ -15,9 +15,7 @@ export default function ResourceList({ publish, resources, pathname }) {
 	useEffect(() => {
 		const fetchTopics = async () => {
 			try {
-				const isTopic = true;
-
-				const fetchedTopics = isTopic ? [] : await topicService.getTopics();
+				const fetchedTopics = topics ? [] : await topicService.getTopics();
 
 				setTopics(fetchedTopics);
 			} catch (error) {
