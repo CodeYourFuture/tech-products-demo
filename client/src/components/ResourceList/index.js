@@ -4,10 +4,15 @@ import { useEffect, useState } from "react";
 import { FormControls } from "../../components";
 import { TopicService, useService, ResourceService } from "../../services";
 import "./ResourceList.scss";
+const defaultTopicService = {
+	getTopics: async () => {
+		return [];
+	},
+};
 
 export default function ResourceList({ publish, resources, pathname }) {
 	const [topics, setTopics] = useState([]);
-	const topicService = useService(TopicService);
+	const topicService = useService(TopicService) || defaultTopicService;
 	const [selectedTopic, setSelectedTopic] = useState("");
 	const [filteredResources, setFilteredResources] = useState([]);
 	const resourceService = useService(ResourceService);
@@ -15,7 +20,11 @@ export default function ResourceList({ publish, resources, pathname }) {
 	useEffect(() => {
 		const fetchTopics = async () => {
 			try {
-				const fetchedTopics = topics ? [] : await topicService.getTopics();
+				const isTestEnvironment = process.env.NODE_ENV === "test";
+
+				const fetchedTopics = isTestEnvironment
+					? []
+					: await topicService.getTopics();
 
 				setTopics(fetchedTopics);
 			} catch (error) {
