@@ -55,9 +55,7 @@ export default function ResourceList({ publish, resources, pathname }) {
 		const selectedOption = topics.find((option) => option.id === selectedValue);
 		setSelectedTopic(selectedOption ? selectedOption.name : "");
 	};
-	if (topics.length === 0) {
-		return null; // or a loading indicator
-	}
+
 	return (
 		<>
 			{resources.length > 0 && pathname !== "/drafts" && (
@@ -69,6 +67,7 @@ export default function ResourceList({ publish, resources, pathname }) {
 						options={topics}
 						onChange={handleChange}
 						className="custom-select"
+						data-testid="filter-topic-select"
 					/>
 				</div>
 			)}
