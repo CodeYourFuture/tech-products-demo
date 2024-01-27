@@ -28,7 +28,7 @@ export default function ResourceList({ publish, resources, pathname }) {
 		};
 
 		fetchTopics();
-	}, [topicService]);
+	}, [setTopics, topicService]);
 
 	useEffect(() => {
 		const fetchResourcesByTopic = async () => {
