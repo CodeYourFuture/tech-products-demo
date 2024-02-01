@@ -5,6 +5,7 @@ import {
 	asyncHandler,
 	methodNotAllowed,
 	sudoOnly,
+	authOnly,
 	validated,
 } from "../utils/middleware";
 
@@ -25,6 +26,26 @@ router
 
 router
 	.route("/:id")
+	.get(
+		authOnly,
+		asyncHandler(async (req, res) => {
+			try {
+				const user = await service.getById(req.params?.id);
+				const { is_admin: isAdmin = false } = req.user ?? {};
+				if (!req.user) {
+					return res.sendStatus(401);
+				}
+				res.send(
+					await service.getMine({ source: req.params?.id, user, isAdmin })
+				);
+			} catch (err) {
+				if (err instanceof MissingUser) {
+					return res.sendStatus(404);
+				}
+				throw err;
+			}
+		})
+	)
 	.patch(
 		sudoOnly,
 		validated({

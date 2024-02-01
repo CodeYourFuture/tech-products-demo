@@ -30,3 +30,16 @@ export async function promote(id) {
 	await getById(id);
 	return await repository.update(id, { is_admin: true });
 }
+
+export async function getMine({ source, user, isAdmin }) {
+	const userResources = await repository.findMine({
+		source,
+		isAdmin,
+	});
+	const totalCount = userResources.length;
+	return {
+		user,
+		resources: userResources,
+		totalCount,
+	};
+}

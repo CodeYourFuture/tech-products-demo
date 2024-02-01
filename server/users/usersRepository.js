@@ -1,4 +1,26 @@
-import db, { insertQuery } from "../db";
+import db, { insertQuery, singleLine } from "../db";
+
+const userResourceQuery = singleLine`
+	SELECT r.*, t.name as topic_name
+	FROM resources as r
+	LEFT JOIN topics as t
+	ON r.topic = t.id
+	JOIN users u ON r.source = u.id 
+`;
+
+const pagedAdminResourceQuery = singleLine`
+	${userResourceQuery}
+	WHERE (r.source = $1)
+	GROUP BY u.id, r.id, t.name
+	ORDER BY accession DESC;
+`;
+
+const pagedUserResourceQuery = singleLine`
+	${userResourceQuery}
+	WHERE (r.draft = false AND r.source = $1) 
+	GROUP BY u.id, r.id, t.name 
+	ORDER BY accession DESC;
+`;
 
 export const add = async ({ email, gitHubId, name }) => {
 	const {
@@ -38,4 +60,10 @@ export const update = async (id, { is_admin }) => {
 		[id, is_admin]
 	);
 	return updated;
+};
+
+export const findMine = async ({ source, isAdmin }) => {
+	const query = isAdmin ? pagedAdminResourceQuery : pagedUserResourceQuery;
+	const { rows } = await db.query(query, [source]);
+	return rows;
 };
