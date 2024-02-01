@@ -18,6 +18,37 @@
         $ref: "#/components/responses/InternalServerError"
 
 /users/{id}:
+  get:
+    tags: [Users]
+    description: |
+      Get user's resources by source equal to parameter id.
+
+      **Note**: Published resources, belonging to the authenticated user, are available to all users; drafts are only accessible to admin users.
+    security:
+      - sudoToken: []
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    requestBody:
+      required: false
+    responses:
+      200:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PaginatedResources"
+      400:
+        $ref: "#/components/responses/BadRequestError"
+      401:
+        $ref: "#/components/responses/UnauthorizedError"
+      404:
+        $ref: "#/components/responses/NotFoundRequestError"
+      500:
+        $ref: "#/components/responses/InternalServerError"
   patch:
     tags: [Users]
     description: |
