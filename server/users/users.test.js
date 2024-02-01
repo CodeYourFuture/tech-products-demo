@@ -70,4 +70,37 @@ describe("/api/users", () => {
 				.expect(400, { name: '"name" is not allowed' });
 		});
 	});
+
+	describe("GET /:id", () => {
+		it("is inaccessible to unauthenticated users", async () => {
+			const { agent } = await authenticateAs("anonymous");
+			await agent
+				.get("/api/users/abc123")
+				.set("User-Agent", "supertest")
+				.expect(401, "Unauthorized");
+		});
+
+		it("allows authenticated users to query personal resources", async () => {
+			let { agent: userAgent, user } = await authenticateAs("user");
+			const resp = await userAgent
+				.get(`/api/users/${user.id}`)
+				.set("Authorization", `Bearer ${sudoToken}`)
+				.set("User-Agent", "supertest")
+				.expect(200);
+			expect(JSON.parse(resp.text).resources).toEqual([]);
+			expect(JSON.parse(resp.text).totalCount).toEqual(0);
+			expect(JSON.parse(resp.text).user.github_id).toEqual(3);
+			expect(JSON.parse(resp.text).user.name).toEqual("Sushma Moolya");
+		});
+
+		it("rejects get resources to nonexistent user", async () => {
+			const { agent } = await authenticateAs("user");
+			const resp = await agent
+				.get("/api/users/ef87091b-0d08-4a18-81a1-3df0d6e663d1")
+				.send({ is_admin: true })
+				.set("Authorization", `Bearer ${sudoToken}`)
+				.set("User-Agent", "supertest");
+			expect(resp.text).toEqual("Not Found");
+		});
+	});
 });
