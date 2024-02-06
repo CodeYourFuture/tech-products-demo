@@ -9,8 +9,8 @@
 			"extensions": [
 				"eamodio.gitlens",
 				"esbenp.prettier-vscode",
-				"orta.vscode-jest",
-			],
-		},
-	},
+				"orta.vscode-jest"
+			]
+		}
+	}
 }
