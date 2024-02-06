@@ -3,7 +3,6 @@ import { randomUUID } from "node:crypto";
 import "@testing-library/jest-dom";
 import "whatwg-fetch";
 import { setupServer } from "msw/node";
-
 export const resourceStub = (overrides = {}) => ({
 	accession: new Date(),
 	description: null,

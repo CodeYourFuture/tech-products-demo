@@ -17,6 +17,14 @@ describe("Drafts", () => {
 		server.use(
 			rest.get("/api/resources", (req, res, ctx) => {
 				return res(ctx.json({ resources: [resource] }));
+			}),
+
+			rest.get("/api/topics", (req, res, ctx) => {
+				const mockTopics = [
+					{ id: "1", name: "Topic 1" },
+					{ id: "2", name: "Topic 2" },
+				];
+				return res(ctx.json(mockTopics));
 			})
 		);
 		render(<Drafts />);
@@ -42,6 +50,13 @@ describe("Drafts", () => {
 			rest.patch("/api/resources/:id", (req, res, ctx) => {
 				patchRequest = req;
 				return res(ctx.json({ ...resource, draft: false }));
+			}),
+			rest.get("/api/topics", (req, res, ctx) => {
+				const mockTopics = [
+					{ id: "1", name: "Topic 1" },
+					{ id: "2", name: "Topic 2" },
+				];
+				return res(ctx.json(mockTopics));
 			})
 		);
 		render(<Drafts />);

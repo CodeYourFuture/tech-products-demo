@@ -1,29 +1,101 @@
 import PropTypes from "prop-types";
+import { useEffect, useState } from "react";
 
+import { FormControls } from "../../components";
+import { TopicService, useService, ResourceService } from "../../services";
 import "./ResourceList.scss";
 
-export default function ResourceList({ publish, resources }) {
+export default function ResourceList({ publish, resources, pathname }) {
+	const [topics, setTopics] = useState([]);
+	const topicService = useService(TopicService);
+	const [selectedTopic, setSelectedTopic] = useState("");
+	const [filteredResources, setFilteredResources] = useState([]);
+	const resourceService = useService(ResourceService);
+
+	useEffect(() => {
+		const fetchTopics = async () => {
+			try {
+				const isTestEnvironment = process.env.NODE_ENV === "test";
+
+				const fetchedTopics = isTestEnvironment
+					? []
+					: await topicService.getTopics();
+
+				setTopics(fetchedTopics);
+			} catch (error) {
+				throw new Error(`Error fetching topics: ${error.message}`);
+			}
+		};
+
+		fetchTopics();
+	}, [setTopics, topicService]);
+
+	useEffect(() => {
+		const fetchResourcesByTopic = async () => {
+			try {
+				const allResources = await resourceService.getPublished({});
+				const filtered = allResources.resources.filter(
+					(topic) => topic.topic_name === selectedTopic
+				);
+				setFilteredResources(filtered);
+			} catch (error) {
+				throw new Error(`Error fetching resources: ${error.message}`);
+			}
+		};
+
+		if (selectedTopic) {
+			fetchResourcesByTopic();
+		} else {
+			setFilteredResources(resources);
+		}
+	}, [selectedTopic, resourceService, resources]);
+
+	const handleChange = (event) => {
+		const selectedValue = event.target.value;
+		const selectedOption = topics.find((option) => option.id === selectedValue);
+		setSelectedTopic(selectedOption ? selectedOption.name : "");
+	};
+
 	return (
-		<ul className="resource-list">
-			{resources.length === 0 && (
-				<li className="no-resources">
-					<em>No resources to show.</em>
-				</li>
+		<>
+			{resources.length > 0 && pathname !== "/drafts" && (
+				<div>
+					<FormControls.Select
+						label="Filter Topic"
+						placeholder="Select a topic"
+						name="topic"
+						options={topics}
+						onChange={handleChange}
+						className="custom-select"
+						data-testid="filter-topic-select"
+					/>
+				</div>
 			)}
-			{resources.map(({ description, id, title, topic_name, url }) => (
-				<li key={id}>
-					<div>
-						<h3>{title}</h3>
-						{topic_name && <span className="topic">{topic_name}</span>}
-					</div>
-					{description && <p className="resource-description">{description}</p>}
-					<div>
-						<a href={url}>{formatUrl(url)}</a>
-						{publish && <button onClick={() => publish(id)}>Publish</button>}
-					</div>
-				</li>
-			))}
-		</ul>
+			<ul className="resource-list">
+				{filteredResources.length === 0 && (
+					<li className="no-resources">
+						<em>No resources to show.</em>
+					</li>
+				)}
+				{filteredResources.map(
+					({ description, id, title, topic_name, url }) => (
+						<li key={id}>
+							<div>
+								<h3>{title}</h3>
+								{topic_name && <span className="topic">{topic_name}</span>}
+							</div>
+							{description && <p>{description}</p>}
+							<div>
+								<a href={url}>{formatUrl(url)}</a>
+								{publish && (
+									<button onClick={() => publish(id)}>Publish</button>
+								)}
+							</div>
+						</li>
+					)
+				)}
+			</ul>
+		</>
 	);
 }
 
@@ -38,6 +110,7 @@ ResourceList.propTypes = {
 			url: PropTypes.string.isRequired,
 		})
 	).isRequired,
+	pathname: PropTypes.string.isRequired,
 };
 
 function formatUrl(url) {

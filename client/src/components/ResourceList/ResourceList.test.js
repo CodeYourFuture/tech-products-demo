@@ -1,7 +1,8 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { rest } from "msw";
 
-import { resourceStub } from "../../../setupTests";
+import { resourceStub, server } from "../../../setupTests";
 
 import ResourceList from "./index";
 
@@ -13,7 +14,7 @@ describe("ResourceList", () => {
 			title: "Data Binding in React",
 			url: "https://www.joshwcomeau.com/react/data-binding/",
 		});
-		render(<ResourceList resources={[resource]} />);
+		render(<ResourceList resources={[resource]} pathname="/" />);
 		expect(screen.getByRole("heading", { level: 3 })).toHaveTextContent(
 			resource.title
 		);
@@ -24,7 +25,7 @@ describe("ResourceList", () => {
 	});
 
 	it("shows a message if no resources are available", () => {
-		render(<ResourceList resources={[]} />);
+		render(<ResourceList resources={[]} pathname="/" />);
 		expect(screen.getByText(/no resources to show/i)).toBeInTheDocument();
 	});
 
@@ -32,7 +33,23 @@ describe("ResourceList", () => {
 		const publish = jest.fn();
 		const resource = resourceStub();
 		const user = userEvent.setup();
-		render(<ResourceList publish={publish} resources={[resource]} />);
+		server.use(
+			rest.get("/api/topics", (req, res, ctx) => {
+				const mockTopics = [
+					{ id: "1", name: "Topic 1" },
+					{ id: "2", name: "Topic 2" },
+				];
+				return res(ctx.json(mockTopics));
+			})
+		);
+
+		render(
+			<ResourceList
+				publish={publish}
+				resources={[resource]}
+				pathname="/drafts"
+			/>
+		);
 
 		await user.click(screen.getByRole("button", { name: /publish/i }));
 
@@ -41,7 +58,7 @@ describe("ResourceList", () => {
 
 	it("shows the topic if available", () => {
 		const resource = resourceStub({ topic_name: "My Topic" });
-		render(<ResourceList resources={[resource]} />);
+		render(<ResourceList resources={[resource]} pathname="/" />);
 		expect(screen.getByText(resource.topic_name)).toBeInTheDocument();
 	});
 });
