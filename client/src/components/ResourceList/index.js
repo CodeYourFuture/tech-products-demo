@@ -5,12 +5,12 @@ import "./ResourceList.scss";
 export default function ResourceList({
 	showBadge = false,
 	loading = false,
-	totalCount = 0,
 	loadMore,
 	showMore,
 	publish,
 	resources,
 }) {
+	const totalCount = resources.length;
 	const noResource = totalCount === 0;
 	const exceedResource = showMore >= totalCount;
 	return (
@@ -65,7 +65,6 @@ ResourceList.propTypes = {
 	showBadge: PropTypes.bool,
 	loading: PropTypes.bool,
 	showMore: PropTypes.number,
-	totalCount: PropTypes.number,
 	loadMore: PropTypes.func,
 	publish: PropTypes.func,
 	resources: PropTypes.arrayOf(

@@ -2,6 +2,8 @@ import { resourceStub } from "../../setupTests";
 
 import UserService from "./userService";
 
+jest.mock("./userService");
+
 describe("UserService", () => {
 	const service = new UserService();
 	const user = {
@@ -14,8 +16,7 @@ describe("UserService", () => {
 
 	describe("getByUser", () => {
 		it("returns user resources on success", async () => {
-			const getByUser = (UserService.prototype.getByUser = jest.fn());
-			getByUser.mockReturnValue({
+			UserService.prototype.getByUser.mockReturnValue({
 				user,
 				resources: resourceStub,
 				totalCount: resourceStub.length,
@@ -25,6 +26,14 @@ describe("UserService", () => {
 			);
 			expect(resource.resources).toEqual(resourceStub);
 			expect(service.getByUser).toHaveBeenCalledTimes(1);
+		});
+
+		it("should handle a failed on get user resources", async () => {
+			UserService.prototype.getByUser.mockImplementation(() =>
+				Promise.reject(new Error("Failed to fetch data"))
+			);
+			const resp = service.getByUser("ef87091b-0d08-4a18-81a1-3df0d6e663d1");
+			await expect(resp).rejects.toThrow("Failed to fetch data");
 		});
 	});
 });

@@ -12,7 +12,7 @@ export default function Account() {
 	const principal = usePrincipal();
 	const userService = useService(UserService);
 	const resourceService = useService(ResourceService);
-	const [{ resources, totalCount } = {}, setEnvelope] = useState();
+	const [{ resources } = {}, setEnvelope] = useState();
 	const [loading, setLoading] = useState(false);
 	const [showMore, setShowMore] = useState(LIMIT);
 
@@ -73,7 +73,6 @@ export default function Account() {
 					loadMore={loadMore}
 					loading={loading}
 					publish={publish}
-					totalCount={totalCount}
 					resources={resources ?? []}
 				/>
 			</section>

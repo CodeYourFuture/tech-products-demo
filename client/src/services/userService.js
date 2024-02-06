@@ -1,3 +1,5 @@
+import { Navigate } from "react-router";
+
 export default class UserService {
 	static ENDPOINT = "/api/users";
 
@@ -6,10 +8,14 @@ export default class UserService {
 	}
 
 	async getByUser(id) {
-		const res = await this.fetch(`${UserService.ENDPOINT}/${id}`);
-		if (res.ok) {
-			const { resources, ...rest } = await res.json();
-			return { ...rest, resources: resources.map(this._revive.bind(this)) };
+		try {
+			const res = await this.fetch(`${UserService.ENDPOINT}/${id}`);
+			if (res.ok) {
+				const { resources, ...rest } = await res.json();
+				return { ...rest, resources: resources.map(this._revive.bind(this)) };
+			}
+		} catch {
+			return <Navigate to={"/"} />;
 		}
 	}
 
