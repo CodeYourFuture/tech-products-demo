@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
 
-import { rest } from "msw";
+import { http, HttpResponse } from "msw";
 
 import { server } from "../../setupTests";
 
@@ -11,15 +11,13 @@ describe("TopicService", () => {
 
 	it("resolves with the data if the request succeeds", async () => {
 		const topics = [{ id: randomUUID(), name: "My Topic" }];
-		server.use(
-			rest.get("/api/topics", (req, res, ctx) => res(ctx.json(topics)))
-		);
+		server.use(http.get("/api/topics", () => HttpResponse.json(topics)));
 		await expect(service.getTopics()).resolves.toEqual(topics);
 	});
 
 	it("resolves undefined if the request fails", async () => {
 		server.use(
-			rest.get("/api/topics", (req, res, ctx) => res(ctx.status(500)))
+			http.get("/api/topics", () => new HttpResponse(null, { status: 500 }))
 		);
 		await expect(service.getTopics()).resolves.toBeUndefined();
 	});
