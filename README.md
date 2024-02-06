@@ -15,6 +15,7 @@ There are two tasks, corresponding to the main tasks developers in our teams car
   - If you've made any database updates, run `npm run migration -- down` to roll them back _before_ checking out the branch
   - If you've made any dependency updates, re-run `npm ci` _after_ checking out the branch
 - Carry out a review of the pull request in GitHub, adding comments to the implementation and deciding whether it's ready to merge ("Approve") or not ("Request changes")
+  - **Note**: as the `main` branch is maintained some conflicts/out of date warnings may appear in GitHub, you can ignore these as out-of-scope for the review
 
 ## Create a PR
 
