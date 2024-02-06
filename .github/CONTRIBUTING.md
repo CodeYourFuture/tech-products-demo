@@ -183,7 +183,7 @@ The app is set up to use regular CSS files or [SCSS] (the latter allows nesting 
 [flexbox]: https://css-tricks.com/snippets/css/a-guide-to-flexbox/
 [github oauth]: https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-oauth-app
 [jest]: https://jestjs.io/
-[msw]: https://jestjs.io/
+[msw]: https://mswjs.io/
 [node-pg-migrate]: https://salsita.github.io/node-pg-migrate/#/
 [query priority]: https://testing-library.com/docs/queries/about/#priority
 [react]: https://react.dev/
