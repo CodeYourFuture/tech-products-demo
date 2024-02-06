@@ -1,0 +1,8 @@
+{
+	"extends": ["plugin:cypress/recommended", "plugin:testing-library/dom"],
+	"rules": {
+		"testing-library/await-async-queries": "off",
+		"testing-library/await-async-utils": "off",
+		"testing-library/prefer-screen-queries": "off"
+	}
+}

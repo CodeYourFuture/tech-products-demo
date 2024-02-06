@@ -5,14 +5,13 @@
 	"extends": [
 		"plugin:jsx-a11y/strict",
 		"plugin:react/recommended",
-		"plugin:react/jsx-runtime",
-		"plugin:vitest/recommended"
+		"plugin:react/jsx-runtime"
 	],
 	"overrides": [
 		{
 			"files": ["setupTests.mjs", "**/*.test.js?(x)"],
 			"env": { "vitest/env": true },
-			"extends": ["plugin:testing-library/react"]
+			"extends": ["plugin:testing-library/react", "plugin:vitest/recommended"]
 		}
 	],
 	"parserOptions": {

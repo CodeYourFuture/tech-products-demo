@@ -7,37 +7,7 @@
 	"ignorePatterns": ["*.d.ts"],
 	"overrides": [
 		{
-			"files": ["setupTests.?(m)js", "**/*.test.js?(x)"],
-			"excludedFiles": ["e2e/**/*.js"],
-			"extends": ["plugin:jest/recommended"],
-			"rules": {
-				"jest/expect-expect": [
-					"error",
-					{
-						"assertFunctionNames": [
-							"expect",
-							"agent.**.expect",
-							"request.**.expect",
-							"screen.findBy*"
-						]
-					}
-				],
-				"jest/no-commented-out-tests": "error",
-				"jest/no-disabled-tests": "error"
-			}
-		},
-		{
-			"files": ["cypress.config.js", "e2e/**/*.js"],
-			"extends": ["plugin:cypress/recommended", "plugin:testing-library/dom"],
-			"rules": {
-				"testing-library/await-async-queries": "off",
-				"testing-library/await-async-utils": "off",
-				"testing-library/prefer-screen-queries": "off",
-				"no-console": "off"
-			}
-		},
-		{
-			"files": ["bin/*.js"],
+			"files": ["bin/*.js", "cypress.config.js"],
 			"rules": {
 				"no-console": "off"
 			}
