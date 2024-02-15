@@ -1,5 +1,5 @@
 import "dotenv-expand/config";
-import { rest } from "msw";
+import { http, HttpResponse } from "msw";
 import { setupServer } from "msw/node";
 import { Pool } from "pg";
 import format from "pg-format";
@@ -67,44 +67,33 @@ export const authenticateAs = async (identity) => {
 		return { agent };
 	}
 	server.use(
-		rest.post(
+		http.post(
 			config.oauth.tokenURL ?? "https://github.com/login/oauth/access_token",
-			(req, res, ctx) => {
-				return res(
-					ctx.json({
-						access_token: "my-cool-token",
-						scope: "read:user,user:email",
-						token_type: "bearer",
-					})
-				);
-			}
+			() =>
+				HttpResponse.json({
+					access_token: "my-cool-token",
+					scope: "read:user,user:email",
+					token_type: "bearer",
+				})
 		),
-		rest.get(
-			config.oauth.userProfileURL ?? "https://api.github.com/user",
-			(req, res, ctx) => {
-				return res(
-					ctx.json({
-						id: generateUniqueId(),
-						login: identity,
-						name: "Sushma Moolya",
-					})
-				);
-			}
+		http.get(config.oauth.userProfileURL ?? "https://api.github.com/user", () =>
+			HttpResponse.json({
+				id: generateUniqueId(),
+				login: identity,
+				name: "Sushma Moolya",
+			})
 		),
-		rest.get(
+		http.get(
 			config.oauth.userEmailURL ?? "https://api.github.com/user/emails",
-			(req, res, ctx) => {
-				return res(
-					ctx.json([
-						{
-							email: "user@example.com",
-							primary: true,
-							verified: true,
-							visibility: "public",
-						},
-					])
-				);
-			}
+			() =>
+				HttpResponse.json([
+					{
+						email: "user@example.com",
+						primary: true,
+						verified: true,
+						visibility: "public",
+					},
+				])
 		)
 	);
 	await agent

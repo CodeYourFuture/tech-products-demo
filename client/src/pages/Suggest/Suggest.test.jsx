@@ -2,7 +2,7 @@ import { randomUUID } from "node:crypto";
 
 import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { rest } from "msw";
+import { http, HttpResponse } from "msw";
 
 import { server } from "../../../setupTests";
 
@@ -15,10 +15,10 @@ describe("Suggest", () => {
 		const url = "https://example.com";
 		const user = userEvent.setup();
 		server.use(
-			rest.get("/api/topics", (req, res, ctx) => res(ctx.json([]))),
-			rest.post("/api/resources", async (req, res, ctx) => {
+			http.get("/api/topics", () => HttpResponse.json([])),
+			http.post("/api/resources", async ({ request: req }) => {
 				requestBody = await req.json();
-				return res(ctx.status(201), ctx.json({}));
+				return HttpResponse.json({}, { status: 201 });
 			})
 		);
 		render(<Suggest />);
@@ -43,10 +43,10 @@ describe("Suggest", () => {
 		let requestBody;
 		const user = userEvent.setup();
 		server.use(
-			rest.get("/api/topics", (req, res, ctx) => res(ctx.json([]))),
-			rest.post("/api/resources", async (req, res, ctx) => {
+			http.get("/api/topics", () => HttpResponse.json([])),
+			http.post("/api/resources", async ({ request: req }) => {
 				requestBody = await req.json();
-				return res(ctx.status(201), ctx.json({}));
+				return HttpResponse.json({}, { status: 201 });
 			})
 		);
 		render(<Suggest />);
@@ -74,9 +74,9 @@ describe("Suggest", () => {
 		const url = "https://react.dev/";
 		const user = userEvent.setup();
 		server.use(
-			rest.get("/api/topics", (req, res, ctx) => res(ctx.json([]))),
-			rest.post("/api/resources", (req, res, ctx) => {
-				return res(ctx.status(409));
+			http.get("/api/topics", () => HttpResponse.json([])),
+			http.post("/api/resources", () => {
+				return new HttpResponse(null, { status: 409 });
 			})
 		);
 		render(<Suggest />);
@@ -99,11 +99,9 @@ describe("Suggest", () => {
 			"Professional Development": randomUUID(),
 		};
 		server.use(
-			rest.get("/api/topics", (req, res, ctx) => {
-				return res(
-					ctx.json(
-						Object.entries(topics).map(([topic, id]) => ({ id, name: topic }))
-					)
+			http.get("/api/topics", () => {
+				return HttpResponse.json(
+					Object.entries(topics).map(([topic, id]) => ({ id, name: topic }))
 				);
 			})
 		);
@@ -131,12 +129,12 @@ describe("Suggest", () => {
 		const topicId = randomUUID();
 		const user = userEvent.setup();
 		server.use(
-			rest.get("/api/topics", (_, res, ctx) => {
-				return res(ctx.json([{ id: topicId, name: topic }]));
+			http.get("/api/topics", () => {
+				return HttpResponse.json([{ id: topicId, name: topic }]);
 			}),
-			rest.post("/api/resources", async (req, res, ctx) => {
+			http.post("/api/resources", async ({ request: req }) => {
 				requestBody = await req.json();
-				return res(ctx.status(201), ctx.json({}));
+				return HttpResponse.json({}, { status: 201 });
 			})
 		);
 
@@ -161,8 +159,8 @@ describe("Suggest", () => {
 		const topic = "Some Topic";
 		const user = userEvent.setup();
 		server.use(
-			rest.get("/api/topics", (_, res, ctx) => {
-				return res(ctx.json([{ id: randomUUID(), name: topic }]));
+			http.get("/api/topics", () => {
+				return HttpResponse.json([{ id: randomUUID(), name: topic }]);
 			})
 		);
 		render(<Suggest />);

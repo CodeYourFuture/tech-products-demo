@@ -1,4 +1,4 @@
-import { rest } from "msw";
+import { http, HttpResponse } from "msw";
 
 import { resourceStub, server } from "../../setupTests";
 
@@ -11,13 +11,13 @@ describe("ResourceService", () => {
 		it("sends an appropriate GET request", async () => {
 			let request;
 			server.use(
-				rest.get("/api/resources", (req, res, ctx) => {
+				http.get("/api/resources", ({ request: req }) => {
 					request = req;
-					return res(ctx.json({ resources: [] }));
+					return HttpResponse.json({ resources: [] });
 				})
 			);
 			await service.getDrafts();
-			expect(request.url.searchParams.get("draft")).toBe("true");
+			expect(new URL(request.url).searchParams.get("draft")).toBe("true");
 		});
 
 		it("returns resources on success", async () => {
@@ -25,8 +25,8 @@ describe("ResourceService", () => {
 				resourceStub({ draft })
 			);
 			server.use(
-				rest.get("/api/resources", (req, res, ctx) => {
-					return res(ctx.json({ resources }));
+				http.get("/api/resources", () => {
+					return HttpResponse.json({ resources });
 				})
 			);
 
@@ -35,7 +35,10 @@ describe("ResourceService", () => {
 
 		it("returns an empty array on error", async () => {
 			server.use(
-				rest.get("/api/resources", (req, res, ctx) => res(ctx.status(400)))
+				http.get(
+					"/api/resources",
+					() => new HttpResponse(null, { status: 400 })
+				)
 			);
 			await expect(service.getDrafts()).resolves.toEqual([]);
 		});
@@ -45,14 +48,15 @@ describe("ResourceService", () => {
 		it("includes query parameters if supplied", async () => {
 			let request;
 			server.use(
-				rest.get("/api/resources", (req, res, ctx) => {
+				http.get("/api/resources", ({ request: req }) => {
 					request = req;
-					return res(ctx.json({ resources: [] }));
+					return HttpResponse.json({ resources: [] });
 				})
 			);
 			await service.getPublished({ page: 123, perPage: 456 });
-			expect(request.url.searchParams.get("page")).toBe("123");
-			expect(request.url.searchParams.get("perPage")).toBe("456");
+			const { searchParams } = new URL(request.url);
+			expect(searchParams.get("page")).toBe("123");
+			expect(searchParams.get("perPage")).toBe("456");
 		});
 
 		it("resolves with resources if request succeeds", async () => {
@@ -60,16 +64,17 @@ describe("ResourceService", () => {
 				resourceStub({ title: "My Resource", url: "https://example.com" }),
 			];
 			server.use(
-				rest.get("/api/resources", (req, res, ctx) =>
-					res(ctx.json({ resources }))
-				)
+				http.get("/api/resources", () => HttpResponse.json({ resources }))
 			);
 			await expect(service.getPublished()).resolves.toEqual({ resources });
 		});
 
 		it("resolves with undefined if request fails", async () => {
 			server.use(
-				rest.get("/api/resources", (req, res, ctx) => res(ctx.status(500)))
+				http.get(
+					"/api/resources",
+					() => new HttpResponse(null, { status: 500 })
+				)
 			);
 			await expect(service.getPublished()).resolves.toBeUndefined();
 		});
@@ -80,13 +85,13 @@ describe("ResourceService", () => {
 			let request;
 			const id = "abc123";
 			server.use(
-				rest.patch("/api/resources/:id", async (req, res, ctx) => {
+				http.patch("/api/resources/:id", async ({ request: req }) => {
 					request = req;
-					return res(ctx.json({ draft: false }));
+					return HttpResponse.json({ draft: false });
 				})
 			);
 			await service.publish(id);
-			expect(request.params.id).toBe(id);
+			expect(new URL(request.url).pathname).toMatch(new RegExp(`/${id}$`));
 			await expect(request.json()).resolves.toEqual({ draft: false });
 		});
 	});
@@ -100,9 +105,9 @@ describe("ResourceService", () => {
 				draft: true,
 			});
 			server.use(
-				rest.post("/api/resources", async (req, res, ctx) => {
+				http.post("/api/resources", ({ request: req }) => {
 					request = req;
-					return res(ctx.status(201), ctx.json(created));
+					return HttpResponse.json(created, { status: 201 });
 				})
 			);
 			await expect(service.suggest(submitted)).resolves.toEqual(created);
@@ -111,8 +116,8 @@ describe("ResourceService", () => {
 
 		it("throws a useful error on conflict", async () => {
 			server.use(
-				rest.post("/api/resources", (req, res, ctx) => {
-					return res(ctx.status(409));
+				http.post("/api/resources", () => {
+					return new HttpResponse(null, { status: 409 });
 				})
 			);
 			await expect(service.suggest({})).rejects.toThrow(
@@ -122,8 +127,8 @@ describe("ResourceService", () => {
 
 		it("throws a useful error otherwise", async () => {
 			server.use(
-				rest.post("/api/resources", (req, res, ctx) => {
-					return res(ctx.status(401));
+				http.post("/api/resources", () => {
+					return new HttpResponse(null, { status: 401 });
 				})
 			);
 			await expect(service.suggest({})).rejects.toThrow("something went wrong");

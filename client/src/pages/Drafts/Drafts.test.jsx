@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { rest } from "msw";
+import { http, HttpResponse } from "msw";
 
 import { resourceStub, server } from "../../../setupTests";
 
@@ -15,8 +15,8 @@ describe("Drafts", () => {
 			url: "https://example.com",
 		});
 		server.use(
-			rest.get("/api/resources", (req, res, ctx) => {
-				return res(ctx.json({ resources: [resource] }));
+			http.get("/api/resources", () => {
+				return HttpResponse.json({ resources: [resource] });
 			})
 		);
 		render(<Drafts />);
@@ -36,12 +36,12 @@ describe("Drafts", () => {
 		const getResponses = [[resource], []];
 		const user = userEvent.setup();
 		server.use(
-			rest.get("/api/resources", (req, res, ctx) => {
-				return res(ctx.json({ resources: getResponses.shift() }));
+			http.get("/api/resources", () => {
+				return HttpResponse.json({ resources: getResponses.shift() });
 			}),
-			rest.patch("/api/resources/:id", (req, res, ctx) => {
+			http.patch("/api/resources/:id", ({ request: req }) => {
 				patchRequest = req;
-				return res(ctx.json({ ...resource, draft: false }));
+				return HttpResponse.json({ ...resource, draft: false });
 			})
 		);
 		render(<Drafts />);
@@ -52,6 +52,8 @@ describe("Drafts", () => {
 		await user.click(publishButton);
 
 		await screen.findByText(/no resources to show/i);
-		expect(patchRequest.params.id).toBe(resource.id);
+		expect(new URL(patchRequest.url).pathname).toMatch(
+			new RegExp(`/${resource.id}$`)
+		);
 	});
 });

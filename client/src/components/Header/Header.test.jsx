@@ -6,7 +6,7 @@ import { usePrincipal } from "../../authContext";
 
 import Header from "./index";
 
-jest.mock("../../authContext");
+vi.mock("../../authContext");
 
 const renderWithHistory = () => {
 	const history = createMemoryHistory();

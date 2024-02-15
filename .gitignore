@@ -1,4 +1,5 @@
 .idea/
+.nyc_output/
 dist/
 e2e/downloads/
 e2e/screenshots/

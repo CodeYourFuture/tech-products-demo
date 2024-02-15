@@ -5,7 +5,7 @@ import { usePrincipal } from "../../authContext";
 
 import Authenticated from "./index";
 
-jest.mock("../../authContext");
+vi.mock("../../authContext");
 
 describe("Authenticated", () => {
 	it("shows the protected page to authenticated users", () => {

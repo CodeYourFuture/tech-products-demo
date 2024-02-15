@@ -29,7 +29,7 @@ describe("ResourceList", () => {
 	});
 
 	it("shows a publish button if enabled", async () => {
-		const publish = jest.fn();
+		const publish = vi.fn();
 		const resource = resourceStub();
 		const user = userEvent.setup();
 		render(<ResourceList publish={publish} resources={[resource]} />);

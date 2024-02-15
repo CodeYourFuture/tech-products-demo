@@ -5,7 +5,7 @@ import { usePrincipal } from "../../authContext";
 
 import Account from "./index";
 
-jest.mock("../../authContext");
+vi.mock("../../authContext");
 
 describe("Account", () => {
 	it("shows the user when available", () => {

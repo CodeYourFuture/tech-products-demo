@@ -1,0 +1,25 @@
+{
+	"overrides": [
+		{
+			"files": ["setupTests.js", "**/*.test.js"],
+			"excludedFiles": ["e2e/**/*.js"],
+			"extends": ["plugin:jest/recommended"],
+			"rules": {
+				"jest/expect-expect": [
+					"error",
+					{
+						"assertFunctionNames": [
+							"expect",
+							"agent.**.expect",
+							"request.**.expect",
+							"screen.findBy*"
+						]
+					}
+				],
+				"jest/no-commented-out-tests": "error",
+				"jest/no-disabled-tests": "error"
+			}
+		}
+	],
+	"parser": "@babel/eslint-parser"
+}

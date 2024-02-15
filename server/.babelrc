@@ -1,4 +1,4 @@
 {
-	"extends": "../.babelrc",
+	"plugins": ["@babel/plugin-transform-runtime"],
 	"presets": [["@babel/preset-env", { "targets": { "node": 20 } }]]
 }
