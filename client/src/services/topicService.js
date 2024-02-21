@@ -4,11 +4,12 @@ export default class TopicService {
 	constructor(request = fetch) {
 		this.fetch = request;
 	}
-
 	async getTopics() {
-		const res = await this.fetch(TopicService.ENDPOINT);
-		if (res.ok) {
-			return res.json();
+		try {
+			const res = await this.fetch(TopicService.ENDPOINT);
+			return res.ok ? res.json() : [];
+		} catch (error) {
+			return undefined;
 		}
 	}
 }

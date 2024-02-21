@@ -15,31 +15,26 @@ export default function ResourceList({ publish, resources, pathname }) {
 	useEffect(() => {
 		const fetchTopics = async () => {
 			try {
-				const isTestEnvironment = process.env.NODE_ENV === "test";
-
-				const fetchedTopics = isTestEnvironment
-					? []
-					: await topicService.getTopics();
-
+				const fetchedTopics = await topicService.getTopics();
 				setTopics(fetchedTopics);
 			} catch (error) {
-				throw new Error(`Error fetching topics: ${error.message}`);
+				throw new Error("Error fetching topics");
 			}
 		};
 
 		fetchTopics();
-	}, [setTopics, topicService]);
+	}, [topicService]);
 
 	useEffect(() => {
 		const fetchResourcesByTopic = async () => {
 			try {
 				const allResources = await resourceService.getPublished({});
 				const filtered = allResources.resources.filter(
-					(topic) => topic.topic_name === selectedTopic
+					({ topic_name }) => topic_name === selectedTopic
 				);
 				setFilteredResources(filtered);
 			} catch (error) {
-				throw new Error(`Error fetching resources: ${error.message}`);
+				throw new Error("Error fetching resources");
 			}
 		};
 
