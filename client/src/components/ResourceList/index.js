@@ -6,11 +6,11 @@ import { TopicService, useService, ResourceService } from "../../services";
 import "./ResourceList.scss";
 
 export default function ResourceList({ publish, resources, pathname }) {
+	const [filteredResources, setFilteredResources] = useState(resources);
+	const [selectedTopic, setSelectedTopic] = useState(undefined);
 	const [topics, setTopics] = useState([]);
-	const topicService = useService(TopicService);
-	const [selectedTopic, setSelectedTopic] = useState("");
-	const [filteredResources, setFilteredResources] = useState([]);
 	const resourceService = useService(ResourceService);
+	const topicService = useService(TopicService);
 
 	useEffect(() => {
 		const fetchTopics = async () => {
