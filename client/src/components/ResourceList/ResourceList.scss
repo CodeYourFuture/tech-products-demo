@@ -67,10 +67,10 @@ ul.resource-list {
 }
 
 .custom-select {
-	padding: layout.$baseline;
-	width: 100%;
-	font: typography.$body-text;
 	background-color: white;
 	border: 1px solid palette.$light-grey;
 	border-radius: layout.$border-radius;
+	font: typography.$body-text;
+	padding: layout.$baseline;
+	width: 100%;
 }
