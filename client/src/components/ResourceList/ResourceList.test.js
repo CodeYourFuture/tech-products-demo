@@ -58,7 +58,7 @@ describe("ResourceList", () => {
 
 	it("shows the topic if available", () => {
 		const resource = resourceStub({ topic_name: "My Topic" });
-		render(<ResourceList resources={[resource]} pathname="/" />);
+		render(<ResourceList resources={[resource]} />);
 		expect(screen.getByText(resource.topic_name)).toBeInTheDocument();
 	});
 });
