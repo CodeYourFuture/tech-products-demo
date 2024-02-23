@@ -8,14 +8,18 @@ export function Home() {
 	const resourceService = useService(ResourceService);
 	const searchParams = useSearchParams();
 	const [{ lastPage, resources } = {}, setEnvelope] = useState();
-
+	const allowTopicFiltering = true;
 	useEffect(() => {
 		resourceService.getPublished(searchParams).then(setEnvelope);
 	}, [resourceService, searchParams]);
 
 	return (
 		<section>
-			<ResourceList resources={resources ?? []} pathname="/" />
+			<ResourceList
+				resources={resources ?? []}
+				pathname="/"
+				allowTopicFiltering={allowTopicFiltering}
+			/>
 			<Pagination lastPage={lastPage ?? 1} />
 		</section>
 	);

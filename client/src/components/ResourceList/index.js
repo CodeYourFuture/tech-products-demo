@@ -1,15 +1,17 @@
 import PropTypes from "prop-types";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 
 import { FormControls } from "../../components";
-import { TopicService, useService, ResourceService } from "../../services";
+import { TopicService, useService } from "../../services";
 import "./ResourceList.scss";
 
-export default function ResourceList({ publish, resources, pathname }) {
-	const [filteredResources, setFilteredResources] = useState(resources);
+export default function ResourceList({
+	publish,
+	resources,
+	allowTopicFiltering,
+}) {
 	const [selectedTopic, setSelectedTopic] = useState(undefined);
 	const [topics, setTopics] = useState([]);
-	const resourceService = useService(ResourceService);
 	const topicService = useService(TopicService);
 
 	useEffect(() => {
@@ -25,35 +27,20 @@ export default function ResourceList({ publish, resources, pathname }) {
 		fetchTopics();
 	}, [topicService]);
 
-	useEffect(() => {
-		const fetchResourcesByTopic = async () => {
-			try {
-				const allResources = await resourceService.getPublished({});
-				const filtered = allResources.resources.filter(
-					({ topic_name }) => topic_name === selectedTopic
-				);
-				setFilteredResources(filtered);
-			} catch (error) {
-				throw new Error("Error fetching resources");
-			}
-		};
-
-		if (selectedTopic) {
-			fetchResourcesByTopic();
-		} else {
-			setFilteredResources(resources);
+	const displayResources = useMemo(() => {
+		if (!selectedTopic) {
+			return resources;
 		}
-	}, [selectedTopic, resourceService, resources]);
+		return resources.filter(({ topic }) => topic === selectedTopic);
+	}, [resources, selectedTopic]);
 
 	const handleChange = (event) => {
-		const selectedValue = event.target.value;
-		const selectedOption = topics.find((option) => option.id === selectedValue);
-		setSelectedTopic(selectedOption ? selectedOption.name : "");
+		setSelectedTopic(event.target.value);
 	};
 
 	return (
 		<>
-			{resources.length > 0 && pathname !== "/drafts" && (
+			{allowTopicFiltering && (
 				<div>
 					<FormControls.Select
 						label="Filter Topic"
@@ -67,28 +54,24 @@ export default function ResourceList({ publish, resources, pathname }) {
 				</div>
 			)}
 			<ul className="resource-list">
-				{filteredResources.length === 0 && (
+				{displayResources.length === 0 && (
 					<li className="no-resources">
 						<em>No resources to show.</em>
 					</li>
 				)}
-				{filteredResources.map(
-					({ description, id, title, topic_name, url }) => (
-						<li key={id}>
-							<div>
-								<h3>{title}</h3>
-								{topic_name && <span className="topic">{topic_name}</span>}
-							</div>
-							{description && <p>{description}</p>}
-							<div>
-								<a href={url}>{formatUrl(url)}</a>
-								{publish && (
-									<button onClick={() => publish(id)}>Publish</button>
-								)}
-							</div>
-						</li>
-					)
-				)}
+				{displayResources.map(({ description, id, title, topic_name, url }) => (
+					<li key={id}>
+						<div>
+							<h3>{title}</h3>
+							{topic_name && <span className="topic">{topic_name}</span>}
+						</div>
+						{description && <p>{description}</p>}
+						<div>
+							<a href={url}>{formatUrl(url)}</a>
+							{publish && <button onClick={() => publish(id)}>Publish</button>}
+						</div>
+					</li>
+				))}
 			</ul>
 		</>
 	);
@@ -103,9 +86,10 @@ ResourceList.propTypes = {
 			title: PropTypes.string.isRequired,
 			topic_name: PropTypes.string,
 			url: PropTypes.string.isRequired,
+			topic: PropTypes.string.isRequired,
 		})
 	).isRequired,
-	pathname: PropTypes.string.isRequired,
+	allowTopicFiltering: PropTypes.bool,
 };
 
 function formatUrl(url) {

@@ -47,7 +47,8 @@ describe("ResourceList", () => {
 			<ResourceList
 				publish={publish}
 				resources={[resource]}
-				pathname="/drafts"
+				//pathname="/drafts"
+				allowTopicFiltering={true}
 			/>
 		);
 
