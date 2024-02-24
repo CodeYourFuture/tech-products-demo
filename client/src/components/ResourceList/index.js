@@ -45,11 +45,10 @@ export default function ResourceList({
 					<FormControls.Select
 						label="Filter Topic"
 						placeholder="Select a topic"
-						name="topic"
+						name="filter topic"
 						options={topics}
 						onChange={handleChange}
 						className="custom-select"
-						data-testid="filter-topic-select"
 					/>
 				</div>
 			)}
