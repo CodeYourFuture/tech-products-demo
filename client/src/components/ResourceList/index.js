@@ -85,7 +85,7 @@ ResourceList.propTypes = {
 			title: PropTypes.string.isRequired,
 			topic_name: PropTypes.string,
 			url: PropTypes.string.isRequired,
-			topic: PropTypes.string.isRequired,
+			topic: PropTypes.string,
 		})
 	).isRequired,
 	allowTopicFiltering: PropTypes.bool,
