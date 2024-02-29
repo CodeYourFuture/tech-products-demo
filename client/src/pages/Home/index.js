@@ -17,7 +17,6 @@ export function Home() {
 		<section>
 			<ResourceList
 				resources={resources ?? []}
-				pathname="/"
 				allowTopicFiltering={allowTopicFiltering}
 			/>
 			<Pagination lastPage={lastPage ?? 1} />
