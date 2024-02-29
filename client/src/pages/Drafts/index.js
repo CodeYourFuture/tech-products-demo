@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { ResourceList } from "../../components";
+// import { ResourceList } from "../../components";
 import { ResourceService, useService } from "../../services";
+
+import DraftList from "./DraftList";
 
 export default function Drafts() {
 	const [drafts, setDrafts] = useState([]);
@@ -28,7 +30,9 @@ export default function Drafts() {
 			<h2>Drafts</h2>
 			<p>Review resources that have been submitted but not yet published.</p>
 			<section>
-				<ResourceList publish={publish} resources={drafts} />
+				{/* <ResourceList publish={publish} resources={drafts} /> */}
+
+				<DraftList publish={publish} resources={drafts} />
 			</section>
 		</>
 	);

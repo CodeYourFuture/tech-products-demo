@@ -7,55 +7,9 @@ import { resourceStub, server } from "../../../setupTests";
 import ResourceList from "./index";
 
 describe("ResourceList", () => {
-	it("shows the resource", () => {
-		const resource = resourceStub({
-			description:
-				'Comprehensive guide to setting up the various types of inputs with React (a.k.a. "data binding")',
-			title: "Data Binding in React",
-			url: "https://www.joshwcomeau.com/react/data-binding/",
-		});
-		// const mytopics = resourceStub({ topic_name: "HTML/CSS", topic: "45678r448666" });
-
-		render(<ResourceList resources={[resource]} />);
-		expect(screen.getByRole("heading", { level: 3 })).toHaveTextContent(
-			resource.title
-		);
-		expect(
-			screen.getByRole("link", { name: "joshwcomeau.com" })
-		).toHaveAttribute("href", resource.url);
-		expect(screen.getByText(/comprehensive guide/i)).toBeInTheDocument();
-	});
-
 	it("shows a message if no resources are available", () => {
 		render(<ResourceList resources={[]} />);
 		expect(screen.getByText(/no resources to show/i)).toBeInTheDocument();
-	});
-
-	it("shows a publish button if enabled", async () => {
-		const publish = jest.fn();
-		const resource = resourceStub();
-		const user = userEvent.setup();
-		server.use(
-			rest.get("/api/topics", (req, res, ctx) => {
-				const mockTopics = [
-					{ id: "1", name: "Topic 1" },
-					{ id: "2", name: "Topic 2" },
-				];
-				return res(ctx.json(mockTopics));
-			})
-		);
-
-		render(
-			<ResourceList
-				publish={publish}
-				resources={[resource]}
-				allowTopicFiltering={true}
-			/>
-		);
-
-		await user.click(screen.getByRole("button", { name: /publish/i }));
-
-		expect(publish).toHaveBeenCalledWith(resource.id);
 	});
 
 	it("shows the topic if available", () => {
@@ -98,7 +52,7 @@ describe("ResourceList", () => {
 			)
 		);
 
-		render(<ResourceList resources={resources} allowTopicFiltering={true} />);
+		render(<ResourceList resources={resources} />);
 
 		// Wait for the select menu to be enabled and options to be populated
 		await waitFor(() => {

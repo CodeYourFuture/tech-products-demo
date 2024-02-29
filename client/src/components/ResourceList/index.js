@@ -3,13 +3,10 @@ import { useEffect, useState, useMemo } from "react";
 
 import { FormControls } from "../../components";
 import { TopicService, useService } from "../../services";
+import { formatUrl } from "../../utils/utils";
 import "./ResourceList.scss";
 
-export default function ResourceList({
-	publish,
-	resources,
-	allowTopicFiltering,
-}) {
+export default function ResourceList({ resources }) {
 	const [selectedTopic, setSelectedTopic] = useState(undefined);
 	const [topics, setTopics] = useState([]);
 	const topicService = useService(TopicService);
@@ -40,18 +37,17 @@ export default function ResourceList({
 
 	return (
 		<>
-			{allowTopicFiltering && (
-				<div>
-					<FormControls.Select
-						label="Filter Topic"
-						placeholder="Select a topic"
-						name="filter topic"
-						options={topics}
-						onChange={handleChange}
-						className="custom-select"
-					/>
-				</div>
-			)}
+			<div>
+				<FormControls.Select
+					label="Filter Topic"
+					placeholder="Select a topic"
+					name="filter topic"
+					options={topics}
+					onChange={handleChange}
+					className="custom-select"
+				/>
+			</div>
+
 			<ul className="resource-list">
 				{displayResources.length === 0 && (
 					<li className="no-resources">
@@ -65,10 +61,7 @@ export default function ResourceList({
 							{topic_name && <span className="topic">{topic_name}</span>}
 						</div>
 						{description && <p>{description}</p>}
-						<div>
-							<a href={url}>{formatUrl(url)}</a>
-							{publish && <button onClick={() => publish(id)}>Publish</button>}
-						</div>
+						<a href={url}>{formatUrl(url)}</a>
 					</li>
 				))}
 			</ul>
@@ -77,7 +70,6 @@ export default function ResourceList({
 }
 
 ResourceList.propTypes = {
-	publish: PropTypes.func,
 	resources: PropTypes.arrayOf(
 		PropTypes.shape({
 			description: PropTypes.string,
@@ -88,13 +80,4 @@ ResourceList.propTypes = {
 			topic: PropTypes.string,
 		})
 	).isRequired,
-	allowTopicFiltering: PropTypes.bool,
 };
-
-function formatUrl(url) {
-	const host = new URL(url).host;
-	if (host.startsWith("www.")) {
-		return host.slice(4);
-	}
-	return host;
-}
