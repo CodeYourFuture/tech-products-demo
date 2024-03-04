@@ -18,13 +18,13 @@ export const create = async (resource) => {
 };
 
 export async function getAll({ draft = false }, { page = 1, perPage = 20 }) {
-	const combinedResult = await repository.findAll({
+	const resources = await repository.findAll({
 		draft,
 		limit: perPage,
 		offset: (page - 1) * perPage,
 	});
 
-	const { pagedResult, findAllResource } = combinedResult;
+	const { pagedResult, findAllResource } = resources;
 
 	const totalCount = await repository.count({ draft });
 	return {
