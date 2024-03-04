@@ -50,8 +50,17 @@ export const count = async ({ draft }) => {
 };
 
 export const findAll = async ({ draft, limit, offset }) => {
-	const { rows } = await db.query(pagedResourceQuery, [draft, limit, offset]);
-	return rows;
+	const pagedResult = await db.query(pagedResourceQuery, [
+		draft,
+		limit,
+		offset,
+	]);
+	const findAllResource = await db.query(resourceQuery);
+
+	return {
+		pagedResult: pagedResult.rows,
+		findAllResource: findAllResource.rows,
+	};
 };
 
 export const findOne = async (id) => {
