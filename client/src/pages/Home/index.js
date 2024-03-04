@@ -13,13 +13,15 @@ export function Home() {
 	useEffect(() => {
 		resourceService.getPublished(searchParams).then(setEnvelope);
 	}, [resourceService, searchParams]);
-	const finalResources = allResources
-		? allResources.slice((page - 1) * perPage, page * perPage)
+	const paginationStartIndex = (page - 1) * perPage;
+	const paginationEndIndex = page * perPage;
+	const displayedResources = allResources
+		? allResources.slice(paginationStartIndex, paginationEndIndex)
 		: [];
 
 	return (
 		<section>
-			<ResourceList resources={finalResources ?? []} />
+			<ResourceList resources={displayedResources ?? []} />
 			<Pagination lastPage={lastPage ?? 1} />
 		</section>
 	);
