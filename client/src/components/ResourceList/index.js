@@ -1,40 +1,10 @@
 import PropTypes from "prop-types";
-import { useEffect, useState, useMemo } from "react";
 
 import { FormControls } from "../../components";
-import { TopicService, useService } from "../../services";
 import { formatUrl } from "../../utils/utils";
 import "./ResourceList.scss";
 
-export default function ResourceList({ resources }) {
-	const [selectedTopic, setSelectedTopic] = useState(undefined);
-	const [topics, setTopics] = useState([]);
-	const topicService = useService(TopicService);
-
-	useEffect(() => {
-		const fetchTopics = async () => {
-			try {
-				const fetchedTopics = await topicService.getTopics();
-				setTopics(fetchedTopics);
-			} catch (error) {
-				throw new Error("Error fetching topics");
-			}
-		};
-
-		fetchTopics();
-	}, [topicService]);
-
-	const displayResources = useMemo(() => {
-		if (!selectedTopic) {
-			return resources;
-		}
-		return resources.filter(({ topic }) => topic === selectedTopic);
-	}, [resources, selectedTopic]);
-
-	const handleChange = (event) => {
-		setSelectedTopic(event.target.value);
-	};
-
+export default function ResourceList({ resources, handleChange, topics }) {
 	return (
 		<>
 			<div>
@@ -49,12 +19,12 @@ export default function ResourceList({ resources }) {
 			</div>
 
 			<ul className="resource-list">
-				{displayResources.length === 0 && (
+				{resources.length === 0 && (
 					<li className="no-resources">
 						<em>No resources to show.</em>
 					</li>
 				)}
-				{displayResources.map(({ description, id, title, topic_name, url }) => (
+				{resources.map(({ description, id, title, topic_name, url }) => (
 					<li key={id}>
 						<div>
 							<h3>{title}</h3>
@@ -80,4 +50,11 @@ ResourceList.propTypes = {
 			topic: PropTypes.string,
 		})
 	).isRequired,
+	topics: PropTypes.arrayOf(
+		PropTypes.shape({
+			id: PropTypes.string.isRequired,
+			name: PropTypes.string.isRequired,
+		})
+	).isRequired,
+	handleChange: PropTypes.func,
 };
