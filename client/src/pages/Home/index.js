@@ -12,7 +12,7 @@ export function Home() {
 	const [topics, setTopics] = useState([]);
 	const topicService = useService(TopicService);
 	const [selectedTopic, setSelectedTopic] = useState(undefined);
-	const navigate = useNavigate(); // Initialize useNavigate
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		const fetchTopics = async () => {
@@ -35,11 +35,7 @@ export function Home() {
 	}, [allResources, selectedTopic]);
 
 	useEffect(() => {
-		const updatedSearchParams = {
-			...searchParams,
-			topic: selectedTopic,
-		};
-		resourceService.getPublished(updatedSearchParams).then(setEnvelope);
+		resourceService.getPublished(searchParams).then(setEnvelope);
 	}, [resourceService, searchParams, selectedTopic]);
 
 	const paginationStartIndex = (page - 1) * perPage;
