@@ -1,60 +1,67 @@
-import PropTypes from "prop-types";
+import { useState, useMemo } from "react";
 
-import { FormControls } from "../../components";
+import { Pagination } from "../../components";
+import {
+	useFetchPublishedResources,
+	usePagination,
+	useFetchTopics,
+	useSearchParams,
+} from "../../hooks";
+import { ResourceService, useService, TopicService } from "../../services";
 import { formatUrl } from "../../utils/utils";
-import "./ResourceList.scss";
 
-export default function ResourceList({ resources, handleChange, topics }) {
+import "./ResourceList.scss";
+import TopicSelector from "./TopicSelector";
+
+export default function ResourceList() {
+	const [selectedTopic, setSelectedTopic] = useState(undefined);
+
+	const resourceService = useService(ResourceService);
+	const searchParams = useSearchParams();
+	const topics = useFetchTopics(useService(TopicService));
+	const { perPage, page, allResources } = useFetchPublishedResources(
+		resourceService,
+		searchParams
+	);
+
+	const filteredResources = useMemo(() => {
+		if (!selectedTopic) {
+			return allResources;
+		}
+		return allResources.filter(({ topic }) => topic === selectedTopic);
+	}, [allResources, selectedTopic]);
+
+	const displayedResources = usePagination(filteredResources, page, perPage);
+	const calculatedLastPage = filteredResources
+		? Math.ceil(filteredResources.length / perPage)
+		: 1;
+
 	return (
 		<>
 			<div>
-				<FormControls.Select
-					label="Filter Topic"
-					placeholder="Select a topic"
-					name="filter topic"
-					options={topics}
-					onChange={handleChange}
-					className="custom-select"
-				/>
+				<TopicSelector setSelectedTopic={setSelectedTopic} topics={topics} />
 			</div>
 
 			<ul className="resource-list">
-				{resources.length === 0 && (
+				{displayedResources.length === 0 && (
 					<li className="no-resources">
 						<em>No resources to show.</em>
 					</li>
 				)}
-				{resources.map(({ description, id, title, topic_name, url }) => (
-					<li key={id}>
-						<div>
-							<h3>{title}</h3>
-							{topic_name && <span className="topic">{topic_name}</span>}
-						</div>
-						{description && <p>{description}</p>}
-						<a href={url}>{formatUrl(url)}</a>
-					</li>
-				))}
+				{displayedResources.map(
+					({ description, id, title, topic_name, url }) => (
+						<li key={id}>
+							<div>
+								<h3>{title}</h3>
+								{topic_name && <span className="topic">{topic_name}</span>}
+							</div>
+							{description && <p>{description}</p>}
+							<a href={url}>{formatUrl(url)}</a>
+						</li>
+					)
+				)}
 			</ul>
+			<Pagination lastPage={calculatedLastPage ?? 1} />
 		</>
 	);
 }
-
-ResourceList.propTypes = {
-	resources: PropTypes.arrayOf(
-		PropTypes.shape({
-			description: PropTypes.string,
-			id: PropTypes.string.isRequired,
-			title: PropTypes.string.isRequired,
-			topic_name: PropTypes.string,
-			url: PropTypes.string.isRequired,
-			topic: PropTypes.string,
-		})
-	).isRequired,
-	topics: PropTypes.arrayOf(
-		PropTypes.shape({
-			id: PropTypes.string.isRequired,
-			name: PropTypes.string.isRequired,
-		})
-	).isRequired,
-	handleChange: PropTypes.func,
-};

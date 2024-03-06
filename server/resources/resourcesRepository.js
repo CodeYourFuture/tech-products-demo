@@ -55,7 +55,11 @@ export const findAll = async ({ draft, limit, offset }) => {
 		limit,
 		offset,
 	]);
-	const findAllResource = await db.query(resourceQuery);
+
+	const findAllResource =
+		draft === false
+			? await db.query(`${resourceQuery} WHERE draft = false`)
+			: { rows: [] };
 
 	return {
 		pagedResult: pagedResult.rows,
