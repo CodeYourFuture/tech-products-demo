@@ -1,14 +1,37 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { rest } from "msw";
 import React from "react";
 import { MemoryRouter } from "react-router-dom";
 
+import { server } from "../../../setupTests"; // Importing server and rest from setupTests
 import * as useFetchPublishedResourcesModule from "../../hooks";
+import * as useFetchTopicsModule from "../../hooks/";
+server.use(
+	rest.get("/api/topics", (req, res, ctx) => {
+		return res(
+			ctx.json([
+				{
+					id: "199a529b-22c1-460f-bc51-387cb12225e8",
+					name: "Git",
+				},
+				{
+					id: "84b099a4-8acd-4659-b5bd-1b89796fb924",
+					name: "HTML/CSS",
+				},
+				// Add more topics here if needed
+			])
+		);
+	})
+);
 
 jest.mock("../../hooks/useFetchPublishedResources", () => ({
 	useFetchPublishedResources: jest.fn(),
 }));
-
+// Mocking useFetchTopicsModule
+jest.mock("../../hooks/useFetchTopics", () => ({
+	useFetchTopics: jest.fn(),
+}));
 import TopicSelector from "./TopicSelector";
 
 import ResourceList from "./index";
@@ -17,10 +40,12 @@ describe("ResourceList", () => {
 	beforeEach(() => {
 		jest.clearAllMocks();
 	});
+
 	const topics = [
 		{ id: "199a529b-22c1-460f-bc51-387cb12225e8", name: "Git" },
 		{ id: "84b099a4-8acd-4659-b5bd-1b89796fb924", name: "HTML/CSS" },
 	];
+
 	const resourceData = [
 		{
 			id: "1",
@@ -39,7 +64,6 @@ describe("ResourceList", () => {
 	];
 
 	it("shows a message if no resources are available", async () => {
-		// Mocking the return value of the hook
 		useFetchPublishedResourcesModule.useFetchPublishedResources.mockReturnValueOnce(
 			{
 				perPage: 10,
@@ -47,7 +71,7 @@ describe("ResourceList", () => {
 				allResources: [],
 			}
 		);
-
+		useFetchTopicsModule.useFetchTopics.mockReturnValueOnce([]);
 		render(
 			<MemoryRouter>
 				<ResourceList />
@@ -79,8 +103,15 @@ describe("ResourceList", () => {
 		});
 	});
 
-	test("displays only resources with the selected topic", async () => {
+	it("displays only resources with the selected topic", async () => {
 		const setSelectedTopicMock = jest.fn();
+
+		// Mocking the response from the server using resourceStub and server from setupTests
+		server.use(
+			rest.get("/api/resources", (req, res, ctx) => {
+				return res(ctx.json({ resources: resourceData }));
+			})
+		);
 
 		useFetchPublishedResourcesModule.useFetchPublishedResources.mockReturnValueOnce(
 			{
@@ -105,6 +136,7 @@ describe("ResourceList", () => {
 			screen.getByRole("combobox", { name: /filter topic/i }),
 			"HTML/CSS"
 		);
+
 		render(
 			<MemoryRouter>
 				<ResourceList />

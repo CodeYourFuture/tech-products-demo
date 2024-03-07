@@ -31,7 +31,9 @@ export default function ResourceList() {
 	return (
 		<>
 			<div>
-				<TopicSelector setSelectedTopic={setSelectedTopic} topics={topics} />
+				{topics && ( // Check if topics is defined
+					<TopicSelector setSelectedTopic={setSelectedTopic} topics={topics} />
+				)}
 			</div>
 
 			<ul className="resource-list">
