@@ -8,15 +8,11 @@ export function useFetchPublishedResources() {
 	const resourceService = useService(ResourceService);
 	const searchParams = useSearchParams();
 
-	const [envelope, setEnvelope] = useState({
-		perPage: 10,
-		page: 1,
-		allResources: [],
-	});
+	const [{ perPage, page, allResources } = {}, setEnvelope] = useState();
 
 	useEffect(() => {
 		resourceService.getPublished(searchParams).then(setEnvelope);
 	}, [resourceService, searchParams]);
 
-	return envelope;
+	return { perPage, page, allResources };
 }
