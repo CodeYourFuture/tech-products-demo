@@ -4,7 +4,7 @@ import { rest } from "msw";
 import React from "react";
 import { MemoryRouter } from "react-router-dom";
 
-import { server } from "../../../setupTests"; // Importing server and rest from setupTests
+import { server } from "../../../setupTests";
 import * as useFetchPublishedResourcesModule from "../../hooks";
 import * as useFetchTopicsModule from "../../hooks/";
 server.use(
@@ -19,7 +19,6 @@ server.use(
 					id: "84b099a4-8acd-4659-b5bd-1b89796fb924",
 					name: "HTML/CSS",
 				},
-				// Add more topics here if needed
 			])
 		);
 	})
@@ -28,7 +27,7 @@ server.use(
 jest.mock("../../hooks/useFetchPublishedResources", () => ({
 	useFetchPublishedResources: jest.fn(),
 }));
-// Mocking useFetchTopicsModule
+
 jest.mock("../../hooks/useFetchTopics", () => ({
 	useFetchTopics: jest.fn(),
 }));
@@ -106,7 +105,6 @@ describe("ResourceList", () => {
 	it("displays only resources with the selected topic", async () => {
 		const setSelectedTopicMock = jest.fn();
 
-		// Mocking the response from the server using resourceStub and server from setupTests
 		server.use(
 			rest.get("/api/resources", (req, res, ctx) => {
 				return res(ctx.json({ resources: resourceData }));

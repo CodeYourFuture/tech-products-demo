@@ -31,7 +31,7 @@ export default function ResourceList() {
 	return (
 		<>
 			<div>
-				{topics && ( // Check if topics is defined
+				{topics && (
 					<TopicSelector setSelectedTopic={setSelectedTopic} topics={topics} />
 				)}
 			</div>
