@@ -5,9 +5,7 @@ import {
 	useFetchPublishedResources,
 	usePagination,
 	useFetchTopics,
-	useSearchParams,
 } from "../../hooks";
-import { ResourceService, useService, TopicService } from "../../services";
 import { formatUrl } from "../../utils/utils";
 
 import "./ResourceList.scss";
@@ -16,14 +14,8 @@ import TopicSelector from "./TopicSelector";
 export default function ResourceList() {
 	const [selectedTopic, setSelectedTopic] = useState(undefined);
 
-	const resourceService = useService(ResourceService);
-	const searchParams = useSearchParams();
-	const topics = useFetchTopics(useService(TopicService));
-	const { perPage, page, allResources } = useFetchPublishedResources(
-		resourceService,
-		searchParams
-	);
-
+	const topics = useFetchTopics();
+	const { perPage, page, allResources } = useFetchPublishedResources();
 	const filteredResources = useMemo(() => {
 		if (!selectedTopic) {
 			return allResources;

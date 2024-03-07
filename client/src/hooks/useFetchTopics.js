@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
 
-export function useFetchTopics(topicService) {
+import { TopicService, useService } from "../services";
+
+export function useFetchTopics() {
+	const topicService = useService(TopicService);
 	const [topics, setTopics] = useState([]);
 
 	useEffect(() => {

@@ -1,16 +1,22 @@
-import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 
-export function useFetchPublishedResources(resourceService, searchParams) {
-	const [{ perPage, page, allResources } = {}, setEnvelope] = useState();
+import { ResourceService, useService } from "../services";
+
+import { useSearchParams } from "./index";
+
+export function useFetchPublishedResources() {
+	const resourceService = useService(ResourceService);
+	const searchParams = useSearchParams();
+
+	const [envelope, setEnvelope] = useState({
+		perPage: 10,
+		page: 1,
+		allResources: [],
+	});
 
 	useEffect(() => {
 		resourceService.getPublished(searchParams).then(setEnvelope);
 	}, [resourceService, searchParams]);
 
-	return { perPage, page, allResources };
+	return envelope;
 }
-useFetchPublishedResources.propTypes = {
-	resourceService: PropTypes.object.isRequired,
-	searchParams: PropTypes.object.isRequired,
-};
