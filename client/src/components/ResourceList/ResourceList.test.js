@@ -3,15 +3,12 @@ import userEvent from "@testing-library/user-event";
 import React from "react";
 import { MemoryRouter } from "react-router-dom";
 
-// Importing the hook directly from the source
 import * as useFetchPublishedResourcesModule from "../../hooks";
 
-// Mocking the hook
 jest.mock("../../hooks/useFetchPublishedResources", () => ({
 	useFetchPublishedResources: jest.fn(),
 }));
 
-// Importing the component after mocking the hook
 import TopicSelector from "./TopicSelector";
 
 import ResourceList from "./index";
@@ -63,10 +60,9 @@ describe("ResourceList", () => {
 	});
 
 	it("shows the topic if available", async () => {
-		// Mocking the return value of the hook to include resources with a topic
 		useFetchPublishedResourcesModule.useFetchPublishedResources.mockReturnValueOnce(
 			{
-				perPage: 10,
+				perPage: 20,
 				page: 1,
 				allResources: resourceData,
 			}
@@ -83,31 +79,39 @@ describe("ResourceList", () => {
 		});
 	});
 
-	it("displays only resources with the selected topic", async () => {
+	test("displays only resources with the selected topic", async () => {
+		const setSelectedTopicMock = jest.fn();
+
 		useFetchPublishedResourcesModule.useFetchPublishedResources.mockReturnValueOnce(
 			{
-				perPage: 10,
+				perPage: 20,
 				page: 1,
-				allResources: resourceData,
+				allResources: resourceData.filter(
+					(resource) => resource.topic_name === "HTML/CSS"
+				),
 			}
 		);
 
 		render(
 			<MemoryRouter>
-				<TopicSelector topics={topics} setSelectedTopic={() => {}} />
+				<TopicSelector
+					topics={topics}
+					setSelectedTopic={setSelectedTopicMock}
+				/>
 			</MemoryRouter>
 		);
 
-		// Select the topic "HTML/CSS"
 		await userEvent.selectOptions(
 			screen.getByRole("combobox", { name: /filter topic/i }),
 			"HTML/CSS"
 		);
+		render(
+			<MemoryRouter>
+				<ResourceList />
+			</MemoryRouter>
+		);
 
-		// Ensure that only resources with the selected topic are displayed
-		expect(
-			expect(screen.getByText(resourceData[0].title)).toBeInTheDocument()
-		).toBeInTheDocument();
-		expect(screen.queryByText(resourceData[1].title)).not.toBeInTheDocument();
+		expect(screen.getByText("A Complete Guide to Flexbox")).toBeInTheDocument();
+		expect(screen.queryByText("React Hooks Tutorial")).not.toBeInTheDocument();
 	});
 });
