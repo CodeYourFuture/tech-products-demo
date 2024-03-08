@@ -169,6 +169,7 @@ describe("/api/resources", () => {
 					perPage: 20,
 					resources: expect.any(Array),
 					totalCount: 25,
+					allResources: [],
 				});
 				expect(envelope.resources).toHaveLength(20);
 				expect(envelope.resources[0]).toMatchObject({ title: "Resource 24" });
@@ -188,6 +189,7 @@ describe("/api/resources", () => {
 					perPage: 10,
 					resources: expect.any(Array),
 					totalCount: 25,
+					allResources: [],
 				});
 				expect(envelope.resources).toHaveLength(10);
 				expect(envelope.resources[0]).toMatchObject({ title: "Resource 14" });

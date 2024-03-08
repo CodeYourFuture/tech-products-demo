@@ -6,7 +6,11 @@ import { MemoryRouter } from "react-router-dom";
 
 import { resourceStub, server } from "../../../setupTests";
 import * as useFetchPublishedResourcesModule from "../../hooks";
-import * as useFetchTopicsModule from "../../hooks/";
+
+import TopicSelector from "./TopicSelector";
+
+import ResourceList from "./index";
+
 server.use(
 	rest.get("/api/topics", (req, res, ctx) => {
 		return res(
@@ -31,9 +35,6 @@ jest.mock("../../hooks/useFetchPublishedResources", () => ({
 jest.mock("../../hooks/useFetchTopics", () => ({
 	useFetchTopics: jest.fn(),
 }));
-import TopicSelector from "./TopicSelector";
-
-import ResourceList from "./index";
 
 describe("ResourceList", () => {
 	beforeEach(() => {
@@ -63,7 +64,6 @@ describe("ResourceList", () => {
 	];
 
 	it("shows resources", async () => {
-		// Mock resource data
 		const resource = resourceStub({
 			description: "This is a very useful resource I found",
 			id: "abc123",
@@ -71,7 +71,6 @@ describe("ResourceList", () => {
 			url: "https://example.com",
 		});
 
-		// Mock useFetchPublishedResources to return the mocked resource data
 		useFetchPublishedResourcesModule.useFetchPublishedResources.mockReturnValueOnce(
 			{
 				perPage: 20,
@@ -80,14 +79,12 @@ describe("ResourceList", () => {
 			}
 		);
 
-		// Render the ResourceList component
 		render(
 			<MemoryRouter>
 				<ResourceList />
 			</MemoryRouter>
 		);
 
-		// Use the specific resource title to find the corresponding <h3> element
 		await expect(
 			screen.findByRole("heading", { name: resource.title })
 		).resolves.toBeInTheDocument();
@@ -97,7 +94,6 @@ describe("ResourceList", () => {
 			resource.url
 		);
 
-		// Assert that the description is present
 		expect(
 			screen.getByText(new RegExp(resource.description))
 		).toBeInTheDocument();
@@ -111,7 +107,7 @@ describe("ResourceList", () => {
 				allResources: [],
 			}
 		);
-		useFetchTopicsModule.useFetchTopics.mockReturnValueOnce([]);
+		useFetchPublishedResourcesModule.useFetchTopics.mockReturnValueOnce([]);
 		render(
 			<MemoryRouter>
 				<ResourceList />
