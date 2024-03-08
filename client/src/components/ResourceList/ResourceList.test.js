@@ -4,7 +4,7 @@ import { rest } from "msw";
 import React from "react";
 import { MemoryRouter } from "react-router-dom";
 
-import { server } from "../../../setupTests";
+import { resourceStub, server } from "../../../setupTests";
 import * as useFetchPublishedResourcesModule from "../../hooks";
 import * as useFetchTopicsModule from "../../hooks/";
 server.use(
@@ -46,21 +46,62 @@ describe("ResourceList", () => {
 	];
 
 	const resourceData = [
-		{
+		resourceStub({
 			id: "1",
 			title: "A Complete Guide to Flexbox",
 			url: "https://www.joshwcomeau.com/react/data-binding/",
 			topics: "84b099a4-8acd-4659-b5bd-1b89796fb924",
 			topic_name: "HTML/CSS",
-		},
-		{
+		}),
+		resourceStub({
 			id: "2",
 			title: "React Hooks Tutorial",
 			url: "https://reactjs.org/docs/hooks-intro.html",
 			topics: "199a529b-22c1-460f-bc51-387cb12225e8",
 			topic_name: "React",
-		},
+		}),
 	];
+
+	it("shows resources", async () => {
+		// Mock resource data
+		const resource = resourceStub({
+			description: "This is a very useful resource I found",
+			id: "abc123",
+			title: "Hello",
+			url: "https://example.com",
+		});
+
+		// Mock useFetchPublishedResources to return the mocked resource data
+		useFetchPublishedResourcesModule.useFetchPublishedResources.mockReturnValueOnce(
+			{
+				perPage: 20,
+				page: 1,
+				allResources: [resource],
+			}
+		);
+
+		// Render the ResourceList component
+		render(
+			<MemoryRouter>
+				<ResourceList />
+			</MemoryRouter>
+		);
+
+		// Use the specific resource title to find the corresponding <h3> element
+		await expect(
+			screen.findByRole("heading", { name: resource.title })
+		).resolves.toBeInTheDocument();
+
+		expect(screen.getByRole("link", { name: "example.com" })).toHaveAttribute(
+			"href",
+			resource.url
+		);
+
+		// Assert that the description is present
+		expect(
+			screen.getByText(new RegExp(resource.description))
+		).toBeInTheDocument();
+	});
 
 	it("shows a message if no resources are available", async () => {
 		useFetchPublishedResourcesModule.useFetchPublishedResources.mockReturnValueOnce(
