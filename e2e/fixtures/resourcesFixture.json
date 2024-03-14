@@ -1,0 +1,23 @@
+{
+	"users": [
+		{
+			"email": "shh@example.com",
+			"github_id": 456,
+			"id": "2a8e4bb3-6f9c-4602-b084-af343fcbe6f0",
+			"name": "discreet-volunteer"
+		}
+	],
+	"resources": [
+		{
+			"id": "2a8e4bb3-6f9c-4602-b084-af343fcbe6f0",
+			"accession": "2024-03-12T16:00:10.289Z",
+			"description": null,
+			"draft": false,
+			"title": "JS TDD Ohm",
+			"url": "https://blog.jonrshar.pe/2023/May/23/js-tdd-ohm.html",
+			"publication": "2024-03-12T16:00:11.983Z",
+			"source": "2a8e4bb3-6f9c-4602-b084-af343fcbe6f0",
+			"topic": "84b099a4-8acd-4659-b5bd-1b89796fb924"
+		}
+	]
+}

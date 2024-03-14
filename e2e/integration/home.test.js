@@ -30,3 +30,23 @@ it("supports users without public emails", () => {
 	cy.logInAs("shh@example.com");
 	cy.findByRole("heading", { level: 1 }).should("contain.text", "Resources");
 });
+
+it("Filters resources by topic", () => {
+	cy.seed("resourcesFixture");
+
+	cy.fixture("resourcesFixture").then((fixtureData) => {
+		cy.visit("/");
+
+		cy.logInAs("shh@example.com");
+
+		const selectedTopic = "HTML/CSS";
+		cy.findByRole("combobox", { name: /filter topic/i }).select(selectedTopic);
+
+		cy.get(".resource-list li").each(($resource, index) => {
+			cy.wrap($resource).within(() => {
+				expect($resource.text()).to.contain(fixtureData.resources[index].title);
+				expect($resource.text()).to.contain(selectedTopic);
+			});
+		});
+	});
+});
