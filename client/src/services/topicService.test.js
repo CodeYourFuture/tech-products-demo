@@ -21,7 +21,6 @@ describe("TopicService", () => {
 		server.use(
 			rest.get("/api/topics", (req, res, ctx) => res(ctx.status(500)))
 		);
-		const topics = await service.getTopics();
-		expect(topics).toEqual([]);
+		await expect(service.getTopics()).resolves.toEqual([]);
 	});
 });
