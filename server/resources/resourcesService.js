@@ -37,7 +37,7 @@ export async function getAll(
 		});
 	}
 
-	const { pagedResult, findAllResource } = resources;
+	const { pagedResult } = resources;
 
 	const totalCount = await repository.count({ draft });
 	return {
@@ -45,7 +45,6 @@ export async function getAll(
 		page,
 		perPage,
 		resources: pagedResult,
-		allResources: findAllResource,
 		totalCount,
 	};
 }
