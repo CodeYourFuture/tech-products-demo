@@ -24,7 +24,7 @@ export default class ResourceService {
 		if (perPage !== undefined) {
 			queryParams.append("perPage", perPage);
 		}
-		// Append topic to queryParams if it is provided
+
 		if (topic !== undefined) {
 			queryParams.append("topic", topic);
 		}
