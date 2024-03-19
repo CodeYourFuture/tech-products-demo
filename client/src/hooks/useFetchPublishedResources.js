@@ -8,8 +8,7 @@ export function useFetchPublishedResources(selectedTopic) {
 	const resourceService = useService(ResourceService);
 	const searchParams = useSearchParams();
 
-	const [{ perPage, page, resources, allResources } = {}, setEnvelope] =
-		useState();
+	const [{ perPage, page, resources, lastPage } = {}, setEnvelope] = useState();
 
 	useEffect(() => {
 		// Merge selectedTopic with existing search parameters if present
@@ -20,5 +19,5 @@ export function useFetchPublishedResources(selectedTopic) {
 		resourceService.getPublished(updatedSearchParams).then(setEnvelope);
 	}, [resourceService, searchParams, selectedTopic]);
 
-	return { perPage, page, resources, allResources };
+	return { perPage, page, resources, lastPage };
 }
