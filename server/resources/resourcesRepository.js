@@ -53,7 +53,13 @@ export const findAll = async ({ draft, limit, offset, topic }) => {
 	const whereClause =
 		conditions.length > 0 ? `WHERE ${conditions.join(" AND ")}` : "";
 
-	const pagedResourceQuery = `${resourceQuery} ${whereClause} ORDER BY accession DESC LIMIT $${params.length + 1} OFFSET $${params.length + 2}`;
+	const pagedResourceQuery = `
+        ${resourceQuery}
+        ${whereClause}
+        ORDER BY accession DESC
+        LIMIT $${params.length + 1}
+        OFFSET $${params.length + 2};
+    `;
 
 	try {
 		const pagedResult = await db.query(pagedResourceQuery, [
