@@ -1,11 +1,14 @@
 import PropTypes from "prop-types";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 import { FormControls } from "..";
 
 export default function TopicSelector({ topics, setSelectedTopic }) {
+	const navigate = useNavigate();
 	const handleChange = (event) => {
 		setSelectedTopic(event.target.value);
+		navigate("/");
 	};
 	return (
 		<div>
