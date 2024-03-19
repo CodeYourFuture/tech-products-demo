@@ -4,15 +4,21 @@ import { ResourceService, useService } from "../services";
 
 import { useSearchParams } from "./index";
 
-export function useFetchPublishedResources() {
+export function useFetchPublishedResources(selectedTopic) {
 	const resourceService = useService(ResourceService);
 	const searchParams = useSearchParams();
 
-	const [{ perPage, page, allResources } = {}, setEnvelope] = useState();
+	const [{ perPage, page, resources, allResources } = {}, setEnvelope] =
+		useState();
 
 	useEffect(() => {
-		resourceService.getPublished(searchParams).then(setEnvelope);
-	}, [resourceService, searchParams]);
+		// Merge selectedTopic with existing search parameters if present
+		const updatedSearchParams = selectedTopic
+			? { ...searchParams, topic: selectedTopic }
+			: searchParams;
 
-	return { perPage, page, allResources };
+		resourceService.getPublished(updatedSearchParams).then(setEnvelope);
+	}, [resourceService, searchParams, selectedTopic]);
+
+	return { perPage, page, resources, allResources };
 }

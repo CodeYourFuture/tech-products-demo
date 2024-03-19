@@ -24,14 +24,16 @@ router
 				draft: Joi.boolean(),
 				page: Joi.number().integer().min(1),
 				perPage: Joi.number().integer().min(1),
+				topic: Joi.string().uuid(),
 			}).unknown(),
 		}),
 		asyncHandler(async (req, res) => {
-			const { draft, page, perPage } = req.query;
+			const { draft, page, perPage, topic } = req.query;
+
 			if (draft && !req.superuser && !req.user?.is_admin) {
 				return res.sendStatus(403);
 			}
-			res.send(await service.getAll({ draft }, { page, perPage }));
+			res.send(await service.getAll({ draft, topic }, { page, perPage }));
 		})
 	)
 	.post(

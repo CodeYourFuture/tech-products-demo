@@ -16,14 +16,20 @@ export default class ResourceService {
 		return [];
 	}
 
-	async getPublished({ page, perPage } = {}) {
-		const res = await this.fetch(
-			`${ResourceService.ENDPOINT}?${new URLSearchParams(
-				Object.entries({ page, perPage }).filter(
-					([, value]) => value !== undefined
-				)
-			)}`
-		);
+	async getPublished({ page, perPage, topic } = {}) {
+		const queryParams = new URLSearchParams();
+		if (page !== undefined) {
+			queryParams.append("page", page);
+		}
+		if (perPage !== undefined) {
+			queryParams.append("perPage", perPage);
+		}
+		// Append topic to queryParams if it is provided
+		if (topic !== undefined) {
+			queryParams.append("topic", topic);
+		}
+
+		const res = await this.fetch(`${ResourceService.ENDPOINT}?${queryParams}`);
 		if (res.ok) {
 			const { resources, ...rest } = await res.json();
 			return { ...rest, resources: resources.map(this._revive.bind(this)) };

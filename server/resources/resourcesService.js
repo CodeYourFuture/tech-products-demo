@@ -17,12 +17,25 @@ export const create = async (resource) => {
 	return await repository.add(resource);
 };
 
-export async function getAll({ draft = false }, { page = 1, perPage = 20 }) {
-	const resources = await repository.findAll({
-		draft,
-		limit: perPage,
-		offset: (page - 1) * perPage,
-	});
+export async function getAll(
+	{ draft = false, topic },
+	{ page = 1, perPage = 20 }
+) {
+	let resources;
+	if (topic) {
+		resources = await repository.findAll({
+			draft,
+			topic,
+			limit: perPage,
+			offset: (page - 1) * perPage,
+		});
+	} else {
+		resources = await repository.findAll({
+			draft,
+			limit: perPage,
+			offset: (page - 1) * perPage,
+		});
+	}
 
 	const { pagedResult, findAllResource } = resources;
 
