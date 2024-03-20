@@ -32,13 +32,31 @@ export const add = async ({ description, source, title, topic, url }) => {
 	}
 };
 
-export const count = async ({ draft }) => {
-	const {
-		rows: [{ count }],
-	} = await db.query("SELECT COUNT(*) FROM resources WHERE draft = $1;", [
-		draft,
-	]);
-	return parseInt(count, 10);
+export const count = async ({ draft, topic }) => {
+	let conditions = ["draft = $1"];
+	let params = [draft];
+
+	if (topic) {
+		conditions.push("topic = $2");
+		params.push(topic);
+	}
+
+	const whereClause =
+		conditions.length > 0 ? `WHERE ${conditions.join(" AND ")}` : "";
+
+	const countQuery = `
+        SELECT COUNT(*) FROM resources
+        ${whereClause};
+    `;
+
+	try {
+		const {
+			rows: [{ count }],
+		} = await db.query(countQuery, params);
+		return parseInt(count, 10);
+	} catch (error) {
+		throw new Error("Failed to count resources");
+	}
 };
 
 export const findAll = async ({ draft, limit, offset, topic }) => {

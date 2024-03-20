@@ -21,25 +21,30 @@ export async function getAll(
 	{ draft = false, topic },
 	{ page = 1, perPage = 20 }
 ) {
+	// Calculate offset based on page number
+	const offset = (page - 1) * perPage;
+
 	let resources;
 	if (topic) {
 		resources = await repository.findAll({
 			draft,
 			topic,
 			limit: perPage,
-			offset: (page - 1) * perPage,
+			offset, // Correctly pass offset
 		});
 	} else {
 		resources = await repository.findAll({
 			draft,
 			limit: perPage,
-			offset: (page - 1) * perPage,
+			offset, // Correctly pass offset
 		});
 	}
 
 	const { pagedResult } = resources;
 
-	const totalCount = await repository.count({ draft });
+	// Fetch total count considering the applied filters
+	const totalCount = await repository.count({ draft, topic });
+
 	return {
 		lastPage: Math.ceil(totalCount / perPage) || 1,
 		page,
