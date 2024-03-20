@@ -21,7 +21,6 @@ export async function getAll(
 	{ draft = false, topic },
 	{ page = 1, perPage = 20 }
 ) {
-	// Calculate offset based on page number
 	const offset = (page - 1) * perPage;
 
 	let resources;
@@ -30,19 +29,18 @@ export async function getAll(
 			draft,
 			topic,
 			limit: perPage,
-			offset, // Correctly pass offset
+			offset,
 		});
 	} else {
 		resources = await repository.findAll({
 			draft,
 			limit: perPage,
-			offset, // Correctly pass offset
+			offset,
 		});
 	}
 
 	const { pagedResult } = resources;
 
-	// Fetch total count considering the applied filters
 	const totalCount = await repository.count({ draft, topic });
 
 	return {
