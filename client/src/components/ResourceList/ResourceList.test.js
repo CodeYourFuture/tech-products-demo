@@ -75,7 +75,7 @@ describe("ResourceList", () => {
 			{
 				perPage: 20,
 				page: 1,
-				allResources: [resource],
+				resources: [resource],
 			}
 		);
 
@@ -104,7 +104,7 @@ describe("ResourceList", () => {
 			{
 				perPage: 10,
 				page: 1,
-				allResources: [],
+				resources: [],
 			}
 		);
 		useFetchPublishedResourcesModule.useFetchTopics.mockReturnValueOnce([]);
@@ -124,7 +124,7 @@ describe("ResourceList", () => {
 			{
 				perPage: 20,
 				page: 1,
-				allResources: resourceData,
+				resources: resourceData,
 			}
 		);
 
@@ -152,7 +152,7 @@ describe("ResourceList", () => {
 			{
 				perPage: 20,
 				page: 1,
-				allResources: resourceData.filter(
+				resources: resourceData.filter(
 					(resource) => resource.topic_name === "HTML/CSS"
 				),
 			}
