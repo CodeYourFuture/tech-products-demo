@@ -33,8 +33,8 @@ export const add = async ({ description, source, title, topic, url }) => {
 };
 
 export const count = async ({ draft, topic }) => {
-	let conditions = ["draft = $1"];
-	let params = [draft];
+	const conditions = ["draft = $1"];
+	const params = [draft];
 
 	if (topic) {
 		conditions.push("topic = $2");
