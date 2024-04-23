@@ -115,7 +115,7 @@
 		"express-validation": "^4.1.0",
 		"helmet": "^7.1.0",
 		"morgan": "^1.10.0",
-		"node-pg-migrate": "^6.2.2",
+		"node-pg-migrate": "^7.0.0",
 		"passport": "^0.7.0",
 		"passport-github2": "^0.1.12",
 		"pg": "^8.11.5",
