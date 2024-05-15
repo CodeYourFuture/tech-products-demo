@@ -39,6 +39,17 @@ describe("ResourceList", () => {
 		expect(publish).toHaveBeenCalledWith(resource.id);
 	});
 
+	it("shows a reject button if enabled", async () => {
+		const reject = vi.fn();
+		const resource = resourceStub();
+		const user = userEvent.setup();
+		render(<ResourceList reject={reject} resources={[resource]} />);
+
+		await user.click(screen.getByRole("button", { name: /reject/i }));
+
+		expect(reject).toHaveBeenCalledWith(resource.id);
+	});
+
 	it("shows the topic if available", () => {
 		const resource = resourceStub({ topic_name: "My Topic" });
 		render(<ResourceList resources={[resource]} />);

@@ -43,3 +43,10 @@ export async function publish(resourceId, publisherId) {
 		publication: new Date(),
 	});
 }
+
+export async function reject(resourceId) {
+	if (!(await repository.findOne(resourceId))) {
+		throw new MissingResource(resourceId);
+	}
+	return await repository.destroy(resourceId);
+}

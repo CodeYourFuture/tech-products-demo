@@ -82,6 +82,24 @@ router
 			}
 		})
 	)
+	.delete(
+		sudoOnly,
+		validated({
+			body: Joi.object({
+				draft: Joi.any().valid(false),
+			}),
+		}),
+		asyncHandler(async (req, res) => {
+			try {
+				res.send(await service.reject(req.params.id));
+			} catch (err) {
+				if (err instanceof service.MissingResource) {
+					logger.info(err.message);
+					return res.sendStatus(404);
+				}
+			}
+		})
+	)
 	.all(methodNotAllowed);
 
 export default router;

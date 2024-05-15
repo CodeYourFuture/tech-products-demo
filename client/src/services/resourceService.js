@@ -41,6 +41,17 @@ export default class ResourceService {
 		}
 	}
 
+	async reject(id) {
+		const res = await this.fetch(`${ResourceService.ENDPOINT}/${id}`, {
+			body: JSON.stringify({ draft: false }),
+			headers: { "Content-Type": "application/json" },
+			method: "DELETE",
+		});
+		if (res.ok) {
+			return this._revive(await res.json());
+		}
+	}
+
 	async suggest(resource) {
 		const res = await this.fetch(ResourceService.ENDPOINT, {
 			body: JSON.stringify(resource),

@@ -76,7 +76,7 @@ export function insertQuery(tableName, columns) {
 
 /**
  * {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#tagged_templates Tagged template}
- * to turn a mutliline query in backticks into a single line.
+ * to turn a multiline query in backticks into a single line.
  * @example
  * const myQuery = singleLine`
  *     SELECT *
@@ -110,4 +110,8 @@ export function updateQuery(tableName, columns) {
 			.map((column, index) => `${format.ident(column)} = $${index + 2}`)
 			.join(", ")
 	);
+}
+
+export function deleteQuery(tableName) {
+	return format("DELETE FROM %I WHERE id = $1 RETURNING *;", tableName);
 }

@@ -1,4 +1,10 @@
-import db, { ErrorCodes, insertQuery, singleLine, updateQuery } from "../db";
+import db, {
+	ErrorCodes,
+	insertQuery,
+	singleLine,
+	updateQuery,
+	deleteQuery,
+} from "../db";
 
 import { DuplicateResource } from "./resourcesService";
 
@@ -69,4 +75,11 @@ export const update = async (id, { draft, publication, publisher }) => {
 		[id, draft, publication, publisher]
 	);
 	return updated;
+};
+
+export const destroy = async (id) => {
+	const {
+		rows: [deleted],
+	} = await db.query(deleteQuery("resources"), [id]);
+	return deleted;
 };
