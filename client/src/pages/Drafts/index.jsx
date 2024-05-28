@@ -21,8 +21,10 @@ export default function Drafts() {
 
 	const reject = useCallback(
 		async (id) => {
-			await resourceService.reject(id);
-			await refreshDrafts();
+			if (window.confirm("Do you really want to reject?")) {
+				await resourceService.reject(id);
+				await refreshDrafts();
+			}
 		},
 		[refreshDrafts, resourceService]
 	);

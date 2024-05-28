@@ -43,9 +43,11 @@ ul.resource-list {
 
 	button {
 		background-color: white;
-		border: 2px solid palette.$blue;
+		// border: 2px solid palette.$blue;
+		border: none;
 		border-radius: layout.$border-radius;
 		color: palette.$blue;
+		padding: 5px 10px;
 		cursor: pointer;
 		font: typography.$body-text-weight
 			calc(#{typography.$body-text-size} * 0.875) typography.$body-text-family;
@@ -63,5 +65,25 @@ ul.resource-list {
 	.resource-description {
 		white-space: pre-line;
 		word-break: break-word;
+	}
+
+	.reject-button {
+		background-color: palette.$red;
+		color: white;
+
+		&:hover,
+		&:focus {
+			color: palette.$red;
+		}
+	}
+
+	.publish-button {
+		background-color: palette.$green;
+		color: white;
+
+		&:hover,
+		&:focus {
+			color: palette.$green;
+		}
 	}
 }

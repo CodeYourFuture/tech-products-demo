@@ -19,8 +19,18 @@ export default function ResourceList({ publish, resources, reject }) {
 					{description && <p className="resource-description">{description}</p>}
 					<div>
 						<a href={url}>{formatUrl(url)}</a>
-						{publish && <button onClick={() => publish(id)}>Publish</button>}
-						{reject && <button onClick={() => reject(id)}>Reject</button>}
+						<div>
+							{reject && (
+								<button onClick={() => reject(id)} className="reject-button">
+									Reject
+								</button>
+							)}
+							{publish && (
+								<button onClick={() => publish(id)} className="publish-button">
+									Publish
+								</button>
+							)}
+						</div>
 					</div>
 				</li>
 			))}
