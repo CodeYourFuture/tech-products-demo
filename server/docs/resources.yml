@@ -14,7 +14,7 @@
 
           **Note**: drafts are only available to admin users or with SUDO token.
         schema:
-          type: boolean
+          type: string
       - in: query
         name: page
         description: Which page of resources to fetch.
@@ -87,11 +87,11 @@
         application/json:
           schema:
             type: object
-            required: [draft]
+            required: [status]
             properties:
-              draft:
-                type: boolean
-                example: false
+              status:
+                type: string
+                example: "published"
     responses:
       200:
         content:

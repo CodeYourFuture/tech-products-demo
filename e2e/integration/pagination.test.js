@@ -38,12 +38,12 @@ function createResource(index) {
 	date.setHours(12, 13, 14);
 	const accession = new Date(date.getTime());
 	date.setHours(14, 15, 16);
-	const publication = new Date(date.getTime());
+	const status_changed_date = new Date(date.getTime());
 	return {
 		accession,
-		draft: false,
-		publication,
-		publisher: admin.id,
+		status: "published",
+		status_changed_date,
+		status_changed_by: admin.id,
 		source: user.id,
 		title: `Resource ${id}`,
 		url: `https://example.com/resources/${id}`,

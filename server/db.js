@@ -111,7 +111,3 @@ export function updateQuery(tableName, columns) {
 			.join(", ")
 	);
 }
-
-export function deleteQuery(tableName) {
-	return format("DELETE FROM %I WHERE id = $1 RETURNING *;", tableName);
-}

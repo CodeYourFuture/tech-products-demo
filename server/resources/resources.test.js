@@ -23,7 +23,7 @@ describe("/api/resources", () => {
 			expect(body).toMatchObject({
 				accession: expect.stringMatching(patterns.DATETIME),
 				description: null,
-				draft: true,
+				status: "drafted",
 				id: expect.stringMatching(patterns.UUID),
 				source: id,
 				title: resource.title,
@@ -160,7 +160,7 @@ describe("/api/resources", () => {
 				const { agent: adminAgent } = await authenticateAs("admin");
 				const { body: envelope } = await adminAgent
 					.get("/api/resources")
-					.query({ draft: true })
+					.query({ status: "drafted" })
 					.set("User-Agent", "supertest")
 					.expect(200);
 				expect(envelope).toEqual({
@@ -179,7 +179,7 @@ describe("/api/resources", () => {
 				const { agent: adminAgent } = await authenticateAs("admin");
 				const { body: envelope } = await adminAgent
 					.get("/api/resources")
-					.query({ draft: true, page: 2, perPage: 10 })
+					.query({ status: "drafted", page: 2, perPage: 10 })
 					.set("User-Agent", "supertest")
 					.expect(200);
 				expect(envelope).toEqual({
@@ -198,7 +198,7 @@ describe("/api/resources", () => {
 				const { agent } = await authenticateAs("admin");
 				await agent
 					.get("/api/resources")
-					.query({ draft: true, page: 0, perPage: "foo" })
+					.query({ status: "drafted", page: 0, perPage: "foo" })
 					.set("User-Agent", "supertest")
 					.expect(400, {
 						page: '"page" must be greater than or equal to 1',
@@ -221,7 +221,7 @@ describe("/api/resources", () => {
 				body: { resources },
 			} = await anonAgent
 				.get("/api/resources")
-				.query({ draft: true })
+				.query({ status: "drafted" })
 				.set("Authorization", `Bearer ${sudoToken}`)
 				.set("User-Agent", "supertest")
 				.expect(200);
@@ -242,7 +242,7 @@ describe("/api/resources", () => {
 
 			await anonAgent
 				.get("/api/resources")
-				.query({ draft: true })
+				.query({ status: "drafted" })
 				.set("User-Agent", "supertest")
 				.expect(403, "Forbidden");
 		});
@@ -269,15 +269,15 @@ describe("/api/resources", () => {
 
 			const {
 				body: {
-					resources: [draft],
+					resources: [status],
 				},
 			} = await anonAgent
 				.get("/api/resources")
-				.query({ draft: true })
+				.query({ status: "drafted" })
 				.set("Authorization", `Bearer ${sudoToken}`)
 				.set("User-Agent", "supertest")
 				.expect(200);
-			expect(draft).toHaveProperty("topic_name", topic.name);
+			expect(status).toHaveProperty("topic_name", topic.name);
 		});
 	});
 
@@ -296,16 +296,16 @@ describe("/api/resources", () => {
 
 			const { body: updated } = await anonAgent
 				.patch(`/api/resources/${resource.id}`)
-				.send({ draft: false })
+				.send({ status: "published" })
 				.set("Authorization", `Bearer ${sudoToken}`)
 				.set("User-Agent", "supertest")
 				.expect(200);
 
 			expect(updated).toEqual({
 				...resource,
-				draft: false,
-				publication: expect.stringMatching(patterns.DATETIME),
-				publisher: null,
+				status: "published",
+				status_changed_date: expect.stringMatching(patterns.DATETIME),
+				status_changed_by: null,
 			});
 
 			const {
@@ -328,11 +328,11 @@ describe("/api/resources", () => {
 
 			await anonAgent
 				.patch(`/api/resources/${resource.id}`)
-				.send({ draft: true, title: "Something else" })
+				.send({ status: "drafted", title: "Something else" })
 				.set("Authorization", `Bearer ${sudoToken}`)
 				.set("User-Agent", "supertest")
 				.expect(400, {
-					draft: '"draft" must be [false]',
+					status: '"status" must be one of [rejected, published]',
 					title: '"title" is not allowed',
 				});
 		});
@@ -341,7 +341,7 @@ describe("/api/resources", () => {
 			const { agent } = await authenticateAs("anonymous");
 			await agent
 				.patch(`/api/resources/${randomUUID()}`)
-				.send({ draft: false })
+				.send({ status: "published" })
 				.set("Authorization", `Bearer ${sudoToken}`)
 				.set("User-Agent", "supertest")
 				.expect(404);
@@ -361,7 +361,7 @@ describe("/api/resources", () => {
 
 			await anonAgent
 				.patch(`/api/resources/${resource.id}`)
-				.send({ draft: false })
+				.send({ status: "published" })
 				.set("User-Agent", "supertest")
 				.expect(401);
 		});
@@ -378,11 +378,14 @@ describe("/api/resources", () => {
 
 			const { body: published } = await adminAgent
 				.patch(`/api/resources/${created.id}`)
-				.send({ draft: false })
+				.send({ status: "published" })
 				.set("User-Agent", "supertest")
 				.expect(200);
 
-			expect(published).toMatchObject({ publisher: admin.id, source: user.id });
+			expect(published).toMatchObject({
+				status_changed_by: admin.id,
+				source: user.id,
+			});
 		});
 	});
 });

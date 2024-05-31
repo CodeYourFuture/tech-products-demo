@@ -17,13 +17,16 @@ export const create = async (resource) => {
 	return await repository.add(resource);
 };
 
-export async function getAll({ draft = false }, { page = 1, perPage = 20 }) {
+export async function getAll(
+	{ status = "published" },
+	{ page = 1, perPage = 20 }
+) {
 	const resources = await repository.findAll({
-		draft,
+		status,
 		limit: perPage,
 		offset: (page - 1) * perPage,
 	});
-	const totalCount = await repository.count({ draft });
+	const totalCount = await repository.count({ status });
 	return {
 		lastPage: Math.ceil(totalCount / perPage) || 1,
 		page,
@@ -33,20 +36,13 @@ export async function getAll({ draft = false }, { page = 1, perPage = 20 }) {
 	};
 }
 
-export async function publish(resourceId, publisherId) {
+export async function action(resourceId, status, publisherId) {
 	if (!(await repository.findOne(resourceId))) {
 		throw new MissingResource(resourceId);
 	}
 	return await repository.update(resourceId, {
-		draft: false,
-		publisher: publisherId,
-		publication: new Date(),
+		status,
+		statusChangedBy: publisherId,
+		statusChangedDate: new Date(),
 	});
-}
-
-export async function reject(resourceId) {
-	if (!(await repository.findOne(resourceId))) {
-		throw new MissingResource(resourceId);
-	}
-	return await repository.destroy(resourceId);
 }

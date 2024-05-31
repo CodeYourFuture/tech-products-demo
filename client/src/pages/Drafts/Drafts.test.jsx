@@ -41,7 +41,7 @@ describe("Drafts", () => {
 			}),
 			http.patch("/api/resources/:id", ({ request: req }) => {
 				patchRequest = req;
-				return HttpResponse.json({ ...resource, draft: false });
+				return HttpResponse.json({ ...resource, status: "published" });
 			})
 		);
 		render(<Drafts />);

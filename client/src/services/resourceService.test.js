@@ -17,12 +17,12 @@ describe("ResourceService", () => {
 				})
 			);
 			await service.getDrafts();
-			expect(new URL(request.url).searchParams.get("draft")).toBe("true");
+			expect(new URL(request.url).searchParams.get("status")).toBe("drafted");
 		});
 
 		it("returns resources on success", async () => {
-			const resources = [true, true, true].map((draft) =>
-				resourceStub({ draft })
+			const resources = ["drafted", "drafted", "drafted"].map((status) =>
+				resourceStub({ status })
 			);
 			server.use(
 				http.get("/api/resources", () => {
@@ -87,12 +87,12 @@ describe("ResourceService", () => {
 			server.use(
 				http.patch("/api/resources/:id", async ({ request: req }) => {
 					request = req;
-					return HttpResponse.json({ draft: false });
+					return HttpResponse.json({ status: "published" });
 				})
 			);
-			await service.publish(id);
+			await service.action(id, "published");
 			expect(new URL(request.url).pathname).toMatch(new RegExp(`/${id}$`));
-			await expect(request.json()).resolves.toEqual({ draft: false });
+			await expect(request.json()).resolves.toEqual({ status: "published" });
 		});
 	});
 
@@ -102,7 +102,7 @@ describe("ResourceService", () => {
 			const submitted = { title: "foo bar", url: "https://example.com" };
 			const created = resourceStub({
 				...submitted,
-				draft: true,
+				status: "drafted",
 			});
 			server.use(
 				http.post("/api/resources", ({ request: req }) => {

@@ -81,12 +81,12 @@ components:
       allOf:
         - $ref: "#/components/schemas/BaseResource"
         - type: object
-          required: [draft]
+          required: [status]
           properties:
-            draft:
-              type: boolean
-              example: true
-            publication:
+            status:
+              type: string
+              example: "drafted"
+            statusChangedDate:
               type: string
               example: null
               nullable: true
@@ -102,15 +102,15 @@ components:
       allOf:
         - $ref: "#/components/schemas/BaseResource"
         - type: object
-          required: [draft, publication]
+          required: [status, statusChangedDate]
           properties:
-            draft:
-              example: false
-            publication:
+            status:
+              example: "published"
+            statusChangedDate:
               type: string
               format: date-time
               nullable: false
-            publisher:
+            statusChangedBy:
               description: |
                 The ID of the user who published the resource (or `null`, if the SUDO token was used).
               type: string

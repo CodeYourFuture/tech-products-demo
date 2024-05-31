@@ -7,7 +7,7 @@ export default class ResourceService {
 
 	async getDrafts() {
 		const res = await this.fetch(
-			`${ResourceService.ENDPOINT}?${new URLSearchParams({ draft: true })}`
+			`${ResourceService.ENDPOINT}?${new URLSearchParams({ status: "drafted" })}`
 		);
 		if (res.ok) {
 			const { resources } = await res.json();
@@ -30,22 +30,11 @@ export default class ResourceService {
 		}
 	}
 
-	async publish(id) {
+	async action(id, status) {
 		const res = await this.fetch(`${ResourceService.ENDPOINT}/${id}`, {
-			body: JSON.stringify({ draft: false }),
+			body: JSON.stringify({ status }),
 			headers: { "Content-Type": "application/json" },
 			method: "PATCH",
-		});
-		if (res.ok) {
-			return this._revive(await res.json());
-		}
-	}
-
-	async reject(id) {
-		const res = await this.fetch(`${ResourceService.ENDPOINT}/${id}`, {
-			body: JSON.stringify({ draft: false }),
-			headers: { "Content-Type": "application/json" },
-			method: "DELETE",
 		});
 		if (res.ok) {
 			return this._revive(await res.json());
@@ -68,11 +57,11 @@ export default class ResourceService {
 		}
 	}
 
-	_revive({ accession, publication, ...resource }) {
+	_revive({ accession, statusChangedDate, ...resource }) {
 		return {
 			...resource,
 			accession: accession && new Date(accession),
-			publication: publication && new Date(publication),
+			statusChangedDate: statusChangedDate && new Date(statusChangedDate),
 		};
 	}
 }

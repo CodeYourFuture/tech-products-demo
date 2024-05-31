@@ -1,10 +1,4 @@
-import db, {
-	ErrorCodes,
-	insertQuery,
-	singleLine,
-	updateQuery,
-	deleteQuery,
-} from "../db";
+import db, { ErrorCodes, insertQuery, singleLine, updateQuery } from "../db";
 
 import { DuplicateResource } from "./resourcesService";
 
@@ -17,7 +11,7 @@ const resourceQuery = singleLine`
 
 const pagedResourceQuery = singleLine`
 		${resourceQuery}
-		WHERE draft = $1
+		WHERE status = $1
 		ORDER BY accession DESC
 		LIMIT $2
 		OFFSET $3;
@@ -46,17 +40,17 @@ export const add = async ({ description, source, title, topic, url }) => {
 	}
 };
 
-export const count = async ({ draft }) => {
+export const count = async ({ status }) => {
 	const {
 		rows: [{ count }],
-	} = await db.query("SELECT COUNT(*) FROM resources WHERE draft = $1;", [
-		draft,
+	} = await db.query("SELECT COUNT(*) FROM resources WHERE status = $1;", [
+		status,
 	]);
 	return parseInt(count, 10);
 };
 
-export const findAll = async ({ draft, limit, offset }) => {
-	const { rows } = await db.query(pagedResourceQuery, [draft, limit, offset]);
+export const findAll = async ({ status, limit, offset }) => {
+	const { rows } = await db.query(pagedResourceQuery, [status, limit, offset]);
 	return rows;
 };
 
@@ -67,19 +61,19 @@ export const findOne = async (id) => {
 	return resource;
 };
 
-export const update = async (id, { draft, publication, publisher }) => {
+export const update = async (
+	id,
+	{ status, statusChangedDate, statusChangedBy }
+) => {
 	const {
 		rows: [updated],
 	} = await db.query(
-		updateQuery("resources", ["draft", "publication", "publisher"]),
-		[id, draft, publication, publisher]
+		updateQuery("resources", [
+			"status",
+			"status_changed_date",
+			"status_changed_by",
+		]),
+		[id, status, statusChangedDate, statusChangedBy]
 	);
 	return updated;
-};
-
-export const destroy = async (id) => {
-	const {
-		rows: [deleted],
-	} = await db.query(deleteQuery("resources"), [id]);
-	return deleted;
 };

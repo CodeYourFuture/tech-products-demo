@@ -13,7 +13,7 @@ export default function Drafts() {
 
 	const publish = useCallback(
 		async (id) => {
-			await resourceService.publish(id);
+			await resourceService.action(id, "published");
 			await refreshDrafts();
 		},
 		[refreshDrafts, resourceService]
@@ -22,7 +22,7 @@ export default function Drafts() {
 	const reject = useCallback(
 		async (id) => {
 			if (window.confirm("Do you really want to reject?")) {
-				await resourceService.reject(id);
+				await resourceService.action(id, "rejected");
 				await refreshDrafts();
 			}
 		},

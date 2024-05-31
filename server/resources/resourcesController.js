@@ -21,17 +21,17 @@ router
 	.get(
 		validated({
 			query: Joi.object({
-				draft: Joi.boolean(),
+				status: Joi.string(),
 				page: Joi.number().integer().min(1),
 				perPage: Joi.number().integer().min(1),
 			}).unknown(),
 		}),
 		asyncHandler(async (req, res) => {
-			const { draft, page, perPage } = req.query;
-			if (draft && !req.superuser && !req.user?.is_admin) {
+			const { status, page, perPage } = req.query;
+			if (status && !req.superuser && !req.user?.is_admin) {
 				return res.sendStatus(403);
 			}
-			res.send(await service.getAll({ draft }, { page, perPage }));
+			res.send(await service.getAll({ status }, { page, perPage }));
 		})
 	)
 	.post(
@@ -67,36 +67,21 @@ router
 		sudoOnly,
 		validated({
 			body: Joi.object({
-				draft: Joi.any().valid(false),
+				status: Joi.any().valid("rejected", "published"),
 			}),
 		}),
 		asyncHandler(async (req, res) => {
 			try {
-				res.send(await service.publish(req.params.id, req.user?.id ?? null));
+				const { status } = req.body;
+				res.send(
+					await service.action(req.params.id, status, req.user?.id ?? null)
+				);
 			} catch (err) {
 				if (err instanceof service.MissingResource) {
 					logger.info(err.message);
 					return res.sendStatus(404);
 				}
 				throw err;
-			}
-		})
-	)
-	.delete(
-		sudoOnly,
-		validated({
-			body: Joi.object({
-				draft: Joi.any().valid(false),
-			}),
-		}),
-		asyncHandler(async (req, res) => {
-			try {
-				res.send(await service.reject(req.params.id));
-			} catch (err) {
-				if (err instanceof service.MissingResource) {
-					logger.info(err.message);
-					return res.sendStatus(404);
-				}
 			}
 		})
 	)

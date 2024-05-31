@@ -9,7 +9,7 @@
 	],
 	"resources": [
 		{
-			"draft": true,
+			"status": "drafted",
 			"source": "2a8e4bb3-6f9c-4602-b084-af343fcbe6f0",
 			"title": "Joi documentation",
 			"url": "https://joi.dev/"

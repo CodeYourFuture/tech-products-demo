@@ -9,10 +9,10 @@ global.fetch = whatwgFetch;
 export const resourceStub = (overrides = {}) => ({
 	accession: new Date(),
 	description: null,
-	draft: false,
+	status: "published",
 	id: randomUUID(),
-	publication: null,
-	publisher: null,
+	statusChangedDate: null,
+	statusChangedBy: null,
 	source: randomUUID(),
 	title: "",
 	topic: null,
