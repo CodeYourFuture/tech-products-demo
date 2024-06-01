@@ -70,7 +70,7 @@
     description: |
       Update an existing resource.
 
-      **Note**: currently only supports publication, by admin user or with SUDO token.
+      **Note**: supports publication and rejection by admin user or with SUDO token.
     security:
       - authCookie: []
       - sudoToken: []

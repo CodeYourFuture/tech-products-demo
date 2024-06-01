@@ -22,3 +22,21 @@ it("lets admin users approve drafts", () => {
 	);
 	cy.findByRole("link", { name: /drafts/i }).should("not.exist");
 });
+
+it("lets admin users reject drafts", () => {
+	const adminEmail = "admin@codeyourfuture.io";
+	cy.seed("admin");
+	cy.seed("oneDraftResource");
+	cy.visit("/");
+
+	cy.logInAs(adminEmail);
+	cy.findByRole("link", { name: /drafts/i }).click();
+	cy.findByText("Joi documentation").should("exist");
+	cy.findByRole("button", { name: /reject/i }).click();
+	cy.findByText("Joi documentation").should("not.exist");
+	cy.logOut();
+	cy.logInAs("shh@example.com");
+	cy.findByRole("heading", { level: 3 }).should("not.exist");
+	cy.findByRole("link", { name: "joi.dev" }).should("not.exist");
+	cy.findByRole("link", { name: /drafts/i }).should("not.exist");
+});
