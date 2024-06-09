@@ -67,6 +67,15 @@ export default class ResourceService {
 		}
 	}
 
+	async remove(id) {
+		const res = await this.fetch(`${ResourceService.ENDPOINT}/${id}`, {
+			method: "DELETE",
+		});
+		if (res.ok) {
+			return;
+		}
+	}
+
 	_revive({ accession, publication, ...resource }) {
 		return {
 			...resource,

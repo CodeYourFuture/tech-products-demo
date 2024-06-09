@@ -99,3 +99,7 @@ export const getResourcesForUser = async ({ id, limit, offset }) => {
 	);
 	return rows;
 };
+
+export const remove = async (id) => {
+	await db.query("DELETE FROM resources WHERE id = $1", [id]);
+};

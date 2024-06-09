@@ -73,6 +73,7 @@ router
 router
 	.route("/user/:id")
 	.get(
+		authOnly,
 		asyncHandler(async (req, res) => {
 			try {
 				const { draft, page, perPage } = req.query;
@@ -106,6 +107,20 @@ router
 		asyncHandler(async (req, res) => {
 			try {
 				res.send(await service.publish(req.params.id, req.user?.id ?? null));
+			} catch (err) {
+				if (err instanceof service.MissingResource) {
+					logger.info(err.message);
+					return res.sendStatus(404);
+				}
+				throw err;
+			}
+		})
+	)
+	.delete(
+		authOnly,
+		asyncHandler(async (req, res) => {
+			try {
+				res.send(await service.remove(req.params.id, req.user?.id ?? null));
 			} catch (err) {
 				if (err instanceof service.MissingResource) {
 					logger.info(err.message);

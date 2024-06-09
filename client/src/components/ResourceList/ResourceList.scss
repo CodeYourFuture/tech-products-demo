@@ -41,6 +41,26 @@ ul.resource-list {
 		}
 	}
 
+	.reject {
+		background-color: white;
+		border: 2px solid palette.$red;
+		border-radius: layout.$border-radius;
+		color: palette.$red;
+		cursor: pointer;
+		font: typography.$body-text-weight
+			calc(#{typography.$body-text-size} * 0.875) typography.$body-text-family;
+		margin-left: layout.$baseline;
+
+		&:hover,
+		&:focus {
+			background-color: palette.hover-light(palette.$blue);
+		}
+
+		&:active {
+			background-color: palette.active-light(palette.$blue);
+		}
+	}
+
 	button {
 		background-color: white;
 		border: 2px solid palette.$blue;

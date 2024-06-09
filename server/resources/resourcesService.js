@@ -64,3 +64,10 @@ export async function getResourcesForUser(
 		totalCount,
 	};
 }
+
+export async function remove(id) {
+	if (!(await repository.findOne(id))) {
+		throw new MissingResource(id);
+	}
+	return await repository.remove(id);
+}
