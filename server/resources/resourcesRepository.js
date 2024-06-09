@@ -78,3 +78,16 @@ export const update = async (id, { draft, publication, publisher }) => {
 	);
 	return updated;
 };
+
+export const getResourcesForUser = async (userId) => {
+	const { rows } = await db.query(
+		`SELECT r.*, t.name as topic_name
+		FROM resources as r
+		LEFT JOIN topics as t
+		ON r.topic = t.id
+		WHERE r.publisher = $1
+		ORDER BY publication DESC;`,
+		[userId]
+	);
+	return rows;
+};
