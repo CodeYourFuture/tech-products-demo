@@ -75,7 +75,15 @@ router
 	.get(
 		asyncHandler(async (req, res) => {
 			try {
-				res.send(await service.getResourcesForUser(req.params.id));
+				const { draft, page, perPage } = req.query;
+
+				res.send(
+					await service.getResourcesForUser(
+						{ id: req.params.id },
+						{ draft },
+						{ page, perPage }
+					)
+				);
 			} catch (err) {
 				if (err instanceof service.MissingUser) {
 					logger.info(err.message);

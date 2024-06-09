@@ -44,7 +44,23 @@ export async function publish(resourceId, publisherId) {
 	});
 }
 
-export async function getResourcesForUser(userId) {
-	const rows = await repository.getResourcesForUser(userId);
-	return rows;
+export async function getResourcesForUser(
+	{ id },
+	{ draft = false },
+	{ page = 1, perPage = 20 }
+) {
+	const resources = await repository.getResourcesForUser({
+		id,
+		limit: perPage,
+		offset: (page - 1) * perPage,
+	});
+	const totalCount = await repository.count({ draft, id });
+
+	return {
+		lastPage: Math.ceil(totalCount / perPage) || 1,
+		page,
+		perPage,
+		resources,
+		totalCount,
+	};
 }

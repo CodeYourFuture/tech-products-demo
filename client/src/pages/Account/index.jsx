@@ -15,7 +15,6 @@ export default function Account() {
 	useEffect(() => {
 		resourceService.getUserResources(principal?.id).then(setEnvelope);
 	}, [resourceService, principal?.id]);
-
 	if (!principal) {
 		return <Navigate to="/" />;
 	}

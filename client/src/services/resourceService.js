@@ -11,6 +11,7 @@ export default class ResourceService {
 		);
 		if (res.ok) {
 			const { resources } = await res.json();
+
 			return resources.map(this._revive.bind(this));
 		}
 		return [];
@@ -19,8 +20,8 @@ export default class ResourceService {
 	async getUserResources(id) {
 		const res = await this.fetch(`${ResourceService.ENDPOINT}/user/${id}`);
 		if (res.ok) {
-			const { resources } = await res.json();
-			return resources.map(this._revive.bind(this));
+			const { resources, ...rest } = await res.json();
+			return { ...rest, resources: resources.map(this._revive.bind(this)) };
 		}
 		return [];
 	}

@@ -50,12 +50,16 @@ export const add = async ({
 	}
 };
 
-export const count = async ({ draft }) => {
+export const count = async ({ draft, userId }) => {
+	let query = "SELECT COUNT(*) FROM resources WHERE draft = $1;";
+	let parameters = [draft];
+	if (userId) {
+		query = "SELECT COUNT(*) FROM resources WHERE draft = $1 AND owner = $2;";
+		parameters = [draft, userId];
+	}
 	const {
 		rows: [{ count }],
-	} = await db.query("SELECT COUNT(*) FROM resources WHERE draft = $1;", [
-		draft,
-	]);
+	} = await db.query(query, parameters);
 	return parseInt(count, 10);
 };
 
@@ -81,15 +85,17 @@ export const update = async (id, { draft, publication, publisher }) => {
 	return updated;
 };
 
-export const getResourcesForUser = async (userId) => {
+export const getResourcesForUser = async ({ id, limit, offset }) => {
 	const { rows } = await db.query(
 		`SELECT r.*, t.name as topic_name
-		FROM resources as r
-		LEFT JOIN topics as t
-		ON r.topic = t.id
-		WHERE r.owner = $1
-		ORDER BY publication DESC;`,
-		[userId]
+			FROM resources as r
+			LEFT JOIN topics as t
+			ON r.topic = t.id
+			WHERE r.owner = $1
+			ORDER BY publication DESC
+			LIMIT $2
+			OFFSET $3;`,
+		[id, limit, offset]
 	);
 	return rows;
 };
