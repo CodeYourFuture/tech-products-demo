@@ -18,7 +18,9 @@ export default class ResourceService {
 	}
 
 	async getUserResources(id) {
-		const res = await this.fetch(`${ResourceService.ENDPOINT}/user/${id}`);
+		const res = await this.fetch(
+			`${ResourceService.ENDPOINT}/user/${id}?${new URLSearchParams({ draft: true })}`
+		);
 		if (res.ok) {
 			const { resources, ...rest } = await res.json();
 			return { ...rest, resources: resources.map(this._revive.bind(this)) };
