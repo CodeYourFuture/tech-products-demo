@@ -47,7 +47,12 @@ router
 		asyncHandler(async (req, res) => {
 			const { id: source } = req.user;
 			try {
-				const resource = await service.create({ ...req.body, source });
+				let isDraft = true;
+
+				if (req.superuser || req.user?.is_admin) {
+					isDraft = false;
+				}
+				const resource = await service.create({ ...req.body, isDraft, source });
 				res.status(201).send(resource);
 			} catch (err) {
 				if (err instanceof DuplicateResource) {

@@ -17,7 +17,14 @@ const pagedResourceQuery = singleLine`
 		OFFSET $3;
 	`;
 
-export const add = async ({ description, source, title, topic, url }) => {
+export const add = async ({
+	description,
+	source,
+	title,
+	topic,
+	url,
+	isDraft,
+}) => {
 	try {
 		const {
 			rows: [created],
@@ -28,8 +35,9 @@ export const add = async ({ description, source, title, topic, url }) => {
 				"title",
 				"topic",
 				"url",
+				"draft",
 			]),
-			[description, source, title, topic, url]
+			[description, source, title, topic, url, isDraft]
 		);
 		return created;
 	} catch (err) {
