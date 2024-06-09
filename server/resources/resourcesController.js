@@ -65,7 +65,22 @@ router
 		})
 	)
 	.all(methodNotAllowed);
-
+router
+	.route("/user/:id")
+	.get(
+		asyncHandler(async (req, res) => {
+			try {
+				res.send(await service.getResourcesForUser(req.params.id));
+			} catch (err) {
+				if (err instanceof service.MissingUser) {
+					logger.info(err.message);
+					return res.sendStatus(404);
+				}
+				throw err;
+			}
+		})
+	)
+	.all(methodNotAllowed);
 router
 	.route("/:id")
 	.patch(
@@ -89,20 +104,4 @@ router
 	)
 	.all(methodNotAllowed);
 
-router
-	.route("user/:id")
-	.get(
-		asyncHandler(async (req, res) => {
-			try {
-				res.send(await service.getResourcesForUser(req.params.id));
-			} catch (err) {
-				if (err instanceof service.MissingUser) {
-					logger.info(err.message);
-					return res.sendStatus(404);
-				}
-				throw err;
-			}
-		})
-	)
-	.all(methodNotAllowed);
 export default router;

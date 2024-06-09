@@ -1,12 +1,21 @@
+import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 
 import { usePrincipal } from "../../authContext";
 import { Button } from "../../components";
+import { Pagination, ResourceList } from "../../components";
+import { ResourceService, useService } from "../../services";
 
 import "./Account.scss";
 
 export default function Account() {
 	const principal = usePrincipal();
+	const [{ lastPage, resources } = {}, setEnvelope] = useState();
+	const resourceService = useService(ResourceService);
+	useEffect(() => {
+		resourceService.getUserResources(principal?.id).then(setEnvelope);
+	}, [resourceService, principal?.id]);
+
 	if (!principal) {
 		return <Navigate to="/" />;
 	}
@@ -25,6 +34,10 @@ export default function Account() {
 					</tr>
 				</tbody>
 			</table>
+			<section>
+				<ResourceList resources={resources ?? []} />
+				<Pagination lastPage={lastPage ?? 1} />
+			</section>
 			<form
 				action="/api/auth/logout"
 				aria-labelledby="logout-button"
