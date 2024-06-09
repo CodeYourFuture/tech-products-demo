@@ -52,7 +52,12 @@ router
 				if (req.superuser || req.user?.is_admin) {
 					isDraft = false;
 				}
-				const resource = await service.create({ ...req.body, isDraft, source });
+				const resource = await service.create({
+					...req.body,
+					isDraft,
+					source,
+					id: req.user?.id,
+				});
 				res.status(201).send(resource);
 			} catch (err) {
 				if (err instanceof DuplicateResource) {

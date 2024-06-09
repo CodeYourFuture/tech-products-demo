@@ -24,6 +24,7 @@ export const add = async ({
 	topic,
 	url,
 	isDraft,
+	id,
 }) => {
 	try {
 		const {
@@ -36,8 +37,9 @@ export const add = async ({
 				"topic",
 				"url",
 				"draft",
+				"owner",
 			]),
-			[description, source, title, topic, url, isDraft]
+			[description, source, title, topic, url, isDraft, id]
 		);
 		return created;
 	} catch (err) {
