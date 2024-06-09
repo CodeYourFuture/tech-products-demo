@@ -45,6 +45,6 @@ export async function publish(resourceId, publisherId) {
 }
 
 export async function getResourcesForUser(userId) {
-	const { rows } = await repository.getResourcesForUser(userId);
+	const rows = await repository.getResourcesForUser(userId);
 	return rows;
 }

@@ -87,7 +87,7 @@ export const getResourcesForUser = async (userId) => {
 		FROM resources as r
 		LEFT JOIN topics as t
 		ON r.topic = t.id
-		WHERE r.publisher = $1
+		WHERE r.owner = $1
 		ORDER BY publication DESC;`,
 		[userId]
 	);
