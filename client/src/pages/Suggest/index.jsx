@@ -41,7 +41,9 @@ export default function Suggest() {
 
 	return (
 		<>
-			<h2>Suggest a resource</h2>
+			<h2>
+				<span>Suggest a resource</span>
+			</h2>
 			<p>
 				Please use the form below to submit a suggestion. Note that it will not
 				appear on the home page immediately, as it needs to be reviewed by an
