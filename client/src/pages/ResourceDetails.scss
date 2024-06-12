@@ -1,0 +1,29 @@
+.container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+}
+
+.resource-table {
+	margin-top: 20px;
+}
+.title {
+	border-bottom: 4px rgb(159, 25, 25) solid;
+}
+
+.resource-row {
+	border-bottom: 1px solid #ddd;
+}
+
+.resource-header {
+	text-align: left;
+	padding: 8px;
+	background-color: #f2f2f2;
+	font-weight: bold;
+}
+
+.resource-data {
+	text-align: left;
+	padding: 8px;
+}

@@ -11,6 +11,7 @@ import {
 	NotFound,
 	Suggest,
 } from "./pages";
+import ResourceDetails from "./pages/ResourceDetails";
 
 const App = () => (
 	<>
@@ -28,6 +29,7 @@ const App = () => (
 						<Route index element={<Suggest />} />
 					</Route>
 					<Route path="*" element={<NotFound />} />
+					<Route path="/resdetails/:id" element={<ResourceDetails />} />
 				</Routes>
 			</article>
 		</main>

@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
-
 import "./ResourceList.scss";
+import { Link } from "react-router-dom";
 
 export default function ResourceList({ publish, resources }) {
 	return (
@@ -13,7 +13,11 @@ export default function ResourceList({ publish, resources }) {
 			{resources.map(({ description, id, title, topic_name, url }) => (
 				<li key={id}>
 					<div>
-						<h3>{title}</h3>
+						<Link
+							to={`/resdetails/${id}?title=${encodeURIComponent(title)}&topic_name=${encodeURIComponent(topic_name)}&description=${encodeURIComponent(description)}&url=${encodeURIComponent(url)}`}
+						>
+							<h3>{title}</h3>
+						</Link>
 						{topic_name && <span className="topic">{topic_name}</span>}
 					</div>
 					{description && <p className="resource-description">{description}</p>}
