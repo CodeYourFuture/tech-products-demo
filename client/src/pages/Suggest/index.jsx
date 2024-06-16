@@ -23,10 +23,12 @@ export default function Suggest() {
 				Object.entries(formData).filter(([, value]) => value !== "")
 			);
 			try {
-				await resourceService.suggest(suggestion);
+				const suggestionResponse = await resourceService.suggest(suggestion);
 				setMessage({
 					success: true,
-					text: "Thank you for suggesting a resource!",
+					text: suggestionResponse.isDraft
+						? "Thank you for suggesting a resource!"
+						: "Thank you for publishing a resource!",
 				});
 			} catch (err) {
 				setMessage({
