@@ -10,11 +10,13 @@ export class MissingResource extends Error {
 	}
 }
 
-export const create = async (resource) => {
+export const create = async (resource, user) => {
+	const isDraft = !user.superuser && !user.is_admin;
+
 	if (resource.topic) {
 		await topicsService.getById(resource.topic);
 	}
-	return await repository.add(resource);
+	return await repository.add({ ...resource, isDraft });
 };
 
 export async function getAll({ draft = false }, { page = 1, perPage = 20 }) {

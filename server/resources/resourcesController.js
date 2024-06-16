@@ -45,14 +45,12 @@ router
 			}),
 		}),
 		asyncHandler(async (req, res) => {
-			const { id: source } = req.user;
+			const { id: source, is_admin } = req.user;
 			try {
-				let isDraft = true;
-
-				if (req.superuser || req.user?.is_admin) {
-					isDraft = false;
-				}
-				const resource = await service.create({ ...req.body, isDraft, source });
+				const resource = await service.create(
+					{ ...req.body, source },
+					{ superAdmin: req.superuser, is_admin }
+				);
 				res.status(201).send(resource);
 			} catch (err) {
 				if (err instanceof DuplicateResource) {
