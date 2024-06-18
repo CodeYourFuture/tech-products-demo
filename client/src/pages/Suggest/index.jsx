@@ -26,7 +26,7 @@ export default function Suggest() {
 				const suggestionResponse = await resourceService.suggest(suggestion);
 				setMessage({
 					success: true,
-					text: suggestionResponse.isDraft
+					text: suggestionResponse.draft
 						? "Thank you for suggesting a resource!"
 						: "Thank you for publishing a resource!",
 				});

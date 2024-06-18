@@ -100,3 +100,40 @@ it("lets the suggester assign a topic to the resource", () => {
 	cy.findByRole("heading", { level: 1 }).click();
 	cy.findByText("HTML/CSS").should("exist");
 });
+
+it("lets an admin user publish a resource", () => {
+	cy.visit("/");
+	cy.logInAs("admin@codeyourfuture.io"); // Log in as admin user
+	cy.findByRole("link", { name: /suggest/i }).click();
+	const now = new Date().toISOString();
+	const description = "This is a useful thing to read.";
+	const title = `Resource from ${now}`;
+	const url = `https://example.com/${now}`;
+	cy.intercept("POST", "/api/resources").as("createResource");
+	cy.findByRole("textbox", { name: /description/i }).type(description);
+	cy.findByRole("textbox", { name: /title/i }).type(title);
+	cy.findByRole("textbox", { name: /url/i }).type(url);
+	cy.findByRole("button", { name: /suggest/i }).click();
+	cy.wait("@createResource").then(
+		({ request: { body: submitted }, response: { body: created } }) => {
+			expect(submitted).to.have.property("description", description);
+			expect(submitted).to.have.property("title", title);
+			expect(submitted).to.have.property("url", url);
+			cy.request({
+				body: { draft: false },
+				headers: { Authorization: `Bearer ${Cypress.env("SUDO_TOKEN")}` },
+				method: "PATCH",
+				url: `/api/resources/${created.id}`,
+			});
+		}
+	);
+	cy.findByText(/thank you for publishing a resource/i).should("exist");
+	cy.visit("/");
+	cy.findByRole("heading", { level: 3 }).should("contain.text", title);
+	cy.findByRole("link", { name: "example.com" }).should(
+		"have.attr",
+		"href",
+		url
+	);
+	cy.findByText(new RegExp(description)).should("exist");
+});
