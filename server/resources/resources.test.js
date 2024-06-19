@@ -385,4 +385,33 @@ describe("/api/resources", () => {
 			expect(published).toMatchObject({ publisher: admin.id, source: user.id });
 		});
 	});
+
+	describe("POST / - Auto publish for the admin resource", () => {
+		it("creates draft as false for admin users", async () => {
+			const {
+				agent,
+				user: { id },
+			} = await authenticateAs("admin");
+			const resource = {
+				title: "Admin Resource",
+				url: "https://example.com/admin",
+			};
+
+			const { body } = await agent
+				.post("/api/resources")
+				.send(resource)
+				.set("User-Agent", "supertest")
+				.expect(201);
+
+			expect(body).toMatchObject({
+				title: resource.title,
+				url: resource.url,
+				draft: false,
+				id: expect.stringMatching(patterns.UUID),
+				source: id,
+				description: null,
+				accession: expect.stringMatching(patterns.DATETIME),
+			});
+		});
+	});
 });
