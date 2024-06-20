@@ -60,10 +60,19 @@ export default function Suggest() {
 		<>
 			<h2>Suggest a resource</h2>
 			<p>
-				Please use the form below to submit a suggestion. Note that it will not
-				appear on the home page immediately, as it needs to be reviewed by an
-				administrator unless you are an admin.
+				{principal?.is_admin ? (
+					<p>Please use the form below to publish a resource.</p>
+				) : (
+					<>
+						{" "}
+						Please use the form below to suggest a resource.
+						<br />
+						Note that it will not appear on the home page immediately, as it
+						needs to be reviewed by an administrator.
+					</>
+				)}
 			</p>
+
 			<section>
 				{message && <Message {...message} />}
 				<Form
