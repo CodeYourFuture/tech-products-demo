@@ -2,7 +2,7 @@ import clsx from "clsx";
 import PropTypes from "prop-types";
 import { useCallback, useEffect, useState } from "react";
 
-import { usePrincipal } from "../../authContext"; // Import the usePrincipal hook
+import { usePrincipal } from "../../authContext";
 import { Form, FormControls } from "../../components";
 import { ResourceService, TopicService, useService } from "../../services";
 
@@ -15,13 +15,6 @@ export default function Suggest() {
 	const topicService = useService(TopicService);
 	const principal = usePrincipal();
 
-	const publish = useCallback(
-		async (id) => {
-			await resourceService.publish(id);
-		},
-		[resourceService]
-	);
-
 	useEffect(() => {
 		topicService.getTopics().then(setTopics);
 	}, [topicService]);
@@ -31,11 +24,10 @@ export default function Suggest() {
 			const suggestion = Object.fromEntries(
 				Object.entries(formData).filter(([, value]) => value !== "")
 			);
-
 			try {
-				const response = await resourceService.suggest(suggestion);
+				await resourceService.suggest(suggestion);
+
 				if (principal?.is_admin) {
-					await publish(response.id);
 					setMessage({
 						success: true,
 						text: "Thank you for suggesting a resource! It has been published.",
@@ -53,26 +45,17 @@ export default function Suggest() {
 				});
 			}
 		},
-		[resourceService, principal, publish]
+		[resourceService, principal]
 	);
 
 	return (
 		<>
 			<h2>Suggest a resource</h2>
 			<p>
-				{principal?.is_admin ? (
-					<p>Please use the form below to publish a resource.</p>
-				) : (
-					<>
-						{" "}
-						Please use the form below to suggest a resource.
-						<br />
-						Note that it will not appear on the home page immediately, as it
-						needs to be reviewed by an administrator.
-					</>
-				)}
+				{principal.is_admin
+					? "As an administrator, your suggestion will be published immediately."
+					: "Please use the form below to submit a suggestion. Note that it will not appear on the home page immediately, as it needs to be reviewed by an administrator."}
 			</p>
-
 			<section>
 				{message && <Message {...message} />}
 				<Form
