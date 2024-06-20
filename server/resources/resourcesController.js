@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { Joi } from "express-validation";
 
+import db, { singleLine } from "../db";
 import { topicsService } from "../topics";
 import logger from "../utils/logger";
 import {
@@ -46,8 +47,12 @@ router
 		}),
 		asyncHandler(async (req, res) => {
 			const { id: source } = req.user;
+			let publishResource = req.user?.is_admin;
 			try {
 				const resource = await service.create({ ...req.body, source });
+				if (publishResource) {
+					await service.publish(resource.id, req.user?.id ?? null);
+				}
 				res.status(201).send(resource);
 			} catch (err) {
 				if (err instanceof DuplicateResource) {
@@ -63,6 +68,27 @@ router
 
 router
 	.route("/:id")
+	.get(
+		asyncHandler(async (req, res) => {
+			const {
+				rows: [resource],
+			} = await db.query(
+				singleLine`
+			SELECT r.*, t.name AS topic_name, us.name AS source_name, up.name AS publisher_name
+			FROM resources AS r
+			INNER JOIN users AS us ON r.source = us.id
+			LEFT JOIN users AS up ON r.publisher = up.id
+			LEFT JOIN topics AS t ON r.topic = t.id
+			WHERE r.id = $1;
+		`,
+				[req.params.id]
+			);
+			if (!resource) {
+				return res.sendStatus(404);
+			}
+			res.json(resource);
+		})
+	)
 	.patch(
 		sudoOnly,
 		validated({
