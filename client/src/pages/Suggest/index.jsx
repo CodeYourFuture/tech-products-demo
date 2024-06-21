@@ -37,18 +37,6 @@ export default function Suggest() {
 						</p>
 					),
 				});
-
-				// if (principal?.is_admin) {
-				// 	setMessage({
-				// 		success: true,
-				// 		text: "Thank you for suggesting a resource! It has been published.",
-				// 	});
-				// } else {
-				// 	setMessage({
-				// 		success: true,
-				// 		text: "Thank you for suggesting a resource! It will be reviewed by an administrator.",
-				// 	});
-				// }
 			} catch (err) {
 				setMessage({
 					success: false,
