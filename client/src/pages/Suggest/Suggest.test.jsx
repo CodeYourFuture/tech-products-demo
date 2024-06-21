@@ -26,10 +26,16 @@ describe("Suggest", () => {
 		await user.type(screen.getByRole("textbox", { name: /title/i }), title);
 		await user.type(screen.getByRole("textbox", { name: /url/i }), url);
 		await user.click(screen.getByRole("button", { name: /suggest/i }));
+		if (requestBody.draft) {
+			await expect(
+				screen.findByText(/thank you for suggesting a resource/i)
+			).resolves.toHaveClass("message", "success");
+		} else {
+			await expect(
+				screen.findByText(/thank you for publishing a resource/i)
+			).resolves.toHaveClass("message", "success");
+		}
 
-		await expect(
-			screen.findByText(/thank you for suggesting a resource/i)
-		).resolves.toHaveClass("message", "success");
 		expect(requestBody).toEqual({ title, url });
 		expect(screen.getByRole("form")).toHaveFormValues({
 			description: "",
@@ -64,8 +70,11 @@ describe("Suggest", () => {
 			"https://webaim.org/resources/contrastchecker/"
 		);
 		await user.click(screen.getByRole("button", { name: /suggest/i }));
-
-		await screen.findByText(/thank you for suggesting a resource/i);
+		if (requestBody.draft) {
+			await screen.findByText(/thank you for suggesting a resource/i);
+		} else {
+			await screen.findByText(/thank you for publishing a resource/i);
+		}
 		expect(requestBody).toHaveProperty("description", description);
 	});
 
@@ -149,8 +158,11 @@ describe("Suggest", () => {
 			topic
 		);
 		await user.click(screen.getByRole("button", { name: /suggest/i }));
-
-		await screen.findByText(/thank you for suggesting a resource/i);
+		if (requestBody.draft) {
+			await screen.findByText(/thank you for suggesting a resource/i);
+		} else {
+			await screen.findByText(/thank you for publishing a resource/i);
+		}
 		expect(requestBody).toHaveProperty("topic", topicId);
 	});
 
