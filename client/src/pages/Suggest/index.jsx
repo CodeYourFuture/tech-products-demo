@@ -28,14 +28,9 @@ export default function Suggest() {
 				await resourceService.suggest(suggestion);
 				setMessage({
 					success: true,
-					text: principal?.is_admin ? (
-						<p>Thank you for suggesting a resource! It has been published.</p>
-					) : (
-						<p>
-							Thank you for suggesting a resource! It will be reviewed by an
-							administrator
-						</p>
-					),
+					text: principal?.is_admin
+						? "Thank you for suggesting a resource! It has been published."
+						: "Thank you for suggesting a resource! It will be reviewed by an administrator",
 				});
 			} catch (err) {
 				setMessage({
