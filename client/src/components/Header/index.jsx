@@ -6,6 +6,7 @@ import "./Header.scss";
 import logo from "./logo.png";
 
 export default function Header() {
+	const user = usePrincipal();
 	const principal = usePrincipal();
 	return (
 		<header>
@@ -17,7 +18,13 @@ export default function Header() {
 			</h1>
 			<nav aria-label="site navigation">
 				<ul>
-					<li>{principal && <NavLink to="/suggest">Suggest</NavLink>}</li>
+					<li>
+						{principal && (
+							<NavLink to="/suggest">
+								{user.is_admin ? "Publish" : "Suggest"}
+							</NavLink>
+						)}
+					</li>
 					<li>
 						{principal?.is_admin && <NavLink to="/drafts">Drafts</NavLink>}
 					</li>

@@ -2,6 +2,7 @@ import clsx from "clsx";
 import PropTypes from "prop-types";
 import { useCallback, useEffect, useState } from "react";
 
+import { usePrincipal } from "../../authContext";
 import { Form, FormControls } from "../../components";
 import { ResourceService, TopicService, useService } from "../../services";
 
@@ -12,7 +13,7 @@ export default function Suggest() {
 	const [topics, setTopics] = useState(undefined);
 	const resourceService = useService(ResourceService);
 	const topicService = useService(TopicService);
-
+	const user = usePrincipal();
 	useEffect(() => {
 		topicService.getTopics().then(setTopics);
 	}, [topicService]);
@@ -23,12 +24,12 @@ export default function Suggest() {
 				Object.entries(formData).filter(([, value]) => value !== "")
 			);
 			try {
-				const suggestionResponse = await resourceService.suggest(suggestion);
+				await resourceService.suggest(suggestion);
 				setMessage({
 					success: true,
-					text: suggestionResponse.draft
-						? "Thank you for suggesting a resource!"
-						: "Thank you for publishing a resource!",
+					text: user.is_admin
+						? "Thank you for publishing a resource!"
+						: "Thank you for suggesting a resource!",
 				});
 			} catch (err) {
 				setMessage({
@@ -38,16 +39,18 @@ export default function Suggest() {
 				throw err;
 			}
 		},
-		[resourceService]
+		[resourceService, user.is_admin]
 	);
 
 	return (
 		<>
-			<h2>Suggest a resource</h2>
+			<h2>{user.is_admin ? "Publish a resource" : "Suggest a resource"}</h2>
 			<p>
-				Please use the form below to submit a suggestion. Note that it will not
+				{user.is_admin
+					? "Please use the form below to submit a resource. It's will appear immediately to the home page because you are administrator"
+					: `Please use the form below to submit a suggestion. Note that it will not
 				appear on the home page immediately, as it needs to be reviewed by an
-				administrator.
+				administrator.`}
 			</p>
 			<section>
 				{message && <Message {...message} />}
@@ -56,7 +59,7 @@ export default function Suggest() {
 					onChange={() => setMessage(undefined)}
 					onSubmit={submitForm}
 					resetButton="Clear"
-					submitButton="Suggest"
+					submitButton={user.is_admin ? "Publish" : "Suggest"}
 				>
 					<FormControls.Input label="Title" name="title" required />
 					<FormControls.Input label="URL" name="url" required type="url" />
