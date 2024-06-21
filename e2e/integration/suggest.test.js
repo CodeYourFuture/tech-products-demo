@@ -116,7 +116,7 @@ it("lets an admin user publish a resource", () => {
 	cy.logInAs("admin@codeyourfuture.io");
 	cy.visit("/");
 
-	cy.findByRole("link", { name: /suggest/i }).click();
+	cy.findByRole("link", { name: /Publish/i }).click();
 	const now = new Date().toISOString();
 	const description = "This is a useful thing to read.";
 	const title = `Resource from ${now}`;
@@ -125,7 +125,7 @@ it("lets an admin user publish a resource", () => {
 	cy.findByRole("textbox", { name: /description/i }).type(description);
 	cy.findByRole("textbox", { name: /title/i }).type(title);
 	cy.findByRole("textbox", { name: /url/i }).type(url);
-	cy.findByRole("button", { name: /suggest/i }).click();
+	cy.findByRole("button", { name: /Publish/i }).click();
 	cy.wait("@createResource").then(
 		({ request: { body: submitted }, response: { body: created } }) => {
 			expect(submitted).to.have.property("description", description);

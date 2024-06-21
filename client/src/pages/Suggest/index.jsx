@@ -14,6 +14,7 @@ export default function Suggest() {
 	const resourceService = useService(ResourceService);
 	const topicService = useService(TopicService);
 	const user = usePrincipal();
+	const isAdmin = user && user.is_admin;
 	useEffect(() => {
 		topicService.getTopics().then(setTopics);
 	}, [topicService]);
@@ -24,12 +25,12 @@ export default function Suggest() {
 				Object.entries(formData).filter(([, value]) => value !== "")
 			);
 			try {
-				await resourceService.suggest(suggestion);
+				const resource = await resourceService.suggest(suggestion);
 				setMessage({
 					success: true,
-					text: user.is_admin
-						? "Thank you for publishing a resource!"
-						: "Thank you for suggesting a resource!",
+					text: resource.draft
+						? "Thank you for suggesting a resource!"
+						: "Thank you for publishing a resource!",
 				});
 			} catch (err) {
 				setMessage({
@@ -39,14 +40,14 @@ export default function Suggest() {
 				throw err;
 			}
 		},
-		[resourceService, user.is_admin]
+		[resourceService]
 	);
 
 	return (
 		<>
-			<h2>{user.is_admin ? "Publish a resource" : "Suggest a resource"}</h2>
+			<h2>{isAdmin ? "Publish a resource" : "Suggest a resource"}</h2>
 			<p>
-				{user.is_admin
+				{isAdmin
 					? "Please use the form below to submit a resource. It's will appear immediately to the home page because you are administrator"
 					: `Please use the form below to submit a suggestion. Note that it will not
 				appear on the home page immediately, as it needs to be reviewed by an
@@ -59,7 +60,7 @@ export default function Suggest() {
 					onChange={() => setMessage(undefined)}
 					onSubmit={submitForm}
 					resetButton="Clear"
-					submitButton={user.is_admin ? "Publish" : "Suggest"}
+					submitButton={isAdmin ? "Publish" : "Suggest"}
 				>
 					<FormControls.Input label="Title" name="title" required />
 					<FormControls.Input label="URL" name="url" required type="url" />
