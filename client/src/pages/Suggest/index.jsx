@@ -26,12 +26,17 @@ export default function Suggest() {
 			);
 			try {
 				await resourceService.suggest(suggestion);
-				setMessage({
-					success: true,
-					text: principal?.is_admin
-						? "Thank you for suggesting a resource! It has been published."
-						: "Thank you for suggesting a resource! It will be reviewed by an administrator",
-				});
+				if (principal?.is_admin) {
+					setMessage({
+						success: true,
+						text: "Thank you for suggesting a resource, It has been published",
+					});
+				} else {
+					setMessage({
+						success: true,
+						text: "Thank you for suggesting a resource",
+					});
+				}
 			} catch (err) {
 				setMessage({
 					success: false,
