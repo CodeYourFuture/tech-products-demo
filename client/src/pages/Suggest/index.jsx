@@ -26,7 +26,6 @@ export default function Suggest() {
 			);
 			try {
 				await resourceService.suggest(suggestion);
-
 				setMessage({
 					success: true,
 					text: principal?.is_admin
@@ -38,6 +37,7 @@ export default function Suggest() {
 					success: false,
 					text: `Resource suggestion failed: ${err.message}.`,
 				});
+				throw err;
 			}
 		},
 		[resourceService, principal]
@@ -47,9 +47,9 @@ export default function Suggest() {
 		<>
 			<h2>Suggest a resource</h2>
 			<p>
-				{principal?.is_admin
-					? "Please use the form below to submit a suggestion. Note that your suggestion will be published immediately."
-					: "Please use the form below to submit a suggestion. Note that it will not appear on the home page immediately, as it needs to be reviewed by an administrator."}
+				Please use the form below to submit a suggestion. Note that it will not
+				appear on the home page immediately, as it needs to be reviewed by an
+				administrator.
 			</p>
 			<section>
 				{message && <Message {...message} />}
