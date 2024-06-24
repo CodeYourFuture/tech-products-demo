@@ -29,8 +29,8 @@ export default function Suggest() {
 				setMessage({
 					success: true,
 					text: principal?.is_admin
-						? "Thank you for suggesting a resource. Admin message."
-						: "Thank you for suggesting a resource",
+						? "Thank you for suggesting a resource. It has been published."
+						: "Thank you for suggesting a resource! It will be reviewd by an administrator",
 				});
 			} catch (err) {
 				setMessage({
@@ -46,11 +46,19 @@ export default function Suggest() {
 	return (
 		<>
 			<h2>Suggest a resource</h2>
-			<p>
-				Please use the form below to submit a suggestion. Note that it will not
-				appear on the home page immediately, as it needs to be reviewed by an
-				administrator.
-			</p>
+			{principal?.is_admin ? (
+				<p>
+					Please use the form below to submit a suggestion. Note that, your
+					suggestion will be published immediately.
+				</p>
+			) : (
+				<p>
+					Please use the form below to submit a suggestion. Note that it will
+					not appear on the home page immediately, as it needs to be reviewed by
+					an administrator.
+				</p>
+			)}
+
 			<section>
 				{message && <Message {...message} />}
 				<Form

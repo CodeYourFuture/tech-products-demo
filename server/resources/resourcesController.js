@@ -47,12 +47,18 @@ router
 		asyncHandler(async (req, res) => {
 			const { id: source } = req.user;
 			let suggetedUser = req.user?.is_admin;
+
 			try {
 				const resource = await service.create({ ...req.body, source });
 				if (suggetedUser) {
-					await service.publish(resource.id, req.user?.id ?? null);
+					const publishedResponse = await service.publish(
+						resource.id,
+						req.user?.id ?? null
+					);
+					res.status(201).send(publishedResponse);
+				} else {
+					res.status(201).send(resource);
 				}
-				res.status(201).send(resource);
 			} catch (err) {
 				if (err instanceof DuplicateResource) {
 					return res.sendStatus(409);
