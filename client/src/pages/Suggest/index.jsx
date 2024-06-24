@@ -2,6 +2,7 @@ import clsx from "clsx";
 import PropTypes from "prop-types";
 import { useCallback, useEffect, useState } from "react";
 
+import { usePrincipal } from "../../authContext";
 import { Form, FormControls } from "../../components";
 import { ResourceService, TopicService, useService } from "../../services";
 
@@ -12,6 +13,7 @@ export default function Suggest() {
 	const [topics, setTopics] = useState(undefined);
 	const resourceService = useService(ResourceService);
 	const topicService = useService(TopicService);
+	const principal = usePrincipal();
 
 	useEffect(() => {
 		topicService.getTopics().then(setTopics);
@@ -26,7 +28,9 @@ export default function Suggest() {
 				await resourceService.suggest(suggestion);
 				setMessage({
 					success: true,
-					text: "Thank you for suggesting a resource!",
+					text: principal?.is_admin
+						? "Thank you for suggesting a resource. It has been published."
+						: "Thank you for suggesting a resource! It will be reviewd by an administrator",
 				});
 			} catch (err) {
 				setMessage({
@@ -36,17 +40,25 @@ export default function Suggest() {
 				throw err;
 			}
 		},
-		[resourceService]
+		[resourceService, principal]
 	);
 
 	return (
 		<>
 			<h2>Suggest a resource</h2>
-			<p>
-				Please use the form below to submit a suggestion. Note that it will not
-				appear on the home page immediately, as it needs to be reviewed by an
-				administrator.
-			</p>
+			{principal?.is_admin ? (
+				<p>
+					Please use the form below to submit a suggestion. Note that, your
+					suggestion will be published immediately.
+				</p>
+			) : (
+				<p>
+					Please use the form below to submit a suggestion. Note that it will
+					not appear on the home page immediately, as it needs to be reviewed by
+					an administrator.
+				</p>
+			)}
+
 			<section>
 				{message && <Message {...message} />}
 				<Form
