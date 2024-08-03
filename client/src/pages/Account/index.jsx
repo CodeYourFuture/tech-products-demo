@@ -12,7 +12,9 @@ export default function Account() {
 	}
 	return (
 		<>
-			<h2>Account</h2>
+			<h2>
+				<span>Account</span>
+			</h2>
 			<table>
 				<tbody>
 					<tr>
