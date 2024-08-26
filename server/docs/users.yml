@@ -34,16 +34,7 @@
           type: string
           format: uuid
     requestBody:
-      required: true
-      content:
-        application/json:
-          schema:
-            type: object
-            required: ["is_admin"]
-            properties:
-              is_admin:
-                type: boolean
-                example: true
+      $ref: "#/components/requests/JsonPatch"
     responses:
       200:
         content:
@@ -54,5 +45,7 @@
         $ref: "#/components/responses/BadRequestError"
       401:
         $ref: "#/components/responses/UnauthorizedError"
+      422:
+        $ref: "#/components/responses/UnprocessableContent"
       500:
         $ref: "#/components/responses/InternalServerError"

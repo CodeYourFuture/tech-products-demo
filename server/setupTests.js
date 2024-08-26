@@ -111,6 +111,7 @@ export const authenticateAs = async (identity) => {
 			.patch(`/api/users/${user.id}`)
 			.set("Authorization", `Bearer ${sudoToken}`)
 			.set("User-Agent", "supertest")
+			.send([{ op: "replace", path: "/is_admin", value: true }])
 			.expect(200));
 	}
 	return { agent, user };

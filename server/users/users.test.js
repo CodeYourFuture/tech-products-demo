@@ -27,6 +27,7 @@ describe("/api/users", () => {
 			const { agent } = await authenticateAs("anonymous");
 			await agent
 				.patch("/api/users/abc123")
+				.set("Content-Type", "application/json-patch+json")
 				.set("User-Agent", "supertest")
 				.expect(401, "Unauthorized");
 		});
@@ -38,8 +39,9 @@ describe("/api/users", () => {
 
 			await anonAgent
 				.patch(`/api/users/${user.id}`)
-				.send({ is_admin: true })
+				.send([{ op: "replace", path: "/is_admin", value: true }])
 				.set("Authorization", `Bearer ${sudoToken}`)
+				.set("Content-Type", "application/json-patch+json")
 				.set("User-Agent", "supertest")
 				.expect(200, { ...user, is_admin: true });
 
@@ -54,20 +56,38 @@ describe("/api/users", () => {
 			const { agent } = await authenticateAs("anonymous");
 			await agent
 				.patch("/api/users/4174cd3c-70c9-4889-8acb-216de7f38025")
-				.send({ is_admin: true })
+				.send([{ op: "replace", path: "/is_admin", value: true }])
 				.set("Authorization", `Bearer ${sudoToken}`)
+				.set("Content-Type", "application/json-patch+json")
 				.set("User-Agent", "supertest")
 				.expect(404, "Not Found");
 		});
 
 		it("rejects other changes", async () => {
-			const { agent } = await authenticateAs("anonymous");
-			await agent
-				.patch("/api/users/4174cd3c-70c9-4889-8acb-216de7f38025")
+			let { user } = await authenticateAs("user");
+			const { agent: anonAgent } = await authenticateAs("anonymous");
+			await anonAgent
+				.patch(`/api/users/${user.id}`)
+				.send([{ op: "replace", path: "/name", value: "Some Alias" }])
+				.set("Authorization", `Bearer ${sudoToken}`)
+				.set("Content-Type", "application/json-patch+json")
+				.set("User-Agent", "supertest")
+				.expect(422, {
+					details: "Only changing the admin status to true is supported",
+					error: "Unprocessable Content",
+				});
+		});
+
+		it("rejects non-JSONPatch requests", async () => {
+			let { user } = await authenticateAs("user");
+			const { agent: anonAgent } = await authenticateAs("anonymous");
+			await anonAgent
+				.patch(`/api/users/${user.id}`)
 				.send({ name: "Some Alias" })
 				.set("Authorization", `Bearer ${sudoToken}`)
+				.set("Content-Type", "application/json-patch+json")
 				.set("User-Agent", "supertest")
-				.expect(400, { name: '"name" is not allowed' });
+				.expect(400, { undefined: '"value" must be an array' });
 		});
 	});
 });

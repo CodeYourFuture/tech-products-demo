@@ -10,6 +10,7 @@ import {
 	sudoOnly,
 	validated,
 } from "../utils/middleware";
+import { jsonPatch } from "../utils/validators";
 
 import { DuplicateResource } from "./resourcesService";
 import * as service from "./resourcesService";
@@ -65,12 +66,20 @@ router
 	.route("/:id")
 	.patch(
 		sudoOnly,
-		validated({
-			body: Joi.object({
-				draft: Joi.any().valid(false),
-			}),
-		}),
+		validated({ body: jsonPatch }),
 		asyncHandler(async (req, res) => {
+			const [{ op, path, value }] = req.body;
+			if (
+				req.body.length > 1 ||
+				op !== "replace" ||
+				path !== "/draft" ||
+				value !== false
+			) {
+				return res.status(422).json({
+					details: "Only changing the draft status to false is supported",
+					error: "Unprocessable Content",
+				});
+			}
 			try {
 				res.send(await service.publish(req.params.id, req.user?.id ?? null));
 			} catch (err) {

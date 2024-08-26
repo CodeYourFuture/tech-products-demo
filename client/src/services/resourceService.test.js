@@ -82,6 +82,7 @@ describe("ResourceService", () => {
 
 	describe("publish", () => {
 		it("sends an appropriate PATCH request", async () => {
+			/** @type {Request} */
 			let request;
 			const id = "abc123";
 			server.use(
@@ -92,7 +93,12 @@ describe("ResourceService", () => {
 			);
 			await service.publish(id);
 			expect(new URL(request.url).pathname).toMatch(new RegExp(`/${id}$`));
-			await expect(request.json()).resolves.toEqual({ draft: false });
+			expect(request.headers.get("Content-Type")).toBe(
+				"application/json-patch+json"
+			);
+			await expect(request.json()).resolves.toEqual([
+				{ op: "replace", path: "/draft", value: false },
+			]);
 		});
 	});
 

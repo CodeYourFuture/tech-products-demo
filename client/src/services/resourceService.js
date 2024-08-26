@@ -32,8 +32,8 @@ export default class ResourceService {
 
 	async publish(id) {
 		const res = await this.fetch(`${ResourceService.ENDPOINT}/${id}`, {
-			body: JSON.stringify({ draft: false }),
-			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify([{ op: "replace", path: "/draft", value: false }]),
+			headers: { "Content-Type": "application/json-patch+json" },
 			method: "PATCH",
 		});
 		if (res.ok) {

@@ -1,5 +1,4 @@
 import { Router } from "express";
-import { Joi } from "express-validation";
 
 import {
 	asyncHandler,
@@ -7,6 +6,7 @@ import {
 	sudoOnly,
 	validated,
 } from "../utils/middleware";
+import { jsonPatch } from "../utils/validators";
 
 import { MissingUser } from "./usersService";
 import * as service from "./usersService";
@@ -27,12 +27,20 @@ router
 	.route("/:id")
 	.patch(
 		sudoOnly,
-		validated({
-			body: Joi.object({
-				is_admin: Joi.boolean(),
-			}),
-		}),
+		validated({ body: jsonPatch }),
 		asyncHandler(async (req, res) => {
+			const [{ op, path, value }] = req.body;
+			if (
+				req.body.length > 1 ||
+				op !== "replace" ||
+				path !== "/is_admin" ||
+				value !== true
+			) {
+				return res.status(422).json({
+					details: "Only changing the admin status to true is supported",
+					error: "Unprocessable Content",
+				});
+			}
 			try {
 				res.json(await service.promote(req.params.id));
 			} catch (err) {

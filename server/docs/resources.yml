@@ -82,16 +82,7 @@
           type: string
           format: uuid
     requestBody:
-      required: true
-      content:
-        application/json:
-          schema:
-            type: object
-            required: [draft]
-            properties:
-              draft:
-                type: boolean
-                example: false
+      $ref: "#/components/requests/JsonPatch"
     responses:
       200:
         content:
@@ -104,5 +95,7 @@
         $ref: "#/components/responses/UnauthorizedError"
       404:
         $ref: "#/components/responses/NotFoundError"
+      422:
+        $ref: "#/components/responses/UnprocessableContent"
       500:
         $ref: "#/components/responses/InternalServerError"
