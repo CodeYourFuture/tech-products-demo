@@ -10,18 +10,11 @@
 	"overrides": [
 		{
 			"files": ["setupTests.mjs", "**/*.test.js?(x)"],
-			"env": { "vitest/env": true },
-			"extends": ["plugin:testing-library/react"],
-			"plugins": ["vitest"],
-			"rules": {
-				"vitest/expect-expect": "error",
-				"vitest/no-commented-out-tests": "error",
-				"vitest/no-identical-title": "error",
-				"vitest/no-import-node-test": "error",
-				"vitest/valid-describe-callback": "error",
-				"vitest/valid-expect": "error",
-				"vitest/valid-title": "error"
-			}
+			"env": { "@vitest/env": true },
+			"extends": [
+				"plugin:@vitest/legacy-recommended",
+				"plugin:testing-library/react"
+			]
 		}
 	],
 	"parserOptions": {
