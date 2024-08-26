@@ -12,6 +12,14 @@ tags:
       url: https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps#web-application-flow
 
 components:
+  requests:
+    JsonPatch:
+      required: true
+      content:
+        application/json-patch+json:
+          schema:
+            $ref: "#/components/schemas/JsonPatch"
+
   responses:
     BadRequestError:
       description: The request was not accepted.
@@ -59,6 +67,20 @@ components:
           schema:
             type: string
             example: Unauthorized
+    UnprocessableContent:
+      description: The request was well-formed but could not be processed
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [details, error]
+            properties:
+              details:
+                example: Only changing the draft status to false is supported
+                type: string
+              error:
+                enum:
+                  - Unprocessable Content
 
   schemas:
     BaseResource:
@@ -98,6 +120,27 @@ components:
             topic_name:
               type: string
               example: "HTML/CSS"
+    JsonPatch:
+      description: |
+        [JSON Patch](https://jsonpatch.com/) is a format for describing changes to a JSON document.
+        It can be used to avoid sending a whole document when only a part has changed.
+
+        Described by [RFC 6902](https://datatracker.ietf.org/doc/html/rfc6902/).
+      type: array
+      items:
+        schema: object
+        required: [op, path]
+        properties:
+          op:
+            type: string
+            enum: [add, copy, move, remove, replace, test]
+          path:
+            type: string
+          from:
+            type: string
+          value:
+            description: Can be anything
+            nullable: true
     PublishedResource:
       allOf:
         - $ref: "#/components/schemas/BaseResource"

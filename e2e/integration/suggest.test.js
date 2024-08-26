@@ -31,7 +31,7 @@ it("lets an authenticated user suggest a resource", () => {
 			expect(submitted).to.have.property("title", title);
 			expect(submitted).to.have.property("url", url);
 			cy.request({
-				body: { draft: false },
+				body: [{ op: "replace", path: "/draft", value: false }],
 				headers: { Authorization: `Bearer ${Cypress.env("SUDO_TOKEN")}` },
 				method: "PATCH",
 				url: `/api/resources/${created.id}`,

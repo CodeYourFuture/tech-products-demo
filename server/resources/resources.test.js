@@ -296,8 +296,9 @@ describe("/api/resources", () => {
 
 			const { body: updated } = await anonAgent
 				.patch(`/api/resources/${resource.id}`)
-				.send({ draft: false })
+				.send([{ op: "replace", path: "/draft", value: false }])
 				.set("Authorization", `Bearer ${sudoToken}`)
+				.set("Content-Type", "application/json-patch+json")
 				.set("User-Agent", "supertest")
 				.expect(200);
 
@@ -314,6 +315,27 @@ describe("/api/resources", () => {
 			expect(resources).toHaveLength(1);
 		});
 
+		it("rejects non-JSONPatch requests", async () => {
+			const { agent: anonAgent } = await authenticateAs("anonymous");
+			const { agent } = await authenticateAs("user");
+			const { body: resource } = await agent
+				.post("/api/resources")
+				.send({
+					title: "Mastering margin collapsing",
+					url: "https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Box_Model/Mastering_margin_collapsing",
+				})
+				.set("User-Agent", "supertest")
+				.expect(201);
+
+			await anonAgent
+				.patch(`/api/resources/${resource.id}`)
+				.send({ draft: false })
+				.set("Authorization", `Bearer ${sudoToken}`)
+				.set("Content-Type", "application/json-patch+json")
+				.set("User-Agent", "supertest")
+				.expect(400, { undefined: '"value" must be an array' });
+		});
+
 		it("rejects other changes", async () => {
 			const { agent: anonAgent } = await authenticateAs("anonymous");
 			const { agent } = await authenticateAs("user");
@@ -328,12 +350,16 @@ describe("/api/resources", () => {
 
 			await anonAgent
 				.patch(`/api/resources/${resource.id}`)
-				.send({ draft: true, title: "Something else" })
+				.send([
+					{ op: "replace", path: "/draft", value: true },
+					{ op: "replace", path: "/title", value: "Something else" },
+				])
 				.set("Authorization", `Bearer ${sudoToken}`)
+				.set("Content-Type", "application/json-patch+json")
 				.set("User-Agent", "supertest")
-				.expect(400, {
-					draft: '"draft" must be [false]',
-					title: '"title" is not allowed',
+				.expect(422, {
+					details: "Only changing the draft status to false is supported",
+					error: "Unprocessable Content",
 				});
 		});
 
@@ -341,8 +367,9 @@ describe("/api/resources", () => {
 			const { agent } = await authenticateAs("anonymous");
 			await agent
 				.patch(`/api/resources/${randomUUID()}`)
-				.send({ draft: false })
+				.send([{ op: "replace", path: "/draft", value: false }])
 				.set("Authorization", `Bearer ${sudoToken}`)
+				.set("Content-Type", "application/json-patch+json")
 				.set("User-Agent", "supertest")
 				.expect(404);
 		});
@@ -361,7 +388,8 @@ describe("/api/resources", () => {
 
 			await anonAgent
 				.patch(`/api/resources/${resource.id}`)
-				.send({ draft: false })
+				.send([{ op: "replace", path: "/draft", value: false }])
+				.set("Content-Type", "application/json-patch+json")
 				.set("User-Agent", "supertest")
 				.expect(401);
 		});
@@ -378,7 +406,8 @@ describe("/api/resources", () => {
 
 			const { body: published } = await adminAgent
 				.patch(`/api/resources/${created.id}`)
-				.send({ draft: false })
+				.send([{ op: "replace", path: "/draft", value: false }])
+				.set("Content-Type", "application/json-patch+json")
 				.set("User-Agent", "supertest")
 				.expect(200);
 

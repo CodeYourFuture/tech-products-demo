@@ -11,6 +11,7 @@
 						"assertFunctionNames": [
 							"expect",
 							"agent.**.expect",
+							"*Agent.**.expect",
 							"request.**.expect",
 							"screen.findBy*"
 						]
