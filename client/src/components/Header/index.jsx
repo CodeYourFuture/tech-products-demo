@@ -18,6 +18,7 @@ export default function Header() {
 			<nav aria-label="site navigation">
 				<ul>
 					<li>{principal && <NavLink to="/suggest">Suggest</NavLink>}</li>
+					<li>{principal && <NavLink to="/bookmarks">Bookmarks</NavLink>}</li>
 					<li>
 						{principal?.is_admin && <NavLink to="/drafts">Drafts</NavLink>}
 					</li>

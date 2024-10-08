@@ -1,4 +1,5 @@
 export { default as About } from "./About";
+export { default as BookmarksPage } from "./BookmarksPage";
 export { default as Account } from "./Account";
 export { default as Authenticated } from "./Authenticated";
 export { default as Drafts } from "./Drafts";
