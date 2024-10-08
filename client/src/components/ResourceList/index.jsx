@@ -1,9 +1,20 @@
 import PropTypes from "prop-types";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 import "./ResourceList.scss";
+import BookmarkFlag from "../BookmarkFlag";
 
 export default function ResourceList({ publish, resources }) {
+	const [bookmarkedResources, setBookmarkedResources] = useState({});
+
+	const handleToggleBookmark = (id) => {
+		setBookmarkedResources((prevBookmarks) => ({
+			...prevBookmarks,
+			[id]: !prevBookmarks[id], // Toggle the bookmark state for this specific resource
+		}));
+	};
+
 	return (
 		<ul className="resource-list">
 			{resources.length === 0 && (
@@ -12,7 +23,15 @@ export default function ResourceList({ publish, resources }) {
 				</li>
 			)}
 			{resources.map(({ description, id, title, topic_name, url }) => (
-				<li key={id}>
+				<li
+					key={id}
+					style={{
+						backgroundColor: bookmarkedResources[id] ? "#E1D7C6" : "white",
+						border: "1px solid #333",
+						borderRadius: "4px",
+						padding: "16px",
+					}}
+				>
 					<div>
 						<h3>
 							<Link to={`/resource/${id}`}>{title}</Link>
@@ -23,6 +42,11 @@ export default function ResourceList({ publish, resources }) {
 					<div>
 						<a href={url}>{formatUrl(url)}</a>
 						{publish && <button onClick={() => publish(id)}>Publish</button>}
+						<BookmarkFlag
+							color={bookmarkedResources[id] ? "black" : "white"}
+							stroke="black"
+							onClick={() => handleToggleBookmark(id)}
+						/>
 					</div>
 				</li>
 			))}
