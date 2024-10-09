@@ -13,6 +13,26 @@ server.on("listening", () => {
 	logger.info("listening on: %s", bind);
 });
 
-process.on("SIGTERM", () => server.close());
+process.on("uncaughtException", (err) => {
+	logger.error("Uncaught Exception: ", err.message);
+	process.exit(1);
+});
 
-connectDb().then(() => server.listen(config.port));
+process.on("unhandledRejection", (reason) => {
+	logger.error("Unhandled Rejection: ", reason);
+	process.exit(1);
+});
+
+process.on("SIGTERM", () => {
+	logger.info("SIGTERM received. Shutting down gracefully...");
+	server.close(() => {
+		logger.info("Server closed.");
+	});
+});
+
+connectDb()
+	.then(() => server.listen(config.port))
+	.catch((err) => {
+		logger.error("Failed to connect to the database: ", err.message);
+		process.exit(1);
+	});
