@@ -18,10 +18,10 @@ export default class BookmarkService {
 		const res = await this.fetch(BookmarkService.ENDPOINT, {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify({ resource_id: resourceId }),
+			body: JSON.stringify({ resourceId }),
 		});
 		if (res.ok) {
-			return await res.json(); // Adjust if needed
+			return await res.json();
 		}
 		throw new Error("Failed to add bookmark");
 	}

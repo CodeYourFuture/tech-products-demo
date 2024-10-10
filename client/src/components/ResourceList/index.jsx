@@ -2,16 +2,20 @@ import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-import "./ResourceList.scss";
+import { BookmarkService, useService } from "../../services";
 import BookmarkFlag from "../BookmarkFlag";
+
+import "./ResourceList.scss";
 
 export default function ResourceList({
 	publish,
 	resources,
 	bookmarkedResources,
 	setBookmarkedResources,
+	onBookmarkToggle,
 }) {
 	const [bookmarkedResourceIds, setBookmarkedResourceIds] = useState({});
+	const bookmarkService = useService(BookmarkService);
 
 	useEffect(() => {
 		const ids = {};
@@ -24,33 +28,19 @@ export default function ResourceList({
 	const handleToggleBookmark = async (resourceId) => {
 		try {
 			if (bookmarkedResourceIds[resourceId]) {
-				await fetch(`/api/bookmarks/${resourceId}`, {
-					method: "DELETE",
-					headers: { "Content-Type": "application/json" },
-				});
+				await bookmarkService.removeBookmark(resourceId);
 				setBookmarkedResourceIds((prev) => ({ ...prev, [resourceId]: false }));
 				setBookmarkedResources((prev) =>
 					prev.filter((bookmark) => bookmark.resource_id !== resourceId)
 				);
+				onBookmarkToggle(resourceId);
 			} else {
-				const response = await fetch("/api/bookmarks", {
-					method: "POST",
-					headers: { "Content-Type": "application/json" },
-					body: JSON.stringify({ resourceId }),
-				});
-				if (response.ok) {
-					const newBookmark = await response.json().catch(() => {
-						return { resource_id: resourceId };
-					});
-					setBookmarkedResourceIds((prev) => ({ ...prev, [resourceId]: true }));
-					setBookmarkedResources((prev) => [...prev, newBookmark]);
-				} else {
-					const errorText = await response.text();
-					return errorText;
-				}
+				const newBookmark = await bookmarkService.addBookmark(resourceId);
+				setBookmarkedResourceIds((prev) => ({ ...prev, [resourceId]: true }));
+				setBookmarkedResources((prev) => [...prev, newBookmark]);
 			}
 		} catch (error) {
-			return error;
+			throw error("Error toggling bookmark:", error);
 		}
 	};
 
@@ -110,6 +100,7 @@ ResourceList.propTypes = {
 		})
 	).isRequired,
 	setBookmarkedResources: PropTypes.func.isRequired,
+	onBookmarkToggle: PropTypes.func.isRequired,
 };
 
 function formatUrl(url) {

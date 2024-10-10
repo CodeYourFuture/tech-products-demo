@@ -19,7 +19,7 @@ export function Home() {
 				setEnvelope(publishedResources);
 
 				const bookmarks = await bookmarkService.getBookmarks();
-				setBookmarkedResources(bookmarks); // Setting bookmarks directly
+				setBookmarkedResources(bookmarks);
 			} catch (error) {
 				return error;
 			}
