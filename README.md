@@ -10,12 +10,15 @@ There are two tasks, corresponding to the main tasks developers in our teams car
 
 ## Review a PR
 
-- In your fork, create a PR from `feature/resource-page` to `main`, using the content of `pull_request.md` as the description
+- In your fork, create a PR from `feature/resource-page` to the `main` branch (**note**: not to the CYF repo's `main` branch)
+  - Use the content of `pull_request.md` on that feature branch as the description of the pull request
 - Check out that branch locally so you can run the scripts and try out the functionality
   - If you've made any database updates, run `npm run migration -- down` to roll them back _before_ checking out the branch
   - If you've made any dependency updates, re-run `npm ci` _after_ checking out the branch
 - Carry out a review of the pull request in GitHub, adding comments to the implementation and deciding whether it's ready to merge ("Approve") or not ("Request changes")
+  - See guidance in [`.github/REVIEWING.md`][reviewing]
   - **Note**: as the `main` branch is maintained some conflicts/out of date warnings may appear in GitHub, you can ignore these as out-of-scope for the review
+- Request a review of your review in the Slack channel
 
 ## Create a PR
 
@@ -23,7 +26,8 @@ There are two tasks, corresponding to the main tasks developers in our teams car
   - Think about how you can best demonstrate your skills - does the feature require shiny new UI, updates to the backend logic, or a mix of both?
 - Implement the feature you've selected, following the guidance in [`.github/CONTRIBUTING.md`][contributing]
   - Remember this is a simulation of working in the team - try to follow the patterns already established in the codebase
-- Look at [previous examples][merged-prs] to get an idea of what a PR should look like
+- Open a PR to the CYF repo's `main` branch (**note**: not your fork's `main` branch) and request review in the Slack channel
+  - Look at [previous examples][merged-prs] to get an idea of what a PR should look like
 
 ## Dev Setup
 
@@ -59,4 +63,5 @@ From there see [`.github/CONTRIBUTING.md`][contributing] for details on recommen
 [dev containers]: https://code.visualstudio.com/docs/devcontainers/containers
 [fork]: https://docs.github.com/en/get-started/quickstart/fork-a-repo
 [merged-prs]: https://github.com/CodeYourFuture/tech-products-demo/pulls?q=is%3Apr+is%3Amerged+
+[reviewing]: .github/REVIEWING.md
 [unblocked-features]: https://github.com/CodeYourFuture/tech-products-demo/issues?q=is%3Aopen+is%3Aissue+-label%3Ablocked+label%3A%22%3Asparkles%3A+feature%22
