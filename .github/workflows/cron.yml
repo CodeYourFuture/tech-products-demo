@@ -5,13 +5,51 @@ on:
   schedule:
     - cron: "0 0 * * 0" # https://crontab.guru/
 
-permissions:
-  contents: "read"
-  pull-requests: "write"
-
 jobs:
+  deps:
+    runs-on: "ubuntu-latest"
+    env:
+      DATABASE_URL: postgres://postgres:@localhost:4211/postgres
+    permissions:
+      contents: "write"
+    steps:
+      - name: Check out source code
+        uses: actions/checkout@v4
+      - name: Start dev service containers
+        run: docker compose up --detach
+      - name: Set up Node.js environment
+        uses: textbook/take-action@nodejs
+        with:
+          checkout: "false"
+          node-version-file: ".nvmrc"
+      - name: Prepare git config for commit
+        run: |
+          git config --global user.name 'gh-actions'
+          git config --global user.email 'actions@github.com'
+      - name: Apply and test in-range dependency updates
+        run: ./bin/up-to-date.sh
+        env:
+          CYPRESS_VIDEO: true
+      - name: Get service logs and stop containers
+        if: always()
+        run: |
+          docker compose logs
+          docker compose down
+      - name: Store Cypress test outputs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          if-no-files-found: ignore
+          name: cypress-outputs
+          path: |
+            e2e/screenshots/
+            e2e/videos/
+
   prune:
     runs-on: "ubuntu-latest"
+    permissions:
+      contents: "read"
+      pull-requests: "write"
     steps:
       - uses: "actions/checkout@v4"
       - run: "./bin/close-stale.sh"
