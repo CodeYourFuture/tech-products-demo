@@ -3,8 +3,8 @@ FROM node:20-alpine
 USER node
 WORKDIR /home/node
 
-COPY package*.json ./
-RUN npm ci
+COPY package.json ./
+RUN npm install
 
 COPY . .
 
