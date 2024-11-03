@@ -110,7 +110,7 @@
 	},
 	"dependencies": {
 		"@babel/runtime": "^7.26.0",
-		"connect-pg-simple": "^9.0.1",
+		"connect-pg-simple": "^10.0.0",
 		"dotenv": "^16.4.5",
 		"dotenv-expand": "^11.0.6",
 		"express": "^4.21.1",
