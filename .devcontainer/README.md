@@ -4,7 +4,7 @@ Allows the project to be started in a [dev container] for [GitHub Codespaces] or
 
 - `devcontainer.json`: Defines the development environment.
 - `docker-compose.yml`: Defines the services (including the dev container) - extends the root `docker-compose.yml`.
-- `Dockerfile`: Defines the app's dev container (Debian, Node 20, PostgreSQL client).
+- `Dockerfile`: Defines the app's dev container (Debian, Node 22, PostgreSQL client).
 
 ## Setup
 
