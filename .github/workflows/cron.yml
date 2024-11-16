@@ -30,6 +30,12 @@ jobs:
         run: ./bin/up-to-date.sh
         env:
           CYPRESS_VIDEO: true
+          FORCE_COLOR: true
+          LOG_LEVEL: debug
+          OAUTH_CLIENT_ID: unused
+          OAUTH_CLIENT_SECRET: unused
+          SESSION_SECRET: correct-horse-battery-staple
+          SUDO_TOKEN: make-me-a-sandwich
       - name: Get service logs and stop containers
         if: always()
         run: |
